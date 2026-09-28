@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Limousine.API/Limousine.API.csproj" />
+  <Project Path="Limousine.Application/Limousine.Application.csproj" />
+  <Project Path="Limousine.Core/Limousine.Core.csproj" />
+  <Project Path="Limousine.Infrastracture/Limousine.Infrastracture.csproj" />
+</Solution>

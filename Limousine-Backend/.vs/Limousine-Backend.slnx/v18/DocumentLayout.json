@@ -1,0 +1,62 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C658B63D-169A-49E1-8744-99D1849E1242}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C658B63D-169A-49E1-8744-99D1849E1242}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|solutionrelative:limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56980B07-A421-40CB-B49B-361E95CF3A07}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{56980B07-A421-40CB-B49B-361E95CF3A07}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Limousine.Infrastracture\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "Limousine.Infrastracture\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T18:33:26.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Limousine.API\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Limousine.API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-28T18:31:56.551Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
