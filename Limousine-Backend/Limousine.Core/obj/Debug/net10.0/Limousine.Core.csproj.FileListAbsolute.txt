@@ -1,0 +1,12 @@
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\bin\Debug\net10.0\Limousine.Core.deps.json
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\bin\Debug\net10.0\Limousine.Core.dll
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\bin\Debug\net10.0\Limousine.Core.pdb
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.AssemblyInfoInputs.cache
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.AssemblyInfo.cs
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.csproj.CoreCompileInputs.cache
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.sourcelink.json
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.dll
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\refint\Limousine.Core.dll
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\Limousine.Core.pdb
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Core\obj\Debug\net10.0\ref\Limousine.Core.dll

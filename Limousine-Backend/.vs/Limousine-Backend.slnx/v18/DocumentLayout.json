@@ -3,12 +3,32 @@
   "WorkspaceRootPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C658B63D-169A-49E1-8744-99D1849E1242}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C658B63D-169A-49E1-8744-99D1849E1242}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|solutionrelative:limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5EEE8167-C365-D92B-B802-F4B63C278A4F}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EEE8167-C365-D92B-B802-F4B63C278A4F}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|solutionrelative:limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56980B07-A421-40CB-B49B-361E95CF3A07}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{56980B07-A421-40CB-B49B-361E95CF3A07}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\controllers\\baseapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\controllers\\baseapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\errors\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\errors\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,20 +50,83 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BaseApiController.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Controllers\\BaseApiController.cs",
+              "RelativeDocumentMoniker": "Limousine.API\\Controllers\\BaseApiController.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Controllers\\BaseApiController.cs",
+              "RelativeToolTip": "Limousine.API\\Controllers\\BaseApiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-30T22:41:39.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Limousine.API\\appsettings.json",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\appsettings.json",
+              "RelativeToolTip": "Limousine.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-30T19:49:04.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DependencyInjection.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\DependencyInjection.cs",
+              "RelativeDocumentMoniker": "Limousine.API\\DependencyInjection.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\DependencyInjection.cs",
+              "RelativeToolTip": "Limousine.API\\DependencyInjection.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAqwAkAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-29T11:11:38.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Program.cs",
+              "RelativeDocumentMoniker": "Limousine.API\\Program.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Program.cs",
+              "RelativeToolTip": "Limousine.API\\Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-29T11:05:19.577Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Limousine.Infrastracture\\Data\\AppDbContext.cs",
               "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Data\\AppDbContext.cs",
               "RelativeToolTip": "Limousine.Infrastracture\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-28T18:33:26.324Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Errors\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "Limousine.API\\Errors\\ApiResponse.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Errors\\ApiResponse.cs",
+              "RelativeToolTip": "Limousine.API\\Errors\\ApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-29T11:23:44.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "launchSettings.json",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Limousine.API\\Properties\\launchSettings.json",
@@ -51,8 +134,7 @@
               "RelativeToolTip": "Limousine.API\\Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-28T18:31:56.551Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T18:31:56.551Z"
             }
           ]
         }
