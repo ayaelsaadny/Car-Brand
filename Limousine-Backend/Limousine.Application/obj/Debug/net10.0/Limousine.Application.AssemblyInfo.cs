@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Limousine.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b5b131498c680f710f55d8ad25250c97d2492a9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d69b986c08a9961f41a673c3edcb098c0a1e78a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Limousine.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Limousine.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

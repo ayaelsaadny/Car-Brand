@@ -81,5 +81,12 @@ namespace Limousine.API.Controllers
             var user = await _authService.GetCurrentUserAsync(userId.Value, cancellationToken);
             return HandleResult(user);
         }
+
+        [HttpPost("logout")]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public ActionResult<ApiResponse> Logout()
+        {
+            return HandleSuccess("Logged out successfully");
+        }
     }
 }

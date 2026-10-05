@@ -30,6 +30,25 @@ namespace Limousine.Infrastracture.Data.Config
                 .IsRequired()
                 .HasMaxLength(30);
 
+            builder.Property(b => b.CustomerId)
+                .IsRequired(false);
+
+            builder.Property(b => b.ServiceNameSnapshot)
+                .IsRequired()
+                .HasMaxLength(150)
+                .HasDefaultValue(string.Empty);
+
+            builder.Property(b => b.VehicleNameSnapshot)
+                .IsRequired()
+                .HasMaxLength(150)
+                .HasDefaultValue(string.Empty);
+
+            builder.Ignore(b => b.CustomerName);
+            builder.Ignore(b => b.CustomerPhone);
+            builder.Ignore(b => b.CustomerNotes);
+            builder.Ignore(b => b.PickupDate);
+            builder.Ignore(b => b.PickupTime);
+
             builder.Property(b => b.PickupLocation)
                 .IsRequired()
                 .HasMaxLength(300);
@@ -44,6 +63,12 @@ namespace Limousine.Infrastracture.Data.Config
             builder.Property(b => b.SpecialNotes)
                 .HasMaxLength(1000);
 
+            builder.Property(b => b.RejectionReason)
+                .HasMaxLength(500);
+
+            builder.Property(b => b.CancellationReason)
+                .HasMaxLength(500);
+
             builder.Property(b => b.EstimatedPrice)
                 .HasPrecision(18, 2);
 
@@ -54,6 +79,7 @@ namespace Limousine.Infrastracture.Data.Config
             builder.HasOne(b => b.Customer)
                 .WithMany(c => c.BookingRequests)
                 .HasForeignKey(b => b.CustomerId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(b => b.Service)

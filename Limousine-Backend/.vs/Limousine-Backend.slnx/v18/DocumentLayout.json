@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9EFFC98D-C718-89D7-F61F-10F1F242F848}|Limousine.Application\\Limousine.Application.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.application\\services\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9EFFC98D-C718-89D7-F61F-10F1F242F848}|Limousine.Application\\Limousine.Application.csproj|solutionrelative:limousine.application\\services\\categoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7873B0B6-6E22-5256-5144-A06816E523E2}|Limousine.API\\Limousine.API.csproj|solutionrelative:limousine.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5EEE8167-C365-D92B-B802-F4B63C278A4F}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|d:\\projects freelance\\limousine\\limousine-backend\\limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5EEE8167-C365-D92B-B802-F4B63C278A4F}|Limousine.Infrastracture\\Limousine.Infrastracture.csproj|solutionrelative:limousine.infrastracture\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -38,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,7 +58,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "CategoryService.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Application\\Services\\CategoryService.cs",
+              "RelativeDocumentMoniker": "Limousine.Application\\Services\\CategoryService.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Application\\Services\\CategoryService.cs",
+              "RelativeToolTip": "Limousine.Application\\Services\\CategoryService.cs",
+              "ViewState": "AgIAAG0BAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T16:52:21.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Limousine.API\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Limousine.API\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-05T16:52:10.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "BaseApiController.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Controllers\\BaseApiController.cs",
               "RelativeDocumentMoniker": "Limousine.API\\Controllers\\BaseApiController.cs",
@@ -58,12 +92,11 @@
               "RelativeToolTip": "Limousine.API\\Controllers\\BaseApiController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-30T22:41:39.9Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-30T22:41:39.9Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\appsettings.json",
               "RelativeDocumentMoniker": "Limousine.API\\appsettings.json",
@@ -71,12 +104,11 @@
               "RelativeToolTip": "Limousine.API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-30T19:49:04.146Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-30T19:49:04.146Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "DependencyInjection.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\DependencyInjection.cs",
               "RelativeDocumentMoniker": "Limousine.API\\DependencyInjection.cs",
@@ -84,12 +116,11 @@
               "RelativeToolTip": "Limousine.API\\DependencyInjection.cs",
               "ViewState": "AgIAAFcAAAAAAAAAAAAqwAkAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-29T11:11:38.422Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-29T11:11:38.422Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Program.cs",
               "RelativeDocumentMoniker": "Limousine.API\\Program.cs",
@@ -101,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Limousine.Infrastracture\\Data\\AppDbContext.cs",
@@ -114,7 +145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "ApiResponse.cs",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Errors\\ApiResponse.cs",
               "RelativeDocumentMoniker": "Limousine.API\\Errors\\ApiResponse.cs",
@@ -126,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "launchSettings.json",
               "DocumentMoniker": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Limousine.API\\Properties\\launchSettings.json",

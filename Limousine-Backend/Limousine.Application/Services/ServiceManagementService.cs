@@ -145,13 +145,17 @@ namespace Limousine.Application.Services
             var service = await _unitOfWork.Repository<Service>().GetByIdAsync(id, cancellationToken);
             if (service == null) return null;
 
-            // Direct access rule: Inactive service is hidden from public
-            if (activeOnly.HasValue && activeOnly.Value && !service.IsActive)
+            var category = await _unitOfWork.Repository<Category>().GetByIdAsync(service.CategoryId, cancellationToken);
+
+            // Direct access rule: Inactive service or service under inactive category is hidden from public
+            if (activeOnly.HasValue && activeOnly.Value)
             {
-                return null;
+                if (!service.IsActive || category == null || !category.IsActive)
+                {
+                    return null;
+                }
             }
 
-            var category = await _unitOfWork.Repository<Category>().GetByIdAsync(service.CategoryId, cancellationToken);
             var bookingCount = await _unitOfWork.BookingRequests.CountAsync(b => b.ServiceId == service.Id, cancellationToken);
 
             return new ServiceDto

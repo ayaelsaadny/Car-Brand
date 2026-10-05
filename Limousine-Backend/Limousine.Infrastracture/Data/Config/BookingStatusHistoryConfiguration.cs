@@ -23,6 +23,12 @@ namespace Limousine.Infrastracture.Data.Config
 
             builder.Property(h => h.Notes)
                 .HasMaxLength(500);
+
+            // Ignore alias properties
+            builder.Ignore(h => h.BookingId);
+            builder.Ignore(h => h.OldStatus);
+            builder.Ignore(h => h.CreatedAt);
+            builder.Ignore(h => h.Reason);
         }
     }
 }

@@ -82,6 +82,10 @@ namespace Limousine.Infrastracture.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("CancellationReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -95,7 +99,7 @@ namespace Limousine.Infrastracture.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerPhoneNumber")
@@ -130,11 +134,22 @@ namespace Limousine.Infrastracture.Data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime?>("ReturnDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ServiceNameSnapshot")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasDefaultValue("");
 
                     b.Property<string>("SpecialNotes")
                         .HasMaxLength(1000)
@@ -150,6 +165,13 @@ namespace Limousine.Infrastracture.Data.Migrations
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("VehicleNameSnapshot")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 
@@ -603,8 +625,7 @@ namespace Limousine.Infrastracture.Data.Migrations
                     b.HasOne("Limousine.Core.Entities.Customer", "Customer")
                         .WithMany("BookingRequests")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Limousine.Core.Entities.Service", "Service")
                         .WithMany("BookingRequests")
