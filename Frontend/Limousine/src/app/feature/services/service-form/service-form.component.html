@@ -1,0 +1,254 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="header-title-group">
+          <div class="crest-icon">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <h3 class="modal-title">
+            {{ (service() ? 'servicesPage.editService' : 'servicesPage.addService') | transloco }}
+          </h3>
+        </div>
+        <button class="btn-close" (click)="onClose()" type="button" aria-label="Close modal">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-form">
+        <!-- Language Switch Tabs -->
+        <div class="lang-tabs">
+          <button
+            type="button"
+            class="lang-tab"
+            [class.active]="activeTab() === 'en'"
+            (click)="activeTab.set('en')"
+          >
+            <span class="lang-code">EN</span>
+            <span>English (Default)</span>
+          </button>
+          <button
+            type="button"
+            class="lang-tab"
+            [class.active]="activeTab() === 'fr'"
+            (click)="activeTab.set('fr')"
+          >
+            <span class="lang-code">FR</span>
+            <span>Français</span>
+          </button>
+        </div>
+
+        <div class="form-body">
+          @if (activeTab() === 'en') {
+            <!-- English fields -->
+            <div class="form-group">
+              <label class="form-label" for="srvName">
+                <span>{{ 'servicesPage.name' | transloco }} (EN)</span>
+                <span class="required-star">*</span>
+              </label>
+              <input
+                id="srvName"
+                type="text"
+                class="form-control"
+                formControlName="name"
+                [placeholder]="'servicesPage.namePlaceholder' | transloco"
+              />
+              @if (form.get('name')?.touched && form.get('name')?.invalid) {
+                <span class="form-error">Service name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="srvDesc">
+                <span>{{ 'categoriesPage.description' | transloco }} (EN)</span>
+              </label>
+              <textarea
+                id="srvDesc"
+                rows="3"
+                class="form-control"
+                formControlName="description"
+                [placeholder]="'servicesPage.descPlaceholder' | transloco"
+              ></textarea>
+            </div>
+          } @else {
+            <!-- French fields -->
+            <div class="form-group">
+              <label class="form-label" for="srvNameFr">
+                <span>Nom du Service (FR)</span>
+              </label>
+              <input
+                id="srvNameFr"
+                type="text"
+                class="form-control"
+                formControlName="nameFr"
+                placeholder="Ex. Transfert VIP Aéroport"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="srvDescFr">
+                <span>Description (FR)</span>
+              </label>
+              <textarea
+                id="srvDescFr"
+                rows="3"
+                class="form-control"
+                formControlName="descriptionFr"
+                placeholder="Description du service en français..."
+              ></textarea>
+            </div>
+          }
+
+          <!-- Category & Price -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label" for="srvCategory">
+                <span>{{ 'servicesPage.category' | transloco }}</span>
+                <span class="required-star">*</span>
+              </label>
+              <select id="srvCategory" class="form-control" formControlName="categoryId">
+                @for (cat of categories(); track cat.id) {
+                  <option [value]="cat.id">{{ cat.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label" for="srvPrice">
+                <span>{{ 'servicesPage.price' | transloco }} (SAR)</span>
+              </label>
+              <input
+                id="srvPrice"
+                type="number"
+                min="0"
+                class="form-control"
+                formControlName="price"
+                [placeholder]="'servicesPage.pricePlaceholder' | transloco"
+              />
+            </div>
+          </div>
+
+          <!-- Route: From & To Location -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label" for="fromLoc">
+                <span>Pickup Origin</span>
+              </label>
+              <input
+                id="fromLoc"
+                type="text"
+                class="form-control"
+                formControlName="fromLocation"
+                [placeholder]="'servicesPage.fromPlaceholder' | transloco"
+              />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label" for="toLoc">
+                <span>Destination</span>
+              </label>
+              <input
+                id="toLoc"
+                type="text"
+                class="form-control"
+                formControlName="toLocation"
+                [placeholder]="'servicesPage.toPlaceholder' | transloco"
+              />
+            </div>
+          </div>
+
+          <!-- Display Order & Checkboxes -->
+          <div class="form-row align-center">
+            <div class="form-group flex-1">
+              <label class="form-label" for="srvOrder">
+                <span>{{ 'servicesPage.displayOrder' | transloco }}</span>
+                <span class="required-star">*</span>
+              </label>
+              <input
+                id="srvOrder"
+                type="number"
+                min="0"
+                class="form-control"
+                formControlName="displayOrder"
+                [placeholder]="'servicesPage.orderPlaceholder' | transloco"
+              />
+            </div>
+
+            <div class="form-group flex-1 check-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="allowVehicleSelection" class="custom-checkbox" />
+                <span class="checkbox-text">{{ 'servicesPage.vehicleSelection' | transloco }}</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="isActive" class="custom-checkbox" />
+                <span class="checkbox-text">{{ 'servicesPage.active' | transloco }}</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Image Upload / Preview -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Service Banner / Image</span>
+              <span class="required-star">*</span>
+            </label>
+            <div class="image-upload-box">
+              @if (previewUrl()) {
+                <div class="preview-wrap">
+                  <img [src]="previewUrl()" alt="Service Preview" class="img-preview" />
+                  <button type="button" class="btn-remove-img" (click)="previewUrl.set(null); selectedFile.set(null); form.patchValue({ imageUrl: '' })">
+                    <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+              } @else {
+                <label class="upload-dropzone">
+                  <svg class="icon-md text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <span class="upload-txt">Click to upload service photo (.jpg, .png, .webp, .svg)</span>
+                  <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input" />
+                </label>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="onClose()" [disabled]="saving()">
+            {{ 'common.cancel' | transloco }}
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="saving() || form.invalid">
+            @if (saving()) {
+              <svg class="icon-sm spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+            }
+            <span>{{ (service() ? 'common.save' : 'servicesPage.save') | transloco }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

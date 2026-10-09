@@ -20,15 +20,17 @@ namespace Limousine.Application.DTOs
 
     public class CreateCategoryDto
     {
-        [Required(ErrorMessage = "Category name is required")]
         [StringLength(100, ErrorMessage = "Category name cannot exceed 100 characters")]
         public string Name { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
+        public Dictionary<string, EntityTranslationDto>? Translations { get; set; }
+
+        [Required(ErrorMessage = "Category image is required")]
         [StringLength(500, ErrorMessage = "ImageUrl cannot exceed 500 characters")]
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 
@@ -38,15 +40,17 @@ namespace Limousine.Application.DTOs
 
     public class UpdateCategoryDto
     {
-        [Required(ErrorMessage = "Category name is required")]
         [StringLength(100, ErrorMessage = "Category name cannot exceed 100 characters")]
         public string Name { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
+        public Dictionary<string, EntityTranslationDto>? Translations { get; set; }
+
+        [Required(ErrorMessage = "Category image is required")]
         [StringLength(500, ErrorMessage = "ImageUrl cannot exceed 500 characters")]
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 

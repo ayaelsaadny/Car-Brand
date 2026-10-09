@@ -1,0 +1,35 @@
+{
+  "Common": {
+    "Success": "Succès",
+    "NotFound": "Ressource introuvable",
+    "InvalidInput": "Données fournies non valides",
+    "Unauthorized": "Accès non autorisé",
+    "Forbidden": "Accès interdit"
+  },
+  "Services": {
+    "Created": "Service créé avec succès",
+    "Updated": "Service mis à jour avec succès",
+    "Deleted": "Service supprimé avec succès",
+    "NotFound": "Le service avec l'ID {0} est introuvable ou actuellement inactif",
+    "EnglishRequired": "La traduction anglaise (en) est requise pour le nom et la description"
+  },
+  "Categories": {
+    "Created": "Catégorie créée avec succès",
+    "Updated": "Catégorie mise à jour avec succès",
+    "Deleted": "Catégorie supprimée avec succès",
+    "NotFound": "La catégorie avec l'ID {0} est introuvable ou actuellement inactive",
+    "EnglishRequired": "La traduction anglaise (en) est requise pour le nom de la catégorie"
+  },
+  "Auth": {
+    "LoginSuccess": "Connexion réussie",
+    "AdminLoginSuccess": "Connexion administrateur réussie",
+    "InvalidCredentials": "Email ou mot de passe incorrect",
+    "RegistrationSuccess": "Inscription réussie",
+    "LogoutSuccess": "Déconnexion réussie"
+  },
+  "Bookings": {
+    "Created": "Demande de réservation créée avec succès",
+    "Retrieved": "Détails de la réservation récupérés avec succès",
+    "NotFound": "La réservation avec l'ID {0} est introuvable"
+  }
+}

@@ -15,11 +15,19 @@ namespace Limousine.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileService _fileService;
+        private readonly ICurrentLanguageService _languageService;
+        private readonly ILocalizationService _localizationService;
 
-        public ServiceManagementService(IUnitOfWork unitOfWork, IFileService fileService)
+        public ServiceManagementService(
+            IUnitOfWork unitOfWork,
+            IFileService fileService,
+            ICurrentLanguageService languageService,
+            ILocalizationService localizationService)
         {
             _unitOfWork = unitOfWork;
             _fileService = fileService;
+            _languageService = languageService;
+            _localizationService = localizationService;
         }
 
         public async Task<IReadOnlyList<ServiceDto>> GetAllAsync(int? categoryId = null, string? searchTerm = null, bool? activeOnly = null, CancellationToken cancellationToken = default)
@@ -36,8 +44,36 @@ namespace Limousine.Application.Services
         {
             var services = await _unitOfWork.Repository<Service>().GetAllAsync(cancellationToken);
             var categories = await _unitOfWork.Repository<Category>().GetAllAsync(cancellationToken);
+            var serviceTranslations = await _unitOfWork.Repository<ServiceTranslation>().GetAllAsync(cancellationToken);
+            var categoryTranslations = await _unitOfWork.Repository<CategoryTranslation>().GetAllAsync(cancellationToken);
+
+            var currentLang = _languageService.CurrentLanguage;
+
+            var serviceTransLookup = serviceTranslations
+                .GroupBy(t => t.ServiceId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var catTransLookup = categoryTranslations
+                .GroupBy(t => t.CategoryId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            string ResolveCatName(Category c)
+            {
+                if (catTransLookup.TryGetValue(c.Id, out var transList))
+                {
+                    if (currentLang == "fr")
+                    {
+                        var fr = transList.FirstOrDefault(t => t.LanguageCode == "fr");
+                        if (fr != null && !string.IsNullOrWhiteSpace(fr.Name)) return fr.Name;
+                    }
+                    var en = transList.FirstOrDefault(t => t.LanguageCode == "en");
+                    if (en != null && !string.IsNullOrWhiteSpace(en.Name)) return en.Name;
+                }
+                return c.Name;
+            }
+
             var activeCategoryIds = categories.Where(c => c.IsActive).Select(c => c.Id).ToHashSet();
-            var categoryDict = categories.ToDictionary(c => c.Id, c => c.Name);
+            var categoryDict = categories.ToDictionary(c => c.Id, c => ResolveCatName(c));
 
             var query = services.AsEnumerable();
 
@@ -120,23 +156,48 @@ namespace Limousine.Application.Services
                 .GroupBy(b => b.ServiceId)
                 .ToDictionary(g => g.Key, g => g.Count());
 
-            return sorted.Select(s => new ServiceDto
+            (string Name, string? Description) ResolveServiceText(Service s)
             {
-                Id = s.Id,
-                CategoryId = s.CategoryId,
-                CategoryName = categoryDict.TryGetValue(s.CategoryId, out var name) ? name : string.Empty,
-                Name = s.Name,
-                Description = s.Description,
-                ImageUrl = s.ImageUrl,
-                Price = s.Price,
-                FromLocation = s.FromLocation,
-                ToLocation = s.ToLocation,
-                IsActive = s.IsActive,
-                AllowVehicleSelection = s.AllowVehicleSelection,
-                DisplayOrder = s.DisplayOrder,
-                CreatedAt = s.CreatedAt,
-                UpdatedAt = s.UpdatedAt,
-                TotalBookings = bookingCounts.TryGetValue(s.Id, out var count) ? count : 0
+                if (serviceTransLookup.TryGetValue(s.Id, out var transList))
+                {
+                    if (currentLang == "fr")
+                    {
+                        var fr = transList.FirstOrDefault(t => t.LanguageCode == "fr");
+                        if (fr != null && !string.IsNullOrWhiteSpace(fr.Name))
+                        {
+                            return (fr.Name, fr.Description ?? s.Description);
+                        }
+                    }
+                    var en = transList.FirstOrDefault(t => t.LanguageCode == "en");
+                    if (en != null && !string.IsNullOrWhiteSpace(en.Name))
+                    {
+                        return (en.Name, en.Description ?? s.Description);
+                    }
+                }
+                return (s.Name, s.Description);
+            }
+
+            return sorted.Select(s =>
+            {
+                var (svcName, svcDesc) = ResolveServiceText(s);
+                return new ServiceDto
+                {
+                    Id = s.Id,
+                    CategoryId = s.CategoryId,
+                    CategoryName = categoryDict.TryGetValue(s.CategoryId, out var name) ? name : string.Empty,
+                    Name = svcName,
+                    Description = svcDesc,
+                    ImageUrl = s.ImageUrl,
+                    Price = s.Price,
+                    FromLocation = s.FromLocation,
+                    ToLocation = s.ToLocation,
+                    IsActive = s.IsActive,
+                    AllowVehicleSelection = s.AllowVehicleSelection,
+                    DisplayOrder = s.DisplayOrder,
+                    CreatedAt = s.CreatedAt,
+                    UpdatedAt = s.UpdatedAt,
+                    TotalBookings = bookingCounts.TryGetValue(s.Id, out var count) ? count : 0
+                };
             }).ToList();
         }
 
@@ -147,12 +208,54 @@ namespace Limousine.Application.Services
 
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(service.CategoryId, cancellationToken);
 
-            // Direct access rule: Inactive service or service under inactive category is hidden from public
             if (activeOnly.HasValue && activeOnly.Value)
             {
                 if (!service.IsActive || category == null || !category.IsActive)
                 {
                     return null;
+                }
+            }
+
+            var currentLang = _languageService.CurrentLanguage;
+            var serviceTranslations = await _unitOfWork.Repository<ServiceTranslation>()
+                .FindAsync(t => t.ServiceId == service.Id, cancellationToken);
+            var categoryTranslations = category != null
+                ? await _unitOfWork.Repository<CategoryTranslation>().FindAsync(t => t.CategoryId == category.Id, cancellationToken)
+                : Array.Empty<CategoryTranslation>();
+
+            string svcName = service.Name;
+            string? svcDesc = service.Description;
+            if (currentLang == "fr")
+            {
+                var fr = serviceTranslations.FirstOrDefault(t => t.LanguageCode == "fr");
+                if (fr != null && !string.IsNullOrWhiteSpace(fr.Name))
+                {
+                    svcName = fr.Name;
+                    svcDesc = fr.Description ?? service.Description;
+                }
+            }
+            else
+            {
+                var en = serviceTranslations.FirstOrDefault(t => t.LanguageCode == "en");
+                if (en != null && !string.IsNullOrWhiteSpace(en.Name))
+                {
+                    svcName = en.Name;
+                    svcDesc = en.Description ?? service.Description;
+                }
+            }
+
+            string catName = category?.Name ?? string.Empty;
+            if (category != null)
+            {
+                if (currentLang == "fr")
+                {
+                    var frCat = categoryTranslations.FirstOrDefault(t => t.LanguageCode == "fr");
+                    if (frCat != null && !string.IsNullOrWhiteSpace(frCat.Name)) catName = frCat.Name;
+                }
+                else
+                {
+                    var enCat = categoryTranslations.FirstOrDefault(t => t.LanguageCode == "en");
+                    if (enCat != null && !string.IsNullOrWhiteSpace(enCat.Name)) catName = enCat.Name;
                 }
             }
 
@@ -162,9 +265,9 @@ namespace Limousine.Application.Services
             {
                 Id = service.Id,
                 CategoryId = service.CategoryId,
-                CategoryName = category?.Name ?? string.Empty,
-                Name = service.Name,
-                Description = service.Description,
+                CategoryName = catName,
+                Name = svcName,
+                Description = svcDesc,
                 ImageUrl = service.ImageUrl,
                 Price = service.Price,
                 FromLocation = service.FromLocation,
@@ -185,19 +288,36 @@ namespace Limousine.Application.Services
                 throw new InvalidOperationException($"Category with ID {dto.CategoryId} does not exist.");
             }
 
+            string serviceName = dto.Name;
+            string? serviceDesc = dto.Description;
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                if (!dto.Translations.TryGetValue("en", out var enTrans) || string.IsNullOrWhiteSpace(enTrans?.Name))
+                {
+                    throw new InvalidOperationException(_localizationService.GetMessage("Services.EnglishRequired"));
+                }
+                serviceName = enTrans.Name.Trim();
+                serviceDesc = enTrans.Description?.Trim();
+            }
+            else if (string.IsNullOrWhiteSpace(serviceName))
+            {
+                throw new InvalidOperationException(_localizationService.GetMessage("Services.EnglishRequired"));
+            }
+
             var existingService = await _unitOfWork.Repository<Service>()
-                .FirstOrDefaultAsync(s => s.CategoryId == dto.CategoryId && s.Name.ToLower() == dto.Name.Trim().ToLower(), cancellationToken);
+                .FirstOrDefaultAsync(s => s.CategoryId == dto.CategoryId && s.Name.ToLower() == serviceName.ToLower(), cancellationToken);
 
             if (existingService != null)
             {
-                throw new InvalidOperationException($"A service with the name '{dto.Name}' already exists in this category.");
+                throw new InvalidOperationException($"A service with the name '{serviceName}' already exists in this category.");
             }
 
             var service = new Service
             {
                 CategoryId = dto.CategoryId,
-                Name = dto.Name.Trim(),
-                Description = dto.Description?.Trim(),
+                Name = serviceName,
+                Description = serviceDesc,
                 ImageUrl = dto.ImageUrl?.Trim() ?? string.Empty,
                 Price = dto.Price,
                 FromLocation = dto.FromLocation?.Trim(),
@@ -210,6 +330,35 @@ namespace Limousine.Application.Services
             };
 
             await _unitOfWork.Repository<Service>().AddAsync(service, cancellationToken);
+            await _unitOfWork.CompleteAsync(cancellationToken);
+
+            // Save translations
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                foreach (var (langCode, trans) in dto.Translations)
+                {
+                    if (!string.IsNullOrWhiteSpace(trans.Name))
+                    {
+                        await _unitOfWork.Repository<ServiceTranslation>().AddAsync(new ServiceTranslation
+                        {
+                            ServiceId = service.Id,
+                            LanguageCode = langCode.ToLowerInvariant(),
+                            Name = trans.Name.Trim(),
+                            Description = trans.Description?.Trim()
+                        }, cancellationToken);
+                    }
+                }
+            }
+            else
+            {
+                await _unitOfWork.Repository<ServiceTranslation>().AddAsync(new ServiceTranslation
+                {
+                    ServiceId = service.Id,
+                    LanguageCode = "en",
+                    Name = service.Name,
+                    Description = service.Description
+                }, cancellationToken);
+            }
             await _unitOfWork.CompleteAsync(cancellationToken);
 
             return new ServiceDto
@@ -243,17 +392,34 @@ namespace Limousine.Application.Services
                 throw new InvalidOperationException($"Category with ID {dto.CategoryId} does not exist.");
             }
 
+            string serviceName = dto.Name;
+            string? serviceDesc = dto.Description;
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                if (!dto.Translations.TryGetValue("en", out var enTrans) || string.IsNullOrWhiteSpace(enTrans?.Name))
+                {
+                    throw new InvalidOperationException(_localizationService.GetMessage("Services.EnglishRequired"));
+                }
+                serviceName = enTrans.Name.Trim();
+                serviceDesc = enTrans.Description?.Trim();
+            }
+            else if (string.IsNullOrWhiteSpace(serviceName))
+            {
+                serviceName = service.Name;
+            }
+
             var duplicate = await _unitOfWork.Repository<Service>()
-                .FirstOrDefaultAsync(s => s.Id != id && s.CategoryId == dto.CategoryId && s.Name.ToLower() == dto.Name.Trim().ToLower(), cancellationToken);
+                .FirstOrDefaultAsync(s => s.Id != id && s.CategoryId == dto.CategoryId && s.Name.ToLower() == serviceName.ToLower(), cancellationToken);
 
             if (duplicate != null)
             {
-                throw new InvalidOperationException($"Another service with the name '{dto.Name}' already exists in this category.");
+                throw new InvalidOperationException($"Another service with the name '{serviceName}' already exists in this category.");
             }
 
             service.CategoryId = dto.CategoryId;
-            service.Name = dto.Name.Trim();
-            service.Description = dto.Description?.Trim();
+            service.Name = serviceName;
+            service.Description = serviceDesc;
             if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
             {
                 service.ImageUrl = dto.ImageUrl.Trim();
@@ -267,6 +433,35 @@ namespace Limousine.Application.Services
             service.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Repository<Service>().Update(service);
+
+            // Update translations
+            var existingTranslations = await _unitOfWork.Repository<ServiceTranslation>()
+                .FindAsync(t => t.ServiceId == service.Id, cancellationToken);
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                foreach (var (code, trans) in dto.Translations)
+                {
+                    var existing = existingTranslations.FirstOrDefault(t => t.LanguageCode == code.ToLowerInvariant());
+                    if (existing != null)
+                    {
+                        existing.Name = trans.Name.Trim();
+                        existing.Description = trans.Description?.Trim();
+                        _unitOfWork.Repository<ServiceTranslation>().Update(existing);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(trans.Name))
+                    {
+                        await _unitOfWork.Repository<ServiceTranslation>().AddAsync(new ServiceTranslation
+                        {
+                            ServiceId = service.Id,
+                            LanguageCode = code.ToLowerInvariant(),
+                            Name = trans.Name.Trim(),
+                            Description = trans.Description?.Trim()
+                        }, cancellationToken);
+                    }
+                }
+            }
+
             await _unitOfWork.CompleteAsync(cancellationToken);
 
             var bookingCount = await _unitOfWork.BookingRequests.CountAsync(b => b.ServiceId == service.Id, cancellationToken);

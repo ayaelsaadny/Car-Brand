@@ -1,0 +1,35 @@
+{
+  "Common": {
+    "Success": "Success",
+    "NotFound": "Resource not found",
+    "InvalidInput": "Invalid input provided",
+    "Unauthorized": "Unauthorized access",
+    "Forbidden": "Access forbidden"
+  },
+  "Services": {
+    "Created": "Service created successfully",
+    "Updated": "Service updated successfully",
+    "Deleted": "Service deleted successfully",
+    "NotFound": "Service with ID {0} not found or is currently inactive",
+    "EnglishRequired": "English translation (en) is required for name and description"
+  },
+  "Categories": {
+    "Created": "Category created successfully",
+    "Updated": "Category updated successfully",
+    "Deleted": "Category deleted successfully",
+    "NotFound": "Category with ID {0} not found or is currently inactive",
+    "EnglishRequired": "English translation (en) is required for category name"
+  },
+  "Auth": {
+    "LoginSuccess": "Login successful",
+    "AdminLoginSuccess": "Admin login successful",
+    "InvalidCredentials": "Invalid email or password",
+    "RegistrationSuccess": "Registration successful",
+    "LogoutSuccess": "Logged out successfully"
+  },
+  "Bookings": {
+    "Created": "Booking request created successfully",
+    "Retrieved": "Booking details retrieved successfully",
+    "NotFound": "Booking with ID {0} not found"
+  }
+}

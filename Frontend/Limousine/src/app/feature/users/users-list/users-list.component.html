@@ -1,0 +1,303 @@
+<div class="users-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title-row">
+        <div class="header-crest">
+          <svg class="crest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div>
+          <span class="header-badge">{{ 'users.adminPortal' | transloco }}</span>
+          <h1 class="header-title">{{ 'users.pageTitle' | transloco }}</h1>
+          <p class="header-subtitle">{{ 'users.pageSubtitle' | transloco }}</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn-luxury-secondary" (click)="loadUsers()" [disabled]="loading()">
+          <svg class="icon-sm" [class.spin]="loading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/>
+          </svg>
+          <span>{{ 'users.refresh' | transloco }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Metric Summary Cards -->
+  <section class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">{{ 'users.totalUsers' | transloco }}</span>
+        <span class="stat-value">{{ stats().total }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper gold-tint">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">{{ 'users.admins' | transloco }}</span>
+        <span class="stat-value text-gold">{{ stats().admins }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper blue-tint">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">{{ 'users.employees' | transloco }}</span>
+        <span class="stat-value text-blue">{{ stats().employees }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper green-tint">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">{{ 'users.activeAccounts' | transloco }}</span>
+        <span class="stat-value text-green">{{ stats().active }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alerts -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Toolbar / Filters Bar -->
+  <section class="toolbar-section">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        [placeholder]="'users.searchPlaceholder' | transloco"
+      />
+      @if (searchQuery()) {
+        <button type="button" class="search-clear-btn" (click)="searchQuery.set('')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="filter-tabs">
+      <button
+        type="button"
+        class="tab-pill"
+        [class.active]="selectedRole() === 'all'"
+        (click)="selectedRole.set('all')"
+      >
+        <span>{{ 'common.all' | transloco }}</span>
+        <span class="tab-badge">{{ stats().total }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-pill"
+        [class.active]="selectedRole() === 'admin'"
+        (click)="selectedRole.set('admin')"
+      >
+        <span>{{ 'users.admins' | transloco }}</span>
+        <span class="tab-badge">{{ stats().admins }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-pill"
+        [class.active]="selectedRole() === 'employee'"
+        (click)="selectedRole.set('employee')"
+      >
+        <span>{{ 'users.employees' | transloco }}</span>
+        <span class="tab-badge">{{ stats().employees }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-pill"
+        [class.active]="selectedRole() === 'customer'"
+        (click)="selectedRole.set('customer')"
+      >
+        <span>{{ 'users.customers' | transloco }}</span>
+        <span class="tab-badge">{{ stats().customers }}</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Users Table Card -->
+  <section class="table-card">
+    @if (loading()) {
+      <div class="loading-state">
+        <div class="spinner-luxury"></div>
+        <p class="loading-text">{{ 'common.loading' | transloco }}</p>
+      </div>
+    } @else if (filteredUsers().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon-wrap">
+          <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h3 class="empty-title">{{ 'users.noUsersFound' | transloco }}</h3>
+        <p class="empty-desc">No accounts found matching your current query or role selection.</p>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{{ 'users.userCol' | transloco }}</th>
+              <th>{{ 'auth.email' | transloco }}</th>
+              <th>{{ 'auth.phone' | transloco }}</th>
+              <th>{{ 'users.roleCol' | transloco }}</th>
+              <th>{{ 'dashboard.status' | transloco }}</th>
+              <th class="text-right">{{ 'users.actionCol' | transloco }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of filteredUsers(); track user.id) {
+              <tr [class.row-current-user]="isCurrentUser(user)">
+                <td>
+                  <div class="user-cell">
+                    <span class="user-avatar" [class.admin-avatar]="getRoleClass(user) === 'admin'">
+                      {{ user.fullName.charAt(0) || 'U' }}
+                    </span>
+                    <div class="user-meta">
+                      <span class="user-fullname">{{ user.fullName }}</span>
+                      @if (isCurrentUser(user)) {
+                        <span class="you-badge">You</span>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="cell-text font-mono">{{ user.email }}</span>
+                </td>
+                <td>
+                  <span class="cell-text">{{ user.phoneNumber || '—' }}</span>
+                </td>
+                <td>
+                  <span class="role-badge" [class]="getRoleClass(user)">
+                    {{ getRoleName(user) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-indicator" [class.active]="user.isActive" [class.inactive]="!user.isActive">
+                    <span class="status-dot"></span>
+                    <span>{{ user.isActive ? ('users.active' | transloco) : ('users.inactive' | transloco) }}</span>
+                  </span>
+                </td>
+                <td class="text-right">
+                  <div class="actions-group">
+                    <button
+                      type="button"
+                      class="btn-icon-subtle"
+                      (click)="openUserModal(user)"
+                      [title]="'users.viewDetails' | transloco"
+                      aria-label="View user profile"
+                    >
+                      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                      </svg>
+                      <span>{{ 'users.viewDetails' | transloco }}</span>
+                    </button>
+
+                    @if (!isCurrentUser(user)) {
+                      <button
+                        type="button"
+                        class="btn-toggle"
+                        [class.btn-deactivate]="user.isActive"
+                        [class.btn-activate]="!user.isActive"
+                        [disabled]="togglingId() === user.id"
+                        (click)="toggleUserStatus(user)"
+                      >
+                        @if (togglingId() === user.id) {
+                          <span class="mini-spinner"></span>
+                        } @else {
+                          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                            @if (user.isActive) {
+                              <circle cx="12" cy="12" r="10"/>
+                              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            } @else {
+                              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                              <polyline points="22 4 12 14.01 9 11.01"/>
+                            }
+                          </svg>
+                          <span>{{ user.isActive ? ('users.deactivate' | transloco) : ('users.activate' | transloco) }}</span>
+                        }
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <!-- User Detail Modal Component -->
+  <app-user-detail-modal
+    [user]="selectedUserForModal()"
+    [isOpen]="isModalOpen()"
+    [isCurrentUser]="isCurrentUser(selectedUserForModal())"
+    [isToggling]="togglingId() === selectedUserForModal()?.id"
+    (toggleStatus)="toggleUserStatus($event)"
+    (closed)="closeUserModal()"
+  ></app-user-detail-modal>
+</div>

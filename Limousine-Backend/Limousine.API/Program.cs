@@ -10,6 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerDocumentation();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .SetIsOriginAllowed(_ => true)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .WithExposedHeaders("Content-Language");
+    });
+});
+
 builder.Services.AddDbContextServices(builder.Configuration);
 builder.Services.AddServices(builder.Configuration);
 
@@ -34,6 +47,9 @@ using (var scope = app.Services.CreateScope())
 // Global exception handling middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
+// Language Resolution Middleware (evaluates query ?lang= and Accept-Language header)
+app.UseMiddleware<LanguageResolutionMiddleware>();
+
 // Enable Swagger UI documentation
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -47,6 +63,8 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

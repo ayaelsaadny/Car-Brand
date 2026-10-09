@@ -1,0 +1,515 @@
+<div class="customer-bookings-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-badge">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+          <path d="M9 12h6M9 16h6"/>
+        </svg>
+        <span>VIP Executive Client</span>
+      </div>
+      <h1 class="page-title">{{ 'customer.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'customer.subtitle' | transloco }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="loadBookings()" [disabled]="loading()">
+        <svg class="icon-sm" [class.spin]="loading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span>{{ 'customer.refresh' | transloco }}</span>
+      </button>
+
+      <a [routerLink]="['/' + currentLang]" fragment="services" class="btn-book-new">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>{{ 'customer.bookFirstTrip' | transloco }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Messages Alert -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage()! | transloco }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage()! | transloco }}</span>
+    </div>
+  }
+
+  <!-- Metrics Grid -->
+  <div class="metrics-grid">
+    <div class="metric-card" [class.active-card]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+      <div class="metric-icon metric-icon-total">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+        </svg>
+      </div>
+      <div class="metric-content">
+        <div class="metric-value">{{ totalCount() }}</div>
+        <div class="metric-label">{{ 'customer.totalBookings' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card" [class.active-card]="statusFilter() === 'pending'" (click)="statusFilter.set('pending')">
+      <div class="metric-icon metric-icon-pending">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="metric-content">
+        <div class="metric-value">{{ pendingCount() }}</div>
+        <div class="metric-label">{{ 'customer.pendingBookings' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card" [class.active-card]="statusFilter() === 'confirmed'" (click)="statusFilter.set('confirmed')">
+      <div class="metric-icon metric-icon-confirmed">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="metric-content">
+        <div class="metric-value">{{ confirmedCount() }}</div>
+        <div class="metric-label">{{ 'customer.confirmedBookings' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card" [class.active-card]="statusFilter() === 'completed'" (click)="statusFilter.set('completed')">
+      <div class="metric-icon metric-icon-completed">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 14 10"/>
+          <path d="M16 16l4-4"/>
+        </svg>
+      </div>
+      <div class="metric-content">
+        <div class="metric-value">{{ completedCount() }}</div>
+        <div class="metric-label">{{ 'customer.completedBookings' | transloco }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters & Search Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg class="icon-sm search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        [placeholder]="'users.searchPlaceholder' | transloco"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        class="search-input"
+      />
+      @if (searchQuery()) {
+        <button class="clear-search" (click)="searchQuery.set('')">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab" [class.active]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+        {{ 'common.all' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'pending'" (click)="statusFilter.set('pending')">
+        {{ 'common.pending' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'confirmed'" (click)="statusFilter.set('confirmed')">
+        {{ 'common.confirmed' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'completed'" (click)="statusFilter.set('completed')">
+        {{ 'customer.completedBookings' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'cancelled'" (click)="statusFilter.set('cancelled')">
+        {{ 'customer.cancelledBookings' | transloco }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Bookings List Section -->
+  @if (loading()) {
+    <div class="loading-state">
+      <svg class="icon-lg spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+        <path d="M12 2a10 10 0 0 1 10 10"/>
+      </svg>
+      <span>{{ 'common.loading' | transloco }}</span>
+    </div>
+  } @else if (filteredBookings().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg class="icon-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+          <circle cx="7" cy="17" r="2"/>
+          <circle cx="17" cy="17" r="2"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">{{ 'customer.noBookings' | transloco }}</h3>
+      <p class="empty-desc">{{ 'customer.subtitle' | transloco }}</p>
+      <a [routerLink]="['/' + currentLang]" fragment="services" class="btn-primary">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>{{ 'customer.bookFirstTrip' | transloco }}</span>
+      </a>
+    </div>
+  } @else {
+    <div class="bookings-grid">
+      @for (booking of filteredBookings(); track booking.id) {
+        <div class="booking-card">
+          <!-- Card Header -->
+          <div class="card-header">
+            <div class="reference-group">
+              <span class="ref-badge">{{ booking.bookingReference }}</span>
+              <span class="booking-service">{{ booking.serviceName }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="getStatusBadgeClass(booking)">
+              {{ booking.statusName || booking.status }}
+            </span>
+          </div>
+
+          <!-- Route Info -->
+          <div class="route-details">
+            <div class="route-point">
+              <div class="point-indicator point-pickup"></div>
+              <div class="point-info">
+                <span class="point-label">{{ 'customer.pickup' | transloco }}</span>
+                <span class="point-val">{{ booking.pickupLocation }}</span>
+              </div>
+            </div>
+
+            <div class="route-divider">
+              <div class="divider-line"></div>
+            </div>
+
+            <div class="route-point">
+              <div class="point-indicator point-dropoff"></div>
+              <div class="point-info">
+                <span class="point-label">{{ 'customer.dropoff' | transloco }}</span>
+                <span class="point-val">{{ booking.dropoffLocation }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Details Grid -->
+          <div class="card-meta">
+            <div class="meta-item">
+              <svg class="icon-sm meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <div class="meta-texts">
+                <span class="meta-k">{{ 'customer.dateTime' | transloco }}</span>
+                <span class="meta-v">{{ booking.pickupDateTime | date:'MMM d, y, h:mm a' }}</span>
+              </div>
+            </div>
+
+            <div class="meta-item">
+              <svg class="icon-sm meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                <circle cx="7" cy="17" r="2"/>
+                <circle cx="17" cy="17" r="2"/>
+              </svg>
+              <div class="meta-texts">
+                <span class="meta-k">{{ 'customer.vehicle' | transloco }}</span>
+                <span class="meta-v">{{ booking.vehicleName || ('customer.assignedChauffeur' | transloco) }}</span>
+              </div>
+            </div>
+
+            <div class="meta-item">
+              <svg class="icon-sm meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+              </svg>
+              <div class="meta-texts">
+                <span class="meta-k">{{ 'customer.passengers' | transloco }}</span>
+                <span class="meta-v">{{ booking.numberOfPassengers }} pax / {{ booking.numberOfLuggage }} bags</span>
+              </div>
+            </div>
+
+            <div class="meta-item price-item">
+              <svg class="icon-sm meta-icon text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <div class="meta-texts">
+                <span class="meta-k">{{ 'customer.fare' | transloco }}</span>
+                <span class="meta-price">{{ booking.estimatedPrice ? (booking.estimatedPrice + ' SAR') : 'VIP Included' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Actions -->
+          <div class="card-footer">
+            <button class="btn-action-outline" (click)="openDetails(booking)">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <span>{{ 'customer.viewDetails' | transloco }}</span>
+            </button>
+
+            @if (canCancel(booking)) {
+              <button class="btn-action-cancel" (click)="openCancelModal(booking)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+                <span>{{ 'customer.cancelBooking' | transloco }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Booking Details Modal -->
+  @if (showDetailsModal() && selectedBooking()) {
+    <div class="modal-backdrop" (click)="closeDetails()">
+      <div class="modal-card modal-lg" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">{{ selectedBooking()!.serviceName }}</h3>
+            <span class="ref-badge">{{ selectedBooking()!.bookingReference }}</span>
+          </div>
+          <button class="btn-close" (click)="closeDetails()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Status Banner -->
+          <div class="details-status-banner">
+            <span class="status-label">Status</span>
+            <span class="status-badge" [ngClass]="getStatusBadgeClass(selectedBooking()!)">
+              {{ selectedBooking()!.statusName || selectedBooking()!.status }}
+            </span>
+          </div>
+
+          <!-- Trip Itinerary -->
+          <div class="details-section">
+            <h4 class="section-title">
+              <svg class="icon-sm text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="10" r="3"/>
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+              </svg>
+              <span>{{ 'customer.pickupDropoff' | transloco }}</span>
+            </h4>
+            <div class="details-grid">
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.pickup' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.pickupLocation }}</span>
+              </div>
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.dropoff' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.dropoffLocation }}</span>
+              </div>
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.dateTime' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.pickupDateTime | date:'medium' }}</span>
+              </div>
+              @if (selectedBooking()!.returnDateTime) {
+                <div class="detail-cell">
+                  <span class="cell-label">Return Date & Time</span>
+                  <span class="cell-value">{{ selectedBooking()!.returnDateTime | date:'medium' }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Vehicle & Flight Details -->
+          <div class="details-section">
+            <h4 class="section-title">
+              <svg class="icon-sm text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                <circle cx="7" cy="17" r="2"/>
+                <circle cx="17" cy="17" r="2"/>
+              </svg>
+              <span>Vehicle & Passenger Details</span>
+            </h4>
+            <div class="details-grid">
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.vehicle' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.vehicleName || ('customer.assignedChauffeur' | transloco) }}</span>
+              </div>
+              @if (selectedBooking()!.vehicleLicensePlate) {
+                <div class="detail-cell">
+                  <span class="cell-label">License Plate</span>
+                  <span class="cell-value">{{ selectedBooking()!.vehicleLicensePlate }}</span>
+                </div>
+              }
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.passengers' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.numberOfPassengers }}</span>
+              </div>
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.luggage' | transloco }}</span>
+                <span class="cell-value">{{ selectedBooking()!.numberOfLuggage }}</span>
+              </div>
+              @if (selectedBooking()!.flightNumber) {
+                <div class="detail-cell">
+                  <span class="cell-label">Flight Number</span>
+                  <span class="cell-value font-mono">{{ selectedBooking()!.flightNumber }}</span>
+                </div>
+              }
+              <div class="detail-cell">
+                <span class="cell-label">{{ 'customer.fare' | transloco }}</span>
+                <span class="cell-value text-gold">{{ selectedBooking()!.estimatedPrice ? (selectedBooking()!.estimatedPrice + ' SAR') : 'VIP Inclusive' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          @if (selectedBooking()!.specialNotes || selectedBooking()!.customerNotes) {
+            <div class="details-section">
+              <h4 class="section-title">
+                <svg class="icon-sm text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <span>{{ 'customer.notes' | transloco }}</span>
+              </h4>
+              <p class="notes-box">{{ selectedBooking()!.specialNotes || selectedBooking()!.customerNotes }}</p>
+            </div>
+          }
+
+          <!-- Status Timeline History -->
+          @if (selectedBooking()!.statusHistories && selectedBooking()!.statusHistories!.length > 0) {
+            <div class="details-section">
+              <h4 class="section-title">
+                <svg class="icon-sm text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 14 10"/>
+                </svg>
+                <span>Timeline History</span>
+              </h4>
+              <div class="history-list">
+                @for (history of selectedBooking()!.statusHistories; track history.id) {
+                  <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-content">
+                      <div class="history-head">
+                        <span class="history-status">{{ history.statusName }}</span>
+                        <span class="history-date">{{ history.createdAt | date:'short' }}</span>
+                      </div>
+                      @if (history.notes) {
+                        <p class="history-note">{{ history.notes }}</p>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeDetails()">
+            {{ 'common.close' | transloco }}
+          </button>
+          @if (canCancel(selectedBooking()!)) {
+            <button class="btn-danger" (click)="closeDetails(); openCancelModal(selectedBooking()!)">
+              {{ 'customer.cancelBooking' | transloco }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Cancellation Confirmation Modal -->
+  @if (showCancelModal() && selectedBooking()) {
+    <div class="modal-backdrop" (click)="closeCancelModal()">
+      <div class="modal-card modal-md" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">{{ 'customer.cancelModalTitle' | transloco }}</h3>
+            <span class="ref-badge">{{ selectedBooking()!.bookingReference }}</span>
+          </div>
+          <button class="btn-close" (click)="closeCancelModal()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="warning-callout">
+            <svg class="icon-md text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <p>{{ 'customer.cancelModalConfirm' | transloco }}</p>
+          </div>
+
+          <form [formGroup]="cancelForm">
+            <div class="form-group">
+              <label class="form-label">{{ 'customer.cancellationReasonLabel' | transloco }}</label>
+              <textarea
+                class="form-control"
+                rows="3"
+                [placeholder]="'customer.cancellationReasonPlaceholder' | transloco"
+                formControlName="cancellationReason"
+              ></textarea>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeCancelModal()" [disabled]="actionLoading()">
+            {{ 'common.cancel' | transloco }}
+          </button>
+          <button class="btn-danger" (click)="confirmCancellation()" [disabled]="actionLoading()">
+            @if (actionLoading()) {
+              <svg class="icon-sm spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+            }
+            <span>{{ 'customer.confirmCancelBtn' | transloco }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

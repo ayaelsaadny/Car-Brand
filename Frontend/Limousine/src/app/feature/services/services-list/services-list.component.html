@@ -1,0 +1,401 @@
+<div class="services-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-badge" [class.badge-staff]="isEmployee()">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span>{{ isAdmin() ? 'Executive Travel Packages' : 'Staff Services Inspection' }}</span>
+      </div>
+      <h1 class="page-title">{{ 'servicesPage.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'servicesPage.subtitle' | transloco }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="loadData()" [disabled]="loading()">
+        <svg class="icon-sm" [class.spin]="loading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span>{{ 'common.loading' | transloco }}</span>
+      </button>
+
+      <!-- Add Service is strictly restricted to Admin -->
+      @if (isAdmin()) {
+        <button class="btn-primary" (click)="openCreateModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>{{ 'servicesPage.addService' | transloco }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Messages Alert -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card" [class.active-card]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+      <div class="stat-icon stat-icon-total">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().total }}</div>
+        <div class="stat-lbl">{{ 'servicesPage.total' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [class.active-card]="statusFilter() === 'active'" (click)="statusFilter.set('active')">
+      <div class="stat-icon stat-icon-active">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().active }}</div>
+        <div class="stat-lbl">{{ 'servicesPage.activeCount' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [class.active-card]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">
+      <div class="stat-icon stat-icon-inactive">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().inactive }}</div>
+        <div class="stat-lbl">{{ 'servicesPage.archivedCount' | transloco }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar & Filters -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg class="icon-sm search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        [placeholder]="'users.searchPlaceholder' | transloco"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        class="search-input"
+      />
+      @if (searchQuery()) {
+        <button class="clear-search" (click)="searchQuery.set('')">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="filter-controls">
+      <!-- Category Filter Dropdown -->
+      <select
+        class="category-select"
+        [ngModel]="selectedCategoryId()"
+        (ngModelChange)="selectedCategoryId.set($event)"
+      >
+        <option value="all">All Categories</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+          {{ 'common.all' | transloco }}
+        </button>
+        <button class="filter-tab" [class.active]="statusFilter() === 'active'" (click)="statusFilter.set('active')">
+          {{ 'servicesPage.active' | transloco }}
+        </button>
+        <button class="filter-tab" [class.active]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">
+          {{ 'servicesPage.inactive' | transloco }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <svg class="icon-lg spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+        <path d="M12 2a10 10 0 0 1 10 10"/>
+      </svg>
+      <span>{{ 'common.loading' | transloco }}</span>
+    </div>
+  } @else if (filteredServices().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg class="icon-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">{{ 'servicesPage.noServices' | transloco }}</h3>
+      <p class="empty-desc">Create executive chauffeur packages and city transfers linked to your luxury fleet.</p>
+      @if (isAdmin()) {
+        <button class="btn-primary" (click)="openCreateModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>{{ 'servicesPage.addService' | transloco }}</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <!-- Services Grid -->
+    <div class="services-grid">
+      @for (service of filteredServices(); track service.id) {
+        <div class="service-card" [class.card-inactive]="!service.isActive">
+          <div class="card-visual">
+            @if (service.imageUrl || service.image) {
+              <img [src]="service.imageUrl || service.image" [alt]="service.name" class="srv-image" />
+            } @else {
+              <div class="srv-fallback-icon">
+                <svg class="icon-xl text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </div>
+            }
+            <div class="visual-badges">
+              <span class="badge-cat">{{ service.categoryName }}</span>
+              <span class="badge-status" [class.badge-active]="service.isActive" [class.badge-inactive]="!service.isActive">
+                {{ (service.isActive ? 'servicesPage.active' : 'servicesPage.inactive') | transloco }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <div class="card-title-row">
+              <h3 class="service-name">{{ service.name }}</h3>
+              <div class="service-price">
+                <span class="price-val">{{ service.price ? (service.price + ' SAR') : 'Custom Fare' }}</span>
+              </div>
+            </div>
+
+            <p class="service-description">
+              {{ service.description || 'Premium bespoke executive service tailored for VIP clients.' }}
+            </p>
+
+            <!-- Route Details -->
+            @if (service.fromLocation || service.toLocation) {
+              <div class="route-box">
+                <div class="route-item">
+                  <span class="route-k">From:</span>
+                  <span class="route-v">{{ service.fromLocation || 'Any Location' }}</span>
+                </div>
+                <div class="route-arrow">
+                  <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </div>
+                <div class="route-item">
+                  <span class="route-k">To:</span>
+                  <span class="route-v">{{ service.toLocation || 'Desired Destination' }}</span>
+                </div>
+              </div>
+            }
+
+            <div class="service-meta-tags">
+              @if (service.allowVehicleSelection) {
+                <span class="tag-vehicle-selection">
+                  <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                    <circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+                  </svg>
+                  <span>Vehicle Selection</span>
+                </span>
+              }
+              <span class="tag-order">#Order: {{ service.displayOrder }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn-check-vehicles" (click)="viewAvailableVehicles(service)">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                <circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+              </svg>
+              <span>Available Fleet</span>
+            </button>
+
+            <!-- Admin Actions: Status Toggle, Edit, Delete -->
+            @if (isAdmin()) {
+              <div class="admin-actions-group">
+                <!-- Status Toggle Switch -->
+                <button
+                  type="button"
+                  class="btn-toggle-status"
+                  [class.is-active]="service.isActive"
+                  (click)="toggleStatus(service)"
+                  [title]="(service.isActive ? 'servicesPage.deactivate' : 'servicesPage.activate') | transloco"
+                >
+                  <span class="toggle-track">
+                    <span class="toggle-thumb"></span>
+                  </span>
+                </button>
+
+                <button class="btn-action-icon" (click)="openEditModal(service)" [title]="'servicesPage.edit' | transloco">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+
+                <button class="btn-action-icon btn-danger-icon" (click)="confirmDelete(service.id)" [title]="'servicesPage.delete' | transloco">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Dedicated Subfolder Form Modal Component -->
+  <app-service-form
+    [service]="editingService()"
+    [categories]="categories()"
+    [isOpen]="isFormOpen()"
+    (saved)="onServiceSaved($event)"
+    (closed)="closeFormModal()"
+  ></app-service-form>
+
+  <!-- Delete Confirmation Modal (Admin Only) -->
+  @if (isDeleteConfirmOpen()) {
+    <div class="modal-backdrop" (click)="closeDeleteConfirm()">
+      <div class="modal-card modal-confirm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3 class="modal-title">{{ 'servicesPage.deleteService' | transloco }}</h3>
+          <button class="btn-close" (click)="closeDeleteConfirm()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body-confirm">
+          <div class="warning-callout">
+            <svg class="icon-md text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <p>{{ 'servicesPage.confirmDelete' | transloco }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeDeleteConfirm()">
+            {{ 'servicesPage.cancel' | transloco }}
+          </button>
+          <button class="btn-danger" (click)="executeDelete()">
+            {{ 'servicesPage.delete' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- View Available Vehicles Modal (Admin & Staff) -->
+  @if (selectedServiceForVehicles()) {
+    <div class="modal-backdrop" (click)="closeVehiclesModal()">
+      <div class="modal-card modal-vehicles" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="header-title-group">
+            <div class="crest-icon">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                <circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+              </svg>
+            </div>
+            <h3 class="modal-title">
+              {{ selectedServiceForVehicles()!.name }} - Available Fleet
+            </h3>
+          </div>
+          <button class="btn-close" (click)="closeVehiclesModal()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body-vehicles">
+          @if (vehiclesLoading()) {
+            <div class="loading-state">
+              <svg class="icon-md spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+              <span>{{ 'common.loading' | transloco }}</span>
+            </div>
+          } @else if (availableVehiclesList().length === 0) {
+            <div class="no-vehicles-box">
+              <p>All fleet vehicles are currently active or awaiting schedule confirmation.</p>
+            </div>
+          } @else {
+            <div class="vehicles-list">
+              @for (v of availableVehiclesList(); track v.id) {
+                <div class="vehicle-item">
+                  <div class="vehicle-info">
+                    <span class="vehicle-name">{{ v.name }}</span>
+                    <span class="vehicle-meta">{{ v.make }} {{ v.model }} ({{ v.year }}) - {{ v.passengerCapacity }} Pax</span>
+                  </div>
+                  <span class="vehicle-price">{{ v.pricePerHour }} SAR / hr</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeVehiclesModal()">
+            {{ 'common.close' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

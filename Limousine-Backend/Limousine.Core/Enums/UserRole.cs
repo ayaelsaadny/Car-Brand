@@ -3,6 +3,7 @@ namespace Limousine.Core.Enums
     public enum UserRole
     {
         Admin = 1,
-        Customer = 2
+        Customer = 2,
+        Employee = 3
     }
 }

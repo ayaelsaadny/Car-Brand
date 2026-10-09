@@ -15,16 +15,51 @@ namespace Limousine.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileService _fileService;
+        private readonly ICurrentLanguageService _languageService;
+        private readonly ILocalizationService _localizationService;
 
-        public CategoryService(IUnitOfWork unitOfWork, IFileService fileService)
+        public CategoryService(
+            IUnitOfWork unitOfWork,
+            IFileService fileService,
+            ICurrentLanguageService languageService,
+            ILocalizationService localizationService)
         {
             _unitOfWork = unitOfWork;
             _fileService = fileService;
+            _languageService = languageService;
+            _localizationService = localizationService;
         }
 
         public async Task<IReadOnlyList<CategoryDto>> GetAllAsync(bool? activeOnly = null, bool includeServices = false, CancellationToken cancellationToken = default)
         {
             var categories = await _unitOfWork.Repository<Category>().GetAllAsync(cancellationToken);
+            var categoryTranslations = await _unitOfWork.Repository<CategoryTranslation>().GetAllAsync(cancellationToken);
+
+            var currentLang = _languageService.CurrentLanguage;
+            var catTransLookup = categoryTranslations
+                .GroupBy(t => t.CategoryId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            (string Name, string? Description) ResolveCategoryText(Category c)
+            {
+                if (catTransLookup.TryGetValue(c.Id, out var transList))
+                {
+                    if (currentLang == "fr")
+                    {
+                        var fr = transList.FirstOrDefault(t => t.LanguageCode == "fr");
+                        if (fr != null && !string.IsNullOrWhiteSpace(fr.Name))
+                        {
+                            return (fr.Name, fr.Description ?? c.Description);
+                        }
+                    }
+                    var en = transList.FirstOrDefault(t => t.LanguageCode == "en");
+                    if (en != null && !string.IsNullOrWhiteSpace(en.Name))
+                    {
+                        return (en.Name, en.Description ?? c.Description);
+                    }
+                }
+                return (c.Name, c.Description);
+            }
 
             var query = categories.AsEnumerable();
             if (activeOnly.HasValue && activeOnly.Value)
@@ -74,20 +109,24 @@ namespace Limousine.Application.Services
                     .ToLookup(s => s.CategoryId);
             }
 
-            return sorted.Select(c => new CategoryDto
+            return sorted.Select(c =>
             {
-                Id = c.Id,
-                Name = c.Name,
-                Description = c.Description,
-                ImageUrl = c.ImageUrl,
-                IsActive = c.IsActive,
-                DisplayOrder = c.DisplayOrder,
-                CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt,
-                ServicesCount = serviceCountsByCategoryId.TryGetValue(c.Id, out var count) ? count : 0,
-                Services = includeServices && servicesByCategoryLookup != null 
-                    ? servicesByCategoryLookup[c.Id].ToList() 
-                    : null
+                var (catName, catDesc) = ResolveCategoryText(c);
+                return new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = catName,
+                    Description = catDesc,
+                    ImageUrl = c.ImageUrl,
+                    IsActive = c.IsActive,
+                    DisplayOrder = c.DisplayOrder,
+                    CreatedAt = c.CreatedAt,
+                    UpdatedAt = c.UpdatedAt,
+                    ServicesCount = serviceCountsByCategoryId.TryGetValue(c.Id, out var count) ? count : 0,
+                    Services = includeServices && servicesByCategoryLookup != null 
+                        ? servicesByCategoryLookup[c.Id].ToList() 
+                        : null
+                };
             }).ToList();
         }
 
@@ -99,6 +138,32 @@ namespace Limousine.Application.Services
             if (activeOnly.HasValue && activeOnly.Value && !category.IsActive)
             {
                 return null;
+            }
+
+            var currentLang = _languageService.CurrentLanguage;
+            var catTranslations = await _unitOfWork.Repository<CategoryTranslation>()
+                .FindAsync(t => t.CategoryId == category.Id, cancellationToken);
+
+            string catName = category.Name;
+            string? catDesc = category.Description;
+
+            if (currentLang == "fr")
+            {
+                var fr = catTranslations.FirstOrDefault(t => t.LanguageCode == "fr");
+                if (fr != null && !string.IsNullOrWhiteSpace(fr.Name))
+                {
+                    catName = fr.Name;
+                    catDesc = fr.Description ?? category.Description;
+                }
+            }
+            else
+            {
+                var en = catTranslations.FirstOrDefault(t => t.LanguageCode == "en");
+                if (en != null && !string.IsNullOrWhiteSpace(en.Name))
+                {
+                    catName = en.Name;
+                    catDesc = en.Description ?? category.Description;
+                }
             }
 
             var services = await _unitOfWork.Repository<Service>().GetAllAsync(cancellationToken);
@@ -115,7 +180,7 @@ namespace Limousine.Application.Services
                 {
                     Id = s.Id,
                     CategoryId = s.CategoryId,
-                    CategoryName = category.Name,
+                    CategoryName = catName,
                     Name = s.Name,
                     Description = s.Description,
                     ImageUrl = s.ImageUrl,
@@ -132,8 +197,8 @@ namespace Limousine.Application.Services
             return new CategoryDto
             {
                 Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
+                Name = catName,
+                Description = catDesc,
                 ImageUrl = category.ImageUrl,
                 IsActive = category.IsActive,
                 DisplayOrder = category.DisplayOrder,
@@ -154,6 +219,22 @@ namespace Limousine.Application.Services
                 return Array.Empty<ServiceDto>();
             }
 
+            var currentLang = _languageService.CurrentLanguage;
+            var catTranslations = await _unitOfWork.Repository<CategoryTranslation>()
+                .FindAsync(t => t.CategoryId == category.Id, cancellationToken);
+
+            string catName = category.Name;
+            if (currentLang == "fr")
+            {
+                var fr = catTranslations.FirstOrDefault(t => t.LanguageCode == "fr");
+                if (fr != null && !string.IsNullOrWhiteSpace(fr.Name)) catName = fr.Name;
+            }
+            else
+            {
+                var en = catTranslations.FirstOrDefault(t => t.LanguageCode == "en");
+                if (en != null && !string.IsNullOrWhiteSpace(en.Name)) catName = en.Name;
+            }
+
             var services = await _unitOfWork.Repository<Service>().GetAllAsync(cancellationToken);
             var query = services.Where(s => s.CategoryId == categoryId);
             if (activeOnly.HasValue && activeOnly.Value)
@@ -168,7 +249,7 @@ namespace Limousine.Application.Services
                 {
                     Id = s.Id,
                     CategoryId = s.CategoryId,
-                    CategoryName = category.Name,
+                    CategoryName = catName,
                     Name = s.Name,
                     Description = s.Description,
                     ImageUrl = s.ImageUrl,
@@ -186,18 +267,35 @@ namespace Limousine.Application.Services
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto, CancellationToken cancellationToken = default)
         {
+            string categoryName = dto.Name;
+            string? categoryDesc = dto.Description;
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                if (!dto.Translations.TryGetValue("en", out var enTrans) || string.IsNullOrWhiteSpace(enTrans?.Name))
+                {
+                    throw new InvalidOperationException(_localizationService.GetMessage("Categories.EnglishRequired"));
+                }
+                categoryName = enTrans.Name.Trim();
+                categoryDesc = enTrans.Description?.Trim();
+            }
+            else if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                throw new InvalidOperationException(_localizationService.GetMessage("Categories.EnglishRequired"));
+            }
+
             var existingCategory = await _unitOfWork.Repository<Category>()
-                .FirstOrDefaultAsync(c => c.Name.ToLower() == dto.Name.Trim().ToLower(), cancellationToken);
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower(), cancellationToken);
 
             if (existingCategory != null)
             {
-                throw new InvalidOperationException($"A category with the name '{dto.Name}' already exists.");
+                throw new InvalidOperationException($"A category with the name '{categoryName}' already exists.");
             }
 
             var category = new Category
             {
-                Name = dto.Name.Trim(),
-                Description = dto.Description?.Trim(),
+                Name = categoryName,
+                Description = categoryDesc,
                 ImageUrl = dto.ImageUrl?.Trim() ?? string.Empty,
                 IsActive = dto.IsActive,
                 DisplayOrder = dto.DisplayOrder,
@@ -206,6 +304,35 @@ namespace Limousine.Application.Services
             };
 
             await _unitOfWork.Repository<Category>().AddAsync(category, cancellationToken);
+            await _unitOfWork.CompleteAsync(cancellationToken);
+
+            // Save translations
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                foreach (var (langCode, trans) in dto.Translations)
+                {
+                    if (!string.IsNullOrWhiteSpace(trans.Name))
+                    {
+                        await _unitOfWork.Repository<CategoryTranslation>().AddAsync(new CategoryTranslation
+                        {
+                            CategoryId = category.Id,
+                            LanguageCode = langCode.ToLowerInvariant(),
+                            Name = trans.Name.Trim(),
+                            Description = trans.Description?.Trim()
+                        }, cancellationToken);
+                    }
+                }
+            }
+            else
+            {
+                await _unitOfWork.Repository<CategoryTranslation>().AddAsync(new CategoryTranslation
+                {
+                    CategoryId = category.Id,
+                    LanguageCode = "en",
+                    Name = category.Name,
+                    Description = category.Description
+                }, cancellationToken);
+            }
             await _unitOfWork.CompleteAsync(cancellationToken);
 
             return new CategoryDto
@@ -227,16 +354,33 @@ namespace Limousine.Application.Services
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(id, cancellationToken);
             if (category == null) return null;
 
+            string categoryName = dto.Name;
+            string? categoryDesc = dto.Description;
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                if (!dto.Translations.TryGetValue("en", out var enTrans) || string.IsNullOrWhiteSpace(enTrans?.Name))
+                {
+                    throw new InvalidOperationException(_localizationService.GetMessage("Categories.EnglishRequired"));
+                }
+                categoryName = enTrans.Name.Trim();
+                categoryDesc = enTrans.Description?.Trim();
+            }
+            else if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                categoryName = category.Name;
+            }
+
             var duplicate = await _unitOfWork.Repository<Category>()
-                .FirstOrDefaultAsync(c => c.Id != id && c.Name.ToLower() == dto.Name.Trim().ToLower(), cancellationToken);
+                .FirstOrDefaultAsync(c => c.Id != id && c.Name.ToLower() == categoryName.ToLower(), cancellationToken);
 
             if (duplicate != null)
             {
-                throw new InvalidOperationException($"Another category with the name '{dto.Name}' already exists.");
+                throw new InvalidOperationException($"Another category with the name '{categoryName}' already exists.");
             }
 
-            category.Name = dto.Name.Trim();
-            category.Description = dto.Description?.Trim();
+            category.Name = categoryName;
+            category.Description = categoryDesc;
             if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
             {
                 category.ImageUrl = dto.ImageUrl.Trim();
@@ -246,6 +390,35 @@ namespace Limousine.Application.Services
             category.UpdatedAt = DateTime.UtcNow;
 
             _unitOfWork.Repository<Category>().Update(category);
+
+            // Update translations
+            var existingTranslations = await _unitOfWork.Repository<CategoryTranslation>()
+                .FindAsync(t => t.CategoryId == category.Id, cancellationToken);
+
+            if (dto.Translations != null && dto.Translations.Count > 0)
+            {
+                foreach (var (code, trans) in dto.Translations)
+                {
+                    var existing = existingTranslations.FirstOrDefault(t => t.LanguageCode == code.ToLowerInvariant());
+                    if (existing != null)
+                    {
+                        existing.Name = trans.Name.Trim();
+                        existing.Description = trans.Description?.Trim();
+                        _unitOfWork.Repository<CategoryTranslation>().Update(existing);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(trans.Name))
+                    {
+                        await _unitOfWork.Repository<CategoryTranslation>().AddAsync(new CategoryTranslation
+                        {
+                            CategoryId = category.Id,
+                            LanguageCode = code.ToLowerInvariant(),
+                            Name = trans.Name.Trim(),
+                            Description = trans.Description?.Trim()
+                        }, cancellationToken);
+                    }
+                }
+            }
+
             await _unitOfWork.CompleteAsync(cancellationToken);
 
             var serviceCount = await _unitOfWork.Repository<Service>()

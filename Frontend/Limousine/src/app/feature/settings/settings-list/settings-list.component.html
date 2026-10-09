@@ -1,0 +1,220 @@
+<div class="settings-page">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title-row">
+        <div class="header-crest">
+          <svg class="crest-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="header-badge">{{ 'auth.admin' | transloco }}</span>
+          <h1 class="header-title">{{ 'settingsPage.title' | transloco }}</h1>
+          <p class="header-subtitle">{{ 'settingsPage.subtitle' | transloco }}</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn-luxury-secondary" (click)="loadSettings()" [disabled]="loading()">
+          <svg class="icon-sm" [class.spin]="loading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/>
+          </svg>
+          <span>{{ 'users.refresh' | transloco }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alerts -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Stats Strip -->
+  <section class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-icon-wrapper">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">Total Parameters</span>
+        <span class="stat-value">{{ settings().length }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">Configuration Groups</span>
+        <span class="stat-value">{{ availableGroups().length }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon-wrapper status-online">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="stat-data">
+        <span class="stat-label">Security Protocol</span>
+        <span class="stat-value highlight">Admin Guarded</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Search Toolbar -->
+  <section class="toolbar-section">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'Search settings by key, group, or value...'"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+      />
+      @if (searchQuery()) {
+        <button type="button" class="search-clear-btn" (click)="searchQuery.set('')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="filter-tabs">
+      <button
+        type="button"
+        class="tab-pill"
+        [class.active]="selectedGroup() === 'all'"
+        (click)="selectedGroup.set('all')"
+      >
+        <span>{{ 'settingsPage.allGroups' | transloco }}</span>
+        <span class="tab-badge">{{ settings().length }}</span>
+      </button>
+
+      @for (grp of availableGroups(); track grp) {
+        <button
+          type="button"
+          class="tab-pill"
+          [class.active]="selectedGroup().toLowerCase() === grp.toLowerCase()"
+          (click)="selectedGroup.set(grp)"
+        >
+          <span>{{ grp }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Content Grid -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner-luxury"></div>
+      <p class="loading-text">{{ 'common.loading' | transloco }}</p>
+    </div>
+  } @else if (filteredSettings().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">{{ 'settingsPage.noSettings' | transloco }}</h3>
+      <p class="empty-desc">Try clearing your search query or choosing another group filter.</p>
+    </div>
+  } @else {
+    <div class="settings-grid">
+      @for (s of filteredSettings(); track s.key) {
+        <article class="setting-card">
+          <div class="card-header">
+            <div class="card-header-main">
+              <span class="card-group-badge">{{ s.group || 'General' }}</span>
+              <h2 class="card-key-title" [title]="s.key">{{ s.key }}</h2>
+            </div>
+            @if (isAdmin()) {
+              <button
+                type="button"
+                class="btn-edit-action"
+                (click)="openEditModal(s)"
+                [attr.aria-label]="'Edit setting ' + s.key"
+              >
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                <span>{{ 'vehiclesPage.edit' | transloco }}</span>
+              </button>
+            }
+          </div>
+
+          @if (s.description) {
+            <p class="card-description">{{ s.description }}</p>
+          }
+
+          <div class="card-value-box">
+            <div class="value-header">
+              <span class="value-label">{{ 'settingsPage.settingValue' | transloco }}</span>
+              <span class="value-type-badge">string</span>
+            </div>
+            <div class="value-display" [title]="s.value">
+              <code>{{ s.value }}</code>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="footer-meta-item">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>{{ 'settingsPage.lastUpdated' | transloco }}: System</span>
+            </span>
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+  <!-- Edit Setting Modal -->
+  <app-setting-form
+    [setting]="selectedSetting()"
+    [isOpen]="isFormOpen()"
+    (saved)="onSettingSaved($event)"
+    (closed)="closeFormModal()"
+  ></app-setting-form>
+</div>

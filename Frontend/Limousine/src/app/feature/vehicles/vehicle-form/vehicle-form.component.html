@@ -1,0 +1,237 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="header-title-group">
+          <div class="crest-icon">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="modal-title">
+              {{ isEditing() ? ('vehiclesPage.editVehicle' | transloco) : ('vehiclesPage.addVehicle' | transloco) }}
+            </h2>
+            <span class="header-subtitle">
+              {{ isEditing() ? ('Fleet ID: #' + vehicle()?.id) : 'Executive Fleet Registry' }}
+            </span>
+          </div>
+        </div>
+
+        <button class="btn-close" (click)="onClose()" type="button" aria-label="Close modal">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-body" novalidate>
+        <!-- Vehicle Name -->
+        <div class="form-group">
+          <label class="form-label" for="vehName">
+            <span>{{ 'vehiclesPage.name' | transloco }}</span>
+            <span class="required-star">*</span>
+          </label>
+          <input
+            id="vehName"
+            type="text"
+            formControlName="name"
+            class="form-control"
+            [placeholder]="'vehiclesPage.namePlaceholder' | transloco"
+            [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+          />
+          @if (form.get('name')?.touched && form.get('name')?.invalid) {
+            <span class="form-error">Vehicle name is required.</span>
+          }
+        </div>
+
+        <!-- Make & Model -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehMake">
+              <span>{{ 'vehiclesPage.make' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehMake"
+              type="text"
+              formControlName="make"
+              class="form-control"
+              [placeholder]="'vehiclesPage.makePlaceholder' | transloco"
+              [class.is-invalid]="form.get('make')?.invalid && form.get('make')?.touched"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehModel">
+              <span>{{ 'vehiclesPage.model' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehModel"
+              type="text"
+              formControlName="model"
+              class="form-control"
+              [placeholder]="'vehiclesPage.modelPlaceholder' | transloco"
+              [class.is-invalid]="form.get('model')?.invalid && form.get('model')?.touched"
+            />
+          </div>
+        </div>
+
+        <!-- Plate, Year, Color -->
+        <div class="form-row form-row-3">
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehPlate">
+              <span>{{ 'vehiclesPage.plate' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehPlate"
+              type="text"
+              formControlName="licensePlate"
+              class="form-control font-mono"
+              [placeholder]="'vehiclesPage.platePlaceholder' | transloco"
+              [class.is-invalid]="form.get('licensePlate')?.invalid && form.get('licensePlate')?.touched"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehYear">
+              <span>{{ 'vehiclesPage.year' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehYear"
+              type="number"
+              min="1900"
+              max="2100"
+              formControlName="year"
+              class="form-control"
+              [placeholder]="'vehiclesPage.yearPlaceholder' | transloco"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehColor">{{ 'vehiclesPage.color' | transloco }}</label>
+            <input
+              id="vehColor"
+              type="text"
+              formControlName="color"
+              class="form-control"
+              [placeholder]="'vehiclesPage.colorPlaceholder' | transloco"
+            />
+          </div>
+        </div>
+
+        <!-- Rates & Capacities -->
+        <div class="form-row form-row-3">
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehPrice">
+              <span>{{ 'vehiclesPage.priceHour' | transloco }} (SAR)</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehPrice"
+              type="number"
+              min="0.01"
+              step="0.01"
+              formControlName="pricePerHour"
+              class="form-control"
+              placeholder="250.00"
+              [class.is-invalid]="form.get('pricePerHour')?.invalid && form.get('pricePerHour')?.touched"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehPass">
+              <span>{{ 'vehiclesPage.passengers' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehPass"
+              type="number"
+              min="1"
+              max="100"
+              formControlName="passengerCapacity"
+              class="form-control"
+              placeholder="4"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehLug">
+              <span>{{ 'vehiclesPage.luggage' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="vehLug"
+              type="number"
+              min="0"
+              max="100"
+              formControlName="luggageCapacity"
+              class="form-control"
+              placeholder="3"
+            />
+          </div>
+        </div>
+
+        <!-- Features & Description -->
+        <div class="form-group">
+          <label class="form-label" for="vehFeatures">{{ 'vehiclesPage.features' | transloco }}</label>
+          <textarea
+            id="vehFeatures"
+            rows="2"
+            formControlName="features"
+            class="form-control textarea"
+            [placeholder]="'vehiclesPage.featuresPlaceholder' | transloco"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="vehDesc">Overview / Description</label>
+          <textarea
+            id="vehDesc"
+            rows="2"
+            formControlName="description"
+            class="form-control textarea"
+            placeholder="Executive luxury specifications and guest amenities..."
+          ></textarea>
+        </div>
+
+        <!-- Toggles -->
+        <div class="toggles-row">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="isActive" class="form-checkbox" />
+            <span class="checkbox-text">{{ 'vehiclesPage.active' | transloco }}</span>
+          </label>
+
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="isDefault" class="form-checkbox" />
+            <span class="checkbox-text">Showcase as Default Fleet Vehicle</span>
+          </label>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="onClose()" [disabled]="isSaving()">
+            {{ 'vehiclesPage.cancel' | transloco }}
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="isSaving() || form.invalid">
+            @if (isSaving()) {
+              <svg class="icon-sm spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+            }
+            <span>{{ 'vehiclesPage.save' | transloco }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

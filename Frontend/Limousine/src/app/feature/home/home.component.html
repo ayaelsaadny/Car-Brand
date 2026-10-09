@@ -1,0 +1,506 @@
+<div class="landing-page" dir="ltr">
+  <!-- 1. Header Navigation -->
+  <header class="public-navbar">
+    <div class="nav-container">
+      <!-- Brand Name / Logo (الاسم) -->
+      <div class="brand">
+        <a [routerLink]="['/' + langService.currentLang()]" class="brand-link">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 18h16M5 15l2-8 5 4 5-4 2 8H5z"/>
+          </svg>
+          <span class="brand-name">{{ settings()['CompanyName'] || 'Limousine' }}</span>
+        </a>
+      </div>
+
+      <!-- Desktop Nav Links (Hidden on Tablet & Mobile) -->
+      <nav class="nav-links">
+        <a href="#categories" class="nav-link">{{ 'nav.categories' | transloco }}</a>
+        <a href="#services" class="nav-link">{{ 'nav.services' | transloco }}</a>
+        <a href="#fleet" class="nav-link">{{ 'nav.fleet' | transloco }}</a>
+        <a href="#contact" class="nav-link">{{ 'nav.contact' | transloco }}</a>
+      </nav>
+
+      <!-- Nav Actions (اللغه + علامه اليوزر + 3 شرايط) -->
+      <div class="nav-actions">
+        <!-- Language Switcher Component (EN | FR) -->
+        <app-language-switcher />
+
+        <!-- User Logged In Actions -->
+        <ng-container *ngIf="authService.isLoggedIn(); else guestActions">
+          <div class="user-chip-menu">
+            <a [routerLink]="['/' + langService.currentLang() + '/dashboard']" class="user-avatar-btn" [title]="authService.currentUser()?.fullName || 'Dashboard'">
+              <span class="user-avatar">{{ authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
+            </a>
+            <div class="user-info desktop-only">
+              <strong>{{ authService.currentUser()?.fullName }}</strong>
+              <small>{{ authService.currentUser()?.role || ('auth.client' | transloco) }}</small>
+            </div>
+            <a [routerLink]="['/' + langService.currentLang() + '/dashboard']" class="btn btn-outline-gold desktop-only">
+              <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="7" height="9" rx="1"/>
+                <rect x="14" y="3" width="7" height="5" rx="1"/>
+                <rect x="14" y="12" width="7" height="9" rx="1"/>
+                <rect x="3" y="16" width="7" height="5" rx="1"/>
+              </svg>
+              <span>{{ 'nav.dashboard' | transloco }}</span>
+            </a>
+            <button (click)="logout()" class="btn-logout desktop-only" [title]="'nav.logout' | transloco">
+              <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v10M18.36 6.64a9 9 0 1 1-12.73 0"/>
+              </svg>
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- User Guest Actions (علامه اليوزر فقط في التابلت والموبايل بدون كلمة Sign In) -->
+        <ng-template #guestActions>
+          <button (click)="openAuthModal('login')" class="user-auth-btn" [title]="'auth.myAccount' | transloco" aria-label="Account">
+            <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M6 20v-1a6 6 0 0 1 12 0v1"/>
+            </svg>
+            <span class="user-btn-text desktop-only">{{ 'nav.login' | transloco }}</span>
+          </button>
+        </ng-template>
+
+        <!-- 3 شرايط Hamburger Button (Visible on Tablet & Mobile) -->
+        <button
+          type="button"
+          class="mobile-hamburger-btn mobile-only"
+          [class.open]="isMobileMenuOpen()"
+          (click)="toggleMobileMenu()"
+          aria-label="Toggle navigation menu"
+        >
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+          <span class="bar bar-3"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ناف بار ينزل من فوق مش من الجنب ويكون افقي فيه الكاتيجوري والسيرفيس وباقي الحاجات -->
+    <div class="mobile-dropdown-panel" [class.open]="isMobileMenuOpen()">
+      <div class="mobile-dropdown-inner">
+        <nav class="mobile-horizontal-links">
+          <a href="#categories" class="mobile-nav-chip" (click)="closeMobileMenu()">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+            <span>{{ 'nav.categories' | transloco }}</span>
+          </a>
+
+          <a href="#services" class="mobile-nav-chip" (click)="closeMobileMenu()">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span>{{ 'nav.services' | transloco }}</span>
+          </a>
+
+          <a href="#fleet" class="mobile-nav-chip" (click)="closeMobileMenu()">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+            <span>{{ 'nav.fleet' | transloco }}</span>
+          </a>
+
+          <a href="#contact" class="mobile-nav-chip" (click)="closeMobileMenu()">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>{{ 'nav.contact' | transloco }}</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">{{ 'hero.badge' | transloco }}</div>
+      <h1 class="hero-title">{{ 'hero.title' | transloco }}</h1>
+      <p class="hero-subtitle">
+        {{ 'hero.subtitle' | transloco }}
+      </p>
+
+      <div class="hero-actions">
+        <a href="#fleet" class="btn btn-gold btn-lg">{{ 'hero.exploreFleet' | transloco }}</a>
+        <a href="#services" class="btn btn-dark-outline btn-lg">{{ 'hero.ourServices' | transloco }}</a>
+      </div>
+
+      <!-- Formal Outlined Features Summary -->
+      <div class="hero-features">
+        <div class="feature-item">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>{{ 'hero.featureSecurity' | transloco }}</span>
+        </div>
+        <div class="feature-item">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>{{ 'hero.featurePunctuality' | transloco }}</span>
+        </div>
+        <div class="feature-item">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 3h12l4 6-10 12L2 9l4-6z"/>
+            <path d="M2 9h20M10 3l-2 6 4 12 4-12-2-6"/>
+          </svg>
+          <span>{{ 'hero.featureVip' | transloco }}</span>
+        </div>
+        <div class="feature-item">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+          <span>{{ 'hero.featureSupport' | transloco }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Services Section -->
+  <section id="services" class="section bg-light">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">{{ 'servicesSection.tag' | transloco }}</span>
+        <h2 class="section-title">{{ 'servicesSection.title' | transloco }}</h2>
+        <p class="section-desc">{{ 'servicesSection.desc' | transloco }}</p>
+      </div>
+
+      <div *ngIf="loadingServices()" class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ 'servicesSection.loading' | transloco }}</p>
+      </div>
+
+      <div *ngIf="!loadingServices()" class="services-grid">
+        <div *ngFor="let s of services()" class="service-card">
+          <div class="service-card-visual" *ngIf="s.imageUrl || s.image">
+            <img [src]="s.imageUrl || s.image" [alt]="s.name" class="service-card-img" />
+          </div>
+          <div class="service-header">
+            <span class="service-cat-badge">{{ s.categoryName }}</span>
+            <div class="service-price">
+              <strong>{{ s.price | number:'1.2-2' }}</strong>
+              <small>{{ 'common.currency' | transloco }}</small>
+            </div>
+          </div>
+          <h3 class="service-title">{{ s.name }}</h3>
+          <p class="service-description">{{ s.description }}</p>
+          <div class="service-route" *ngIf="s.fromLocation || s.toLocation">
+            <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>{{ s.fromLocation || ('servicesSection.anyOrigin' | transloco) }} → {{ s.toLocation || ('servicesSection.dest' | transloco) }}</span>
+          </div>
+          <button (click)="openAuthModal('login')" class="btn btn-outline-card">{{ 'servicesSection.bookService' | transloco }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Fleet Section -->
+  <section id="fleet" class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">{{ 'fleetSection.tag' | transloco }}</span>
+        <h2 class="section-title">{{ 'fleetSection.title' | transloco }}</h2>
+        <p class="section-desc">{{ 'fleetSection.desc' | transloco }}</p>
+      </div>
+
+      <div *ngIf="loadingVehicles()" class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ 'fleetSection.loading' | transloco }}</p>
+      </div>
+
+      <div *ngIf="!loadingVehicles()" class="fleet-grid">
+        <div *ngFor="let v of vehicles()" class="fleet-card">
+          <div class="fleet-image-wrap">
+            <div class="fleet-image-placeholder">
+              <svg class="icon-outline icon-outline-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+                <circle cx="7" cy="17" r="2"/>
+                <circle cx="17" cy="17" r="2"/>
+              </svg>
+            </div>
+            <span class="fleet-year-badge">{{ v.year }}</span>
+          </div>
+
+          <div class="fleet-info">
+            <h3 class="fleet-title">{{ v.name }}</h3>
+            <p class="fleet-make-model">{{ v.make }} {{ v.model }}</p>
+
+            <div class="fleet-specs">
+              <span class="spec-pill">
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                {{ v.passengerCapacity }} {{ 'common.passengers' | transloco }}
+              </span>
+              <span class="spec-pill">
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="6" width="18" height="15" rx="2"/>
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="16"/>
+                  <line x1="14" y1="11" x2="14" y2="16"/>
+                </svg>
+                {{ v.luggageCapacity }} {{ 'common.luggage' | transloco }}
+              </span>
+            </div>
+
+            <p class="fleet-features" *ngIf="v.features">
+              {{ v.features }}
+            </p>
+
+            <div class="fleet-footer">
+              <div class="fleet-rate">
+                <span class="price-val">{{ v.pricePerHour | number:'1.2-2' }}</span>
+                <span class="price-unit">{{ 'common.currency' | transloco }} {{ 'common.perHour' | transloco }}</span>
+              </div>
+              <button (click)="openAuthModal('login')" class="btn btn-gold-sm">{{ 'common.bookNow' | transloco }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Categories Section -->
+  <section id="categories" class="section bg-light">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-tag">{{ 'categoriesSection.tag' | transloco }}</span>
+        <h2 class="section-title">{{ 'categoriesSection.title' | transloco }}</h2>
+        <p class="section-desc">{{ 'categoriesSection.desc' | transloco }}</p>
+      </div>
+
+      <div *ngIf="loadingCategories()" class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ 'categoriesSection.loading' | transloco }}</p>
+      </div>
+
+      <div *ngIf="!loadingCategories()" class="categories-grid">
+        <div *ngFor="let c of categories()" class="category-card">
+          <div class="cat-image-wrap" *ngIf="c.imageUrl || c.image; else catSvgWrap">
+            <img [src]="c.imageUrl || c.image" [alt]="c.name" class="cat-card-img" />
+          </div>
+          <ng-template #catSvgWrap>
+            <div class="cat-icon-wrap">
+              <svg class="icon-outline icon-outline-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 18h16M5 15l2-8 5 4 5-4 2 8H5z"/>
+              </svg>
+            </div>
+          </ng-template>
+          <h3 class="cat-title">{{ c.name }}</h3>
+          <p class="cat-desc">{{ c.description }}</p>
+          <span class="cat-count">{{ c.servicesCount || 0 }} {{ 'categoriesSection.servicesAvailable' | transloco }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Contact Section -->
+  <section id="contact" class="section contact-section">
+    <div class="section-container">
+      <div class="contact-box">
+        <div class="contact-details">
+          <span class="section-tag">{{ 'contactSection.tag' | transloco }}</span>
+          <h2>{{ settings()['CompanyName'] || 'Limousine' }}</h2>
+          <p>{{ 'contactSection.desc' | transloco }}</p>
+
+          <div class="contact-items">
+            <div class="contact-row" *ngIf="settings()['ContactPhone']">
+              <span class="contact-icon">
+                <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <div>
+                <small>{{ 'contactSection.phone' | transloco }}</small>
+                <strong>{{ settings()['ContactPhone'] }}</strong>
+              </div>
+            </div>
+
+            <div class="contact-row" *ngIf="settings()['ContactEmail']">
+              <span class="contact-icon">
+                <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+              <div>
+                <small>{{ 'contactSection.email' | transloco }}</small>
+                <strong>{{ settings()['ContactEmail'] }}</strong>
+              </div>
+            </div>
+
+            <div class="contact-row" *ngIf="settings()['Currency']">
+              <span class="contact-icon">
+                <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                  <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              </span>
+              <div>
+                <small>{{ 'contactSection.currency' | transloco }}</small>
+                <strong>{{ settings()['Currency'] }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-cta">
+          <h3>{{ 'contactSection.specialEvent' | transloco }}</h3>
+          <p>{{ 'contactSection.specialEventDesc' | transloco }}</p>
+          <button (click)="openAuthModal('register')" class="btn btn-gold btn-lg">{{ 'contactSection.instantAccount' | transloco }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Footer -->
+  <footer class="public-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M4 18h16M5 15l2-8 5 4 5-4 2 8H5z"/>
+        </svg>
+        <strong>{{ settings()['CompanyName'] || 'Limousine' }}</strong>
+      </div>
+      <p class="footer-copy">© 2026 Prestige Limousine Services. All rights reserved.</p>
+      <div class="footer-links">
+        <a [routerLink]="['/' + langService.currentLang() + '/dashboard']">{{ 'nav.dashboard' | transloco }}</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 8. Auth Modal -->
+  <div class="modal-backdrop" *ngIf="showAuthModal()" (click)="closeAuthModal()">
+    <div class="auth-modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-tabs">
+          <button 
+            type="button" 
+            class="tab-btn" 
+            [class.active]="authTab() === 'login'" 
+            (click)="authTab.set('login')">
+            {{ 'auth.signInTab' | transloco }}
+          </button>
+          <button 
+            type="button" 
+            class="tab-btn" 
+            [class.active]="authTab() === 'register'" 
+            (click)="authTab.set('register')">
+            {{ 'auth.registerTab' | transloco }}
+          </button>
+        </div>
+        <button class="close-modal-btn" (click)="closeAuthModal()" aria-label="Close">
+          <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Error & Success alerts -->
+        <div *ngIf="authError()" class="alert alert-error">
+          {{ authError() }}
+        </div>
+        <div *ngIf="authSuccess()" class="alert alert-success">
+          {{ authSuccess() }}
+        </div>
+
+        <!-- 1. Sign In Form -->
+        <form *ngIf="authTab() === 'login'" (ngSubmit)="onLogin()" class="auth-form">
+          <div class="form-group">
+            <label>{{ 'auth.email' | transloco }}</label>
+            <input 
+              type="email" 
+              name="email" 
+              [(ngModel)]="loginData.email" 
+              placeholder="example@mail.com" 
+              required />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'auth.password' | transloco }}</label>
+            <input 
+              type="password" 
+              name="password" 
+              [(ngModel)]="loginData.password" 
+              placeholder="••••••••" 
+              required />
+          </div>
+
+          <button type="submit" class="btn btn-gold btn-block" [disabled]="authLoading()">
+            <span *ngIf="!authLoading()">{{ 'auth.signInBtn' | transloco }}</span>
+            <span *ngIf="authLoading()">{{ 'auth.signingIn' | transloco }}</span>
+          </button>
+
+          <!-- 1-Click Admin Demo -->
+          <div class="demo-box">
+            <span>{{ 'auth.wantToTryAdmin' | transloco }}</span>
+            <button type="button" class="btn-demo" (click)="fillAdminDemo()">{{ 'auth.adminDemo' | transloco }}</button>
+          </div>
+        </form>
+
+        <!-- 2. Register Form -->
+        <form *ngIf="authTab() === 'register'" (ngSubmit)="onRegister()" class="auth-form">
+          <div class="form-group">
+            <label>{{ 'auth.fullName' | transloco }}</label>
+            <input 
+              type="text" 
+              name="fullName" 
+              [(ngModel)]="registerData.fullName" 
+              placeholder="Alexandre Dumas" 
+              required />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'auth.email' | transloco }}</label>
+            <input 
+              type="email" 
+              name="regEmail" 
+              [(ngModel)]="registerData.email" 
+              placeholder="name@domain.com" 
+              required />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'auth.phone' | transloco }}</label>
+            <input 
+              type="tel" 
+              name="phone" 
+              [(ngModel)]="registerData.phoneNumber" 
+              placeholder="+1 555 123 4567" />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'auth.password' | transloco }}</label>
+            <input 
+              type="password" 
+              name="regPassword" 
+              [(ngModel)]="registerData.password" 
+              placeholder="••••••••" 
+              required />
+          </div>
+
+          <button type="submit" class="btn btn-gold btn-block" [disabled]="authLoading()">
+            <span *ngIf="!authLoading()">{{ 'auth.registerBtn' | transloco }}</span>
+            <span *ngIf="authLoading()">{{ 'auth.creating' | transloco }}</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -268,6 +268,39 @@ namespace Limousine.Infrastracture.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Limousine.Core.Entities.CategoryTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId", "LanguageCode")
+                        .IsUnique();
+
+                    b.ToTable("CategoryTranslations");
+                });
+
             modelBuilder.Entity("Limousine.Core.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -465,6 +498,39 @@ namespace Limousine.Infrastracture.Data.Migrations
                     b.ToTable("Services");
                 });
 
+            modelBuilder.Entity("Limousine.Core.Entities.ServiceTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId", "LanguageCode")
+                        .IsUnique();
+
+                    b.ToTable("ServiceTranslations");
+                });
+
             modelBuilder.Entity("Limousine.Core.Entities.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -657,6 +723,17 @@ namespace Limousine.Infrastracture.Data.Migrations
                     b.Navigation("BookingRequest");
                 });
 
+            modelBuilder.Entity("Limousine.Core.Entities.CategoryTranslation", b =>
+                {
+                    b.HasOne("Limousine.Core.Entities.Category", "Category")
+                        .WithMany("Translations")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Limousine.Core.Entities.Customer", b =>
                 {
                     b.HasOne("Limousine.Core.Entities.ApplicationUser", "User")
@@ -688,6 +765,17 @@ namespace Limousine.Infrastracture.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Limousine.Core.Entities.ServiceTranslation", b =>
+                {
+                    b.HasOne("Limousine.Core.Entities.Service", "Service")
+                        .WithMany("Translations")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("Limousine.Core.Entities.VehicleImage", b =>
                 {
                     b.HasOne("Limousine.Core.Entities.Vehicle", "Vehicle")
@@ -714,6 +802,8 @@ namespace Limousine.Infrastracture.Data.Migrations
             modelBuilder.Entity("Limousine.Core.Entities.Category", b =>
                 {
                     b.Navigation("Services");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Limousine.Core.Entities.Customer", b =>
@@ -724,6 +814,8 @@ namespace Limousine.Infrastracture.Data.Migrations
             modelBuilder.Entity("Limousine.Core.Entities.Service", b =>
                 {
                     b.Navigation("BookingRequests");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Limousine.Core.Entities.Vehicle", b =>

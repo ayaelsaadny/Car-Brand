@@ -1,0 +1,142 @@
+@if (isOpen() && booking(); as b) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="modal-header-meta">
+          <div class="crest-icon">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div>
+            <div class="meta-row">
+              <span class="ref-badge">{{ b.bookingReference }}</span>
+              <span class="status-badge" [class]="getStatusClass(b.statusName || b.status)">
+                {{ b.statusName || b.status }}
+              </span>
+            </div>
+            <h2 class="modal-title">{{ 'bookingsPage.bookingDetails' | transloco }}</h2>
+          </div>
+        </div>
+
+        <button class="btn-close" (click)="onClose()" type="button" aria-label="Close modal">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body details-body">
+        <!-- Client Information -->
+        <section class="details-section">
+          <h4 class="section-title">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Client Information</span>
+          </h4>
+          <div class="grid-two">
+            <div class="detail-row">
+              <span class="detail-label">{{ 'bookingsPage.clientName' | transloco }}:</span>
+              <span class="detail-val font-semibold">{{ b.customerName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email:</span>
+              <span class="detail-val font-mono">{{ b.customerEmail }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">{{ 'bookingsPage.phoneNumber' | transloco }}:</span>
+              <span class="detail-val">{{ b.customerPhone || '—' }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Itinerary & Fleet -->
+        <section class="details-section">
+          <h4 class="section-title">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+            <span>Itinerary & Fleet</span>
+          </h4>
+          <div class="grid-two">
+            <div class="detail-row">
+              <span class="detail-label">{{ 'bookingsPage.serviceType' | transloco }}:</span>
+              <span class="detail-val">{{ b.serviceName }}</span>
+            </div>
+            @if (b.vehicleName) {
+              <div class="detail-row">
+                <span class="detail-label">{{ 'bookingsPage.vehicle' | transloco }}:</span>
+                <span class="detail-val">{{ b.vehicleName }} ({{ b.vehicleLicensePlate }})</span>
+              </div>
+            }
+            <div class="detail-row">
+              <span class="detail-label">Pickup Location:</span>
+              <span class="detail-val">{{ b.pickupLocation }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Dropoff Destination:</span>
+              <span class="detail-val">{{ b.dropoffLocation }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">{{ 'bookingsPage.dateTime' | transloco }}:</span>
+              <span class="detail-val">{{ b.pickupDateTime | date:'medium' }}</span>
+            </div>
+            @if (b.flightNumber) {
+              <div class="detail-row">
+                <span class="detail-label">Flight Number:</span>
+                <span class="detail-val font-mono">{{ b.flightNumber }}</span>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- Service Specs & Fare -->
+        <section class="details-section">
+          <h4 class="section-title">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            <span>Service Specs & Fare</span>
+          </h4>
+          <div class="grid-two">
+            <div class="detail-row">
+              <span class="detail-label">Passengers / Luggage:</span>
+              <span class="detail-val">{{ b.numberOfPassengers }} Passengers • {{ b.numberOfLuggage }} Luggage</span>
+            </div>
+            @if (b.estimatedPrice) {
+              <div class="detail-row">
+                <span class="detail-label">{{ 'bookingsPage.price' | transloco }}:</span>
+                <span class="detail-val gold">{{ b.estimatedPrice }} SAR</span>
+              </div>
+            }
+          </div>
+
+          @if (b.specialNotes || b.customerNotes) {
+            <div class="notes-box">
+              <span class="detail-label">Client Notes:</span>
+              <p class="notes-text">{{ b.specialNotes || b.customerNotes }}</p>
+            </div>
+          }
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="onClose()">
+          {{ 'common.close' | transloco }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

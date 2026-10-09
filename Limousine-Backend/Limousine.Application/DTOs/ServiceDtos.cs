@@ -23,17 +23,25 @@ namespace Limousine.Application.DTOs
         public int TotalBookings { get; set; }
     }
 
+    public class EntityTranslationDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+    }
+
     public class CreateServiceDto
     {
-        [Required(ErrorMessage = "Service name is required")]
         [StringLength(100, ErrorMessage = "Service name cannot exceed 100 characters")]
         public string Name { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
+        public Dictionary<string, EntityTranslationDto>? Translations { get; set; }
+
+        [Required(ErrorMessage = "Service image is required")]
         [StringLength(500, ErrorMessage = "ImageUrl cannot exceed 500 characters")]
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         [Range(0, 100000, ErrorMessage = "Price must be greater than or equal to 0")]
         public decimal? Price { get; set; }
@@ -56,15 +64,17 @@ namespace Limousine.Application.DTOs
 
     public class UpdateServiceDto
     {
-        [Required(ErrorMessage = "Service name is required")]
         [StringLength(100, ErrorMessage = "Service name cannot exceed 100 characters")]
         public string Name { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
+        public Dictionary<string, EntityTranslationDto>? Translations { get; set; }
+
+        [Required(ErrorMessage = "Service image is required")]
         [StringLength(500, ErrorMessage = "ImageUrl cannot exceed 500 characters")]
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         [Range(0, 100000, ErrorMessage = "Price must be greater than or equal to 0")]
         public decimal? Price { get; set; }

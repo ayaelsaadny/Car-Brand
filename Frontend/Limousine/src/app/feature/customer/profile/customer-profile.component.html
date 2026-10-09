@@ -1,0 +1,201 @@
+<div class="profile-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-badge">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>VIP Executive Client</span>
+      </div>
+      <h1 class="page-title">{{ 'account.profileTitle' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'account.profileSubtitle' | transloco }}</p>
+    </div>
+
+    <div class="header-actions">
+      <a [routerLink]="['/' + currentLang + '/customer/bookings']" class="btn-outline">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+          <path d="M9 12h6M9 16h6"/>
+        </svg>
+        <span>{{ 'nav.myBookings' | transloco }}</span>
+      </a>
+
+      <a [routerLink]="['/' + currentLang + '/account/change-password']" class="btn-outline">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>{{ 'account.changePassword' | transloco }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Status Banners -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage()! | transloco }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage()! | transloco }}</span>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-state">
+      <svg class="icon-lg spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+        <path d="M12 2a10 10 0 0 1 10 10"/>
+      </svg>
+      <span>{{ 'common.loading' | transloco }}</span>
+    </div>
+  } @else {
+    <div class="profile-layout">
+      <!-- Profile Card -->
+      <div class="profile-overview-card">
+        <div class="avatar-wrap">
+          <div class="avatar-circle">
+            <svg class="icon-xl text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span class="vip-crest-badge">VIP</span>
+        </div>
+
+        <h3 class="overview-name">{{ profile()?.fullName }}</h3>
+        <span class="overview-email">{{ profile()?.email }}</span>
+        <span class="role-pill">{{ profile()?.role || 'Customer' }}</span>
+
+        <div class="overview-stats">
+          <div class="stat-block">
+            <span class="stat-num">{{ profile()?.totalBookings || 0 }}</span>
+            <span class="stat-lbl">{{ 'customer.totalBookings' | transloco }}</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <span class="stat-num">{{ 'account.verified' | transloco }}</span>
+            <span class="stat-lbl">{{ 'account.accountStatus' | transloco }}</span>
+          </div>
+        </div>
+
+        <div class="membership-meta">
+          <svg class="icon-sm text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>{{ 'account.activeMember' | transloco }}</span>
+        </div>
+      </div>
+
+      <!-- Edit Form Card -->
+      <div class="profile-form-card">
+        <div class="card-header">
+          <h2 class="card-title">{{ 'account.personalDetails' | transloco }}</h2>
+          <span class="card-subtitle">Updated in real-time across your VIP services</span>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-body">
+          <div class="form-group">
+            <label class="form-label" for="fullName">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>{{ 'auth.fullName' | transloco }}</span>
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              class="form-control"
+              formControlName="fullName"
+              [placeholder]="'auth.fullNamePlaceholder' | transloco"
+            />
+            @if (profileForm.get('fullName')?.touched && profileForm.get('fullName')?.invalid) {
+              <span class="form-error">{{ 'auth.fullNameInvalid' | transloco }}</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <span>{{ 'auth.email' | transloco }}</span>
+            </label>
+            <input
+              id="email"
+              type="email"
+              class="form-control readonly-input"
+              [value]="profile()?.email"
+              readonly
+            />
+            <span class="form-hint">{{ 'account.emailCannotBeChanged' | transloco }}</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>{{ 'auth.phoneNumber' | transloco }}</span>
+            </label>
+            <input
+              id="phone"
+              type="text"
+              class="form-control"
+              formControlName="phoneNumber"
+              [placeholder]="'auth.phonePlaceholder' | transloco"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="address">
+              <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>{{ 'account.address' | transloco }}</span>
+            </label>
+            <input
+              id="address"
+              type="text"
+              class="form-control"
+              formControlName="address"
+              [placeholder]="'account.addressPlaceholder' | transloco"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn-submit"
+              [disabled]="saving() || profileForm.invalid"
+            >
+              @if (saving()) {
+                <svg class="icon-sm spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                  <path d="M12 2a10 10 0 0 1 10 10"/>
+                </svg>
+              }
+              <span>{{ 'common.save' | transloco }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

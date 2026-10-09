@@ -1,0 +1,278 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="header-title-group">
+          <div class="crest-icon">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="modal-title">{{ 'bookingsPage.addBooking' | transloco }}</h2>
+            <span class="header-subtitle">VIP Reservation & Chauffeur Dispatch</span>
+          </div>
+        </div>
+
+        <button class="btn-close" (click)="onClose()" type="button" aria-label="Close modal">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Error Alert -->
+      @if (errorMessage()) {
+        <div class="alert alert-danger">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <!-- Form Body -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-body" novalidate>
+        <!-- Section: Client Details -->
+        <div class="form-section-title">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Client Information</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label class="form-label" for="clientFullName">
+              <span>{{ 'bookingsPage.clientName' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="clientFullName"
+              type="text"
+              formControlName="fullName"
+              class="form-control"
+              placeholder="e.g. Lord Alexander Wright"
+              [class.is-invalid]="form.get('fullName')?.invalid && form.get('fullName')?.touched"
+            />
+            @if (form.get('fullName')?.touched && form.get('fullName')?.invalid) {
+              <span class="form-error">Client full name is required.</span>
+            }
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="clientPhone">
+              <span>{{ 'bookingsPage.phoneNumber' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="clientPhone"
+              type="tel"
+              formControlName="phoneNumber"
+              class="form-control"
+              placeholder="+966 50 123 4567"
+              [class.is-invalid]="form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched"
+            />
+            @if (form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid) {
+              <span class="form-error">Valid phone number is required.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="clientEmail">
+            <span>Email Address</span>
+            <span class="required-star">*</span>
+          </label>
+          <input
+            id="clientEmail"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="client@luxury-domain.com"
+            [class.is-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+          />
+          @if (form.get('email')?.touched && form.get('email')?.invalid) {
+            <span class="form-error">A valid email address is required.</span>
+          }
+        </div>
+
+        <!-- Section: Service & Fleet Selection -->
+        <div class="form-section-title">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Service & Vehicle Configuration</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="serviceSelect">
+              <span>{{ 'bookingsPage.serviceType' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <select id="serviceSelect" formControlName="serviceId" class="form-control">
+              @for (srv of services(); track srv.id) {
+                <option [ngValue]="srv.id">{{ srv.name }} ({{ srv.price ? srv.price + ' SAR' : 'Rate on inquiry' }})</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="vehicleSelect">
+              <span>{{ 'bookingsPage.vehicle' | transloco }}</span>
+            </label>
+            <select id="vehicleSelect" formControlName="vehicleId" class="form-control">
+              <option [ngValue]="null">Auto-dispatch / Chauffeur choice</option>
+              @for (v of vehicles(); track v.id) {
+                <option [ngValue]="v.id">{{ v.name }} - {{ v.licensePlate }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <!-- Section: Route & Schedule -->
+        <div class="form-section-title">
+          <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+          </svg>
+          <span>Route & Schedule</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="pickupLoc">
+              <span>Pickup Location</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="pickupLoc"
+              type="text"
+              formControlName="pickupLocation"
+              class="form-control"
+              placeholder="e.g. King Khalid International Airport (Terminal 1)"
+              [class.is-invalid]="form.get('pickupLocation')?.invalid && form.get('pickupLocation')?.touched"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="dropoffLoc">
+              <span>Dropoff Destination</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="dropoffLoc"
+              type="text"
+              formControlName="dropoffLocation"
+              class="form-control"
+              placeholder="e.g. The Ritz-Carlton Riyadh"
+              [class.is-invalid]="form.get('dropoffLocation')?.invalid && form.get('dropoffLocation')?.touched"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="pickupTime">
+              <span>{{ 'bookingsPage.dateTime' | transloco }}</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="pickupTime"
+              type="datetime-local"
+              formControlName="pickupDateTime"
+              class="form-control"
+              [class.is-invalid]="form.get('pickupDateTime')?.invalid && form.get('pickupDateTime')?.touched"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="flightNo">
+              <span>Flight Number (Optional)</span>
+            </label>
+            <input
+              id="flightNo"
+              type="text"
+              formControlName="flightNumber"
+              class="form-control"
+              placeholder="e.g. SV 120"
+            />
+          </div>
+        </div>
+
+        <!-- Section: Passenger & Luggage -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="passengersCount">
+              <span>Passengers</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="passengersCount"
+              type="number"
+              min="1"
+              max="50"
+              formControlName="numberOfPassengers"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group flex-1">
+            <label class="form-label" for="luggageCount">
+              <span>Luggage Bags</span>
+              <span class="required-star">*</span>
+            </label>
+            <input
+              id="luggageCount"
+              type="number"
+              min="0"
+              max="50"
+              formControlName="numberOfLuggage"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <!-- Section: Internal Notes -->
+        <div class="form-group">
+          <label class="form-label" for="clientNotes">
+            <span>Special Requests / Internal Notes</span>
+          </label>
+          <textarea
+            id="clientNotes"
+            rows="2"
+            formControlName="customerNotes"
+            class="form-control"
+            placeholder="e.g. VIP guest requests sparkling water and child seat..."
+          ></textarea>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="onClose()" [disabled]="saving()">
+            {{ 'vehiclesPage.cancel' | transloco }}
+          </button>
+
+          <button type="submit" class="btn-submit" [disabled]="saving() || form.invalid">
+            @if (saving()) {
+              <svg class="icon-sm spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+            }
+            <span>{{ 'bookingsPage.addBooking' | transloco }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

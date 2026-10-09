@@ -1,0 +1,364 @@
+<div class="categories-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-badge" [class.badge-staff]="isEmployee()">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        <span>{{ isAdmin() ? 'Executive Fleet Classification' : 'Staff Catalog Inspection' }}</span>
+      </div>
+      <h1 class="page-title">{{ 'categoriesPage.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'categoriesPage.subtitle' | transloco }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="loadCategories()" [disabled]="loading()">
+        <svg class="icon-sm" [class.spin]="loading()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span>{{ 'categoriesPage.refresh' | transloco }}</span>
+      </button>
+
+      <!-- Add Category is strictly restricted to Admin -->
+      @if (isAdmin()) {
+        <button class="btn-primary" (click)="openCreateModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>{{ 'categoriesPage.addCategory' | transloco }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Messages Alert -->
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card" [class.active-card]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+      <div class="stat-icon stat-icon-total">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().total }}</div>
+        <div class="stat-lbl">{{ 'categoriesPage.total' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [class.active-card]="statusFilter() === 'active'" (click)="statusFilter.set('active')">
+      <div class="stat-icon stat-icon-active">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().active }}</div>
+        <div class="stat-lbl">{{ 'categoriesPage.activeCount' | transloco }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" [class.active-card]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">
+      <div class="stat-icon stat-icon-inactive">
+        <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-num">{{ stats().inactive }}</div>
+        <div class="stat-lbl">{{ 'categoriesPage.archivedCount' | transloco }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar & Filters -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg class="icon-sm search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        [placeholder]="'users.searchPlaceholder' | transloco"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        class="search-input"
+      />
+      @if (searchQuery()) {
+        <button class="clear-search" (click)="searchQuery.set('')">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab" [class.active]="statusFilter() === 'all'" (click)="statusFilter.set('all')">
+        {{ 'common.all' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'active'" (click)="statusFilter.set('active')">
+        {{ 'categoriesPage.active' | transloco }}
+      </button>
+      <button class="filter-tab" [class.active]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">
+        {{ 'categoriesPage.inactive' | transloco }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <svg class="icon-lg spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+        <path d="M12 2a10 10 0 0 1 10 10"/>
+      </svg>
+      <span>{{ 'common.loading' | transloco }}</span>
+    </div>
+  } @else if (filteredCategories().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg class="icon-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+      </div>
+      <h3 class="empty-title">{{ 'categoriesPage.noCategories' | transloco }}</h3>
+      <p class="empty-desc">Create distinct luxury categories to classify executive sedans, limousines, and SUVs.</p>
+      @if (isAdmin()) {
+        <button class="btn-primary" (click)="openCreateModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>{{ 'categoriesPage.addCategory' | transloco }}</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <!-- Categories Grid -->
+    <div class="categories-grid">
+      @for (category of filteredCategories(); track category.id) {
+        <div class="category-card" [class.card-inactive]="!category.isActive">
+          <div class="card-visual">
+            @if (category.imageUrl || category.image) {
+              <img [src]="category.imageUrl || category.image" [alt]="category.name" class="cat-image" />
+            } @else {
+              <div class="cat-fallback-icon">
+                <svg class="icon-xl text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+              </div>
+            }
+            <div class="visual-badges">
+              <span class="badge-order">#{{ category.displayOrder }}</span>
+              <span class="badge-status" [class.badge-active]="category.isActive" [class.badge-inactive]="!category.isActive">
+                {{ (category.isActive ? 'categoriesPage.active' : 'categoriesPage.inactive') | transloco }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <div class="card-header-row">
+              <h3 class="category-name">{{ category.name }}</h3>
+              <button class="btn-services-badge" (click)="viewCategoryServices(category)" title="View linked services">
+                <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>{{ category.servicesCount || 0 }} {{ 'categoriesPage.servicesCount' | transloco }}</span>
+              </button>
+            </div>
+
+            <p class="category-description">
+              {{ category.description || 'No description provided for this VIP category.' }}
+            </p>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn-view-services" (click)="viewCategoryServices(category)">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <span>Services</span>
+            </button>
+
+            <!-- Admin Only Actions: Edit, Delete, Status Toggle -->
+            @if (isAdmin()) {
+              <div class="admin-actions-group">
+                <!-- Status Toggle Switch -->
+                <button
+                  type="button"
+                  class="btn-toggle-status"
+                  [class.is-active]="category.isActive"
+                  (click)="toggleStatus(category)"
+                  [title]="(category.isActive ? 'categoriesPage.deactivate' : 'categoriesPage.activate') | transloco"
+                >
+                  <span class="toggle-track">
+                    <span class="toggle-thumb"></span>
+                  </span>
+                </button>
+
+                <button class="btn-action-icon" (click)="openEditModal(category)" [title]="'categoriesPage.edit' | transloco">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+
+                <button class="btn-action-icon btn-danger-icon" (click)="confirmDelete(category.id)" [title]="'categoriesPage.delete' | transloco">
+                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Dedicated Subfolder Form Modal Component -->
+  <app-category-form
+    [category]="editingCategory()"
+    [isOpen]="isFormOpen()"
+    (saved)="onCategorySaved($event)"
+    (closed)="closeFormModal()"
+  ></app-category-form>
+
+  <!-- Delete Confirmation Modal (Admin Only) -->
+  @if (isDeleteConfirmOpen()) {
+    <div class="modal-backdrop" (click)="closeDeleteConfirm()">
+      <div class="modal-card modal-confirm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3 class="modal-title">{{ 'categoriesPage.deleteCategory' | transloco }}</h3>
+          <button class="btn-close" (click)="closeDeleteConfirm()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body-confirm">
+          <div class="warning-callout">
+            <svg class="icon-md text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <p>{{ 'categoriesPage.confirmDelete' | transloco }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeDeleteConfirm()">
+            {{ 'categoriesPage.cancel' | transloco }}
+          </button>
+          <button class="btn-danger" (click)="executeDelete()">
+            {{ 'categoriesPage.delete' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- View Linked Services Modal (Admin & Staff) -->
+  @if (selectedCategoryServices()) {
+    <div class="modal-backdrop" (click)="closeServicesModal()">
+      <div class="modal-card modal-services" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="header-title-group">
+            <div class="crest-icon">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3 class="modal-title">
+              {{ selectedCategoryServices()!.name }} - Services
+            </h3>
+          </div>
+          <button class="btn-close" (click)="closeServicesModal()">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body-services">
+          @if (servicesLoading()) {
+            <div class="loading-state">
+              <svg class="icon-md spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10"/>
+              </svg>
+              <span>{{ 'common.loading' | transloco }}</span>
+            </div>
+          } @else if (servicesList().length === 0) {
+            <div class="no-services-box">
+              <p>No services currently assigned to this category.</p>
+            </div>
+          } @else {
+            <div class="services-list">
+              @for (srv of servicesList(); track srv.id) {
+                <div class="srv-item">
+                  <div class="srv-info">
+                    <span class="srv-name">{{ srv.name }}</span>
+                    @if (srv.description) {
+                      <span class="srv-desc">{{ srv.description }}</span>
+                    }
+                  </div>
+                  @if (srv.price) {
+                    <span class="srv-price">{{ srv.price }} SAR</span>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeServicesModal()">
+            {{ 'common.close' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

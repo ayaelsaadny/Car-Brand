@@ -1,0 +1,129 @@
+<div class="layout" [attr.dir]="dir()">
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+    <div class="brand">
+      @if (logoUrl()) {
+        <img class="logo-img" [src]="logoUrl()" [alt]="appName()" />
+      } @else {
+        <div class="brand-crest">
+          <svg class="icon-outline icon-outline-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 18h16M5 15l2-8 5 4 5-4 2 8H5z"/>
+          </svg>
+          <span class="logo">{{ appName() }}</span>
+        </div>
+      }
+      <button class="close-btn" (click)="close()" aria-label="Close menu">
+        <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="nav">
+      @for (item of computedNavItems(); track item.link) {
+        <a class="nav-item" [routerLink]="item.link" routerLinkActive="active" (click)="close()">
+          <span class="nav-icon">
+            @switch (item.iconKey) {
+              @case ('globe') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              }
+              @case ('dashboard') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+                  <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+                </svg>
+              }
+              @case ('vehicles') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 17h14M4 11l2.5-6h11L20 11M3 11h18v6H3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>
+                </svg>
+              }
+              @case ('bookings') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 12h6M9 16h6"/>
+                </svg>
+              }
+              @case ('services') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              }
+              @case ('categories') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+              }
+              @case ('users') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              }
+              @case ('settings') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              }
+              @case ('profile') {
+                <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              }
+              @default {
+                @if (item.iconClass) { <i [class]="item.iconClass"></i> }
+              }
+            }
+          </span>
+          <span class="nav-label">{{ item.label }}</span>
+          @if (item.badge !== undefined) { <span class="nav-badge">{{ item.badge }}</span> }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="nav-item logout" (click)="onLogout()">
+        <span class="nav-icon">
+          <svg class="icon-outline icon-outline-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2v10M18.36 6.64a9 9 0 1 1-12.73 0"/>
+          </svg>
+        </span>
+        <span>{{ computedLogoutLabel() }}</span>
+      </button>
+    </div>
+  </aside>
+
+  @if (sidebarOpen()) { <div class="backdrop" (click)="close()"></div> }
+
+  <div class="main">
+    <header class="header">
+      <button class="menu-btn" (click)="toggle()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="header-slot"><ng-content select="[header-start]" /></div>
+
+      <div class="header-actions">
+        <app-language-switcher />
+        <ng-content select="[header-actions]" />
+        @if (currentUserDisplay(); as u) {
+          <div class="user-chip">
+            @if (u.avatarUrl) { <img class="avatar" [src]="u.avatarUrl" [alt]="u.name" /> }
+            @else { <span class="avatar avatar-fallback">{{ u.name.charAt(0) }}</span> }
+            <span class="user-meta">
+              <strong>{{ u.name }}</strong>
+              @if (u.subtitle) { <small>{{ u.subtitle }}</small> }
+            </span>
+          </div>
+        }
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

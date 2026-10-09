@@ -13,6 +13,7 @@ namespace Limousine.Core.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
+        public ICollection<CategoryTranslation> Translations { get; set; } = new List<CategoryTranslation>();
         public ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }

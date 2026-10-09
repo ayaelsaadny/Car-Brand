@@ -58,6 +58,40 @@ namespace Limousine.Infrastracture.Data.Seed
                     }
                 }
 
+                // 1b. Seed Employee / Dispatcher Account (employee@limousine.com / employee123)
+                var employeeEmail = "employee@limousine.com";
+                var employeeUser = await context.ApplicationUsers.FirstOrDefaultAsync(u => u.Email == employeeEmail);
+                if (employeeUser == null)
+                {
+                    logger.LogInformation("Seeding default Employee account (employee@limousine.com)...");
+                    employeeUser = new ApplicationUser
+                    {
+                        FullName = "Operations Dispatcher",
+                        Email = employeeEmail,
+                        PasswordHash = HashPassword("employee123"),
+                        PhoneNumber = "+1987654321",
+                        Role = UserRole.Employee,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    await context.ApplicationUsers.AddAsync(employeeUser);
+                    await context.SaveChangesAsync();
+
+                    var empCustomer = new Customer
+                    {
+                        UserId = employeeUser.Id,
+                        FirstName = "Operations",
+                        LastName = "Dispatcher",
+                        Email = employeeUser.Email,
+                        PhoneNumber = employeeUser.PhoneNumber ?? "+1987654321",
+                        Address = "Fleet Dispatch Desk",
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    await context.Customers.AddAsync(empCustomer);
+                    await context.SaveChangesAsync();
+                }
+
                 // 2. Seed One or More Active Categories
                 if (!await context.Categories.AnyAsync())
                 {
@@ -199,6 +233,92 @@ namespace Limousine.Infrastracture.Data.Seed
                     await context.WebsiteSettings.AddRangeAsync(settings);
                     await context.SaveChangesAsync();
                 }
+
+                // 5. Seed Category & Service Translations (en & fr)
+                var allCategories = await context.Categories.ToListAsync();
+                foreach (var cat in allCategories)
+                {
+                    if (!await context.CategoryTranslations.AnyAsync(t => t.CategoryId == cat.Id && t.LanguageCode == "en"))
+                    {
+                        await context.CategoryTranslations.AddAsync(new CategoryTranslation
+                        {
+                            CategoryId = cat.Id,
+                            LanguageCode = "en",
+                            Name = cat.Name,
+                            Description = cat.Description
+                        });
+                    }
+
+                    if (!await context.CategoryTranslations.AnyAsync(t => t.CategoryId == cat.Id && t.LanguageCode == "fr"))
+                    {
+                        var frName = cat.Name switch
+                        {
+                            "Airport Transfer" => "Transfert Aéroport",
+                            "Corporate Travel" => "Voyages d'Affaires",
+                            "Special Events & VIP" => "Événements Spéciaux et VIP",
+                            "Corporate Transportation" => "Transport Corporatif",
+                            _ => cat.Name
+                        };
+                        var frDesc = cat.Description switch
+                        {
+                            "Punctual, stress-free transfers to and from international and private airports." => "Transferts ponctuels et sereins depuis et vers les aéroports internationaux et privés.",
+                            "Executive transportation for business meetings, conferences, and roadshows." => "Transport exécutif pour réunions d'affaires, conférences et tournées professionnelles.",
+                            "Luxury chauffeur service for galas, weddings, and exclusive private celebrations." => "Service de chauffeur de luxe pour galas, mariages et réceptions privées exclusives.",
+                            _ => cat.Description
+                        };
+
+                        await context.CategoryTranslations.AddAsync(new CategoryTranslation
+                        {
+                            CategoryId = cat.Id,
+                            LanguageCode = "fr",
+                            Name = frName,
+                            Description = frDesc
+                        });
+                    }
+                }
+                await context.SaveChangesAsync();
+
+                var allServices = await context.Services.ToListAsync();
+                foreach (var srv in allServices)
+                {
+                    if (!await context.ServiceTranslations.AnyAsync(t => t.ServiceId == srv.Id && t.LanguageCode == "en"))
+                    {
+                        await context.ServiceTranslations.AddAsync(new ServiceTranslation
+                        {
+                            ServiceId = srv.Id,
+                            LanguageCode = "en",
+                            Name = srv.Name,
+                            Description = srv.Description
+                        });
+                    }
+
+                    if (!await context.ServiceTranslations.AnyAsync(t => t.ServiceId == srv.Id && t.LanguageCode == "fr"))
+                    {
+                        var frName = srv.Name switch
+                        {
+                            "VIP Airport Meet & Greet" => "Accueil VIP à l'Aéroport",
+                            "Executive Hourly Chauffeur" => "Chauffeur Exécutif à l'Heure",
+                            "Executive Boardroom Chauffeur" => "Chauffeur de Direction et Conseil",
+                            _ => srv.Name
+                        };
+                        var frDesc = srv.Description switch
+                        {
+                            "Premium curb-side or gate meet-and-greet with flight tracking and luggage assistance." => "Accueil personnalisé au terminal ou en porte avec suivi des vols et prise en charge des bagages.",
+                            "Dedicated executive chauffeur by the hour for seamless point-to-point business travel." => "Service de chauffeur privé dédié à l'heure pour vos déplacements professionnels sans interruption.",
+                            "Dedicated discreet chauffeur service for VIP executives and corporate delegations." => "Service de chauffeur discret et haut de gamme pour cadres dirigeants et délégations d'affaires.",
+                            _ => srv.Description
+                        };
+
+                        await context.ServiceTranslations.AddAsync(new ServiceTranslation
+                        {
+                            ServiceId = srv.Id,
+                            LanguageCode = "fr",
+                            Name = frName,
+                            Description = frDesc
+                        });
+                    }
+                }
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

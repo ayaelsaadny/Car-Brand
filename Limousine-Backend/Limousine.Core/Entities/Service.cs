@@ -20,6 +20,7 @@ namespace Limousine.Core.Entities
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
 
+        public ICollection<ServiceTranslation> Translations { get; set; } = new List<ServiceTranslation>();
         public ICollection<BookingRequest> BookingRequests { get; set; } = new List<BookingRequest>();
     }
 }

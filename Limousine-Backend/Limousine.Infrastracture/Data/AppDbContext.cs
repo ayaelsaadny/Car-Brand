@@ -19,7 +19,9 @@ namespace Limousine.Infrastracture.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<ServiceTranslation> ServiceTranslations { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleImage> VehicleImages { get; set; }
         public DbSet<BookingRequest> BookingRequests { get; set; }

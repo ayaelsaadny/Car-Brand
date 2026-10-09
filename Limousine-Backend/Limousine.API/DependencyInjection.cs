@@ -43,6 +43,11 @@ namespace Limousine.API
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IFileService, FileService>();
 
+            // Localization & Language Resolution
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentLanguageService, CurrentLanguageService>();
+            services.AddScoped<ILocalizationService, LocalizationService>();
+
             // Standardize Model Validation Errors to ApiValidationErrorResponse
             services.Configure<ApiBehaviorOptions>(options =>
             {

@@ -176,3 +176,5 @@ D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.0\Resources\messages.en.json
+D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.API\bin\Debug\net10.0\Resources\messages.fr.json
