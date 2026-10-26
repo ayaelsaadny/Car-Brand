@@ -7,12 +7,17 @@
     "fleet": "Flotte",
     "vehicles": "Véhicules",
     "categories": "Catégories",
+    "reviews": "Avis",
     "bookings": "Réservations",
     "settings": "Paramètres",
     "contact": "Contact",
     "login": "Connexion",
     "register": "Inscription",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "ourServices": "Nos services",
+    "forBusiness": "Pour les entreprises",
+    "help": "Aide",
+    "contactUs": "Contactez-nous"
   },
   "common": {
     "save": "Enregistrer les modifications",
@@ -43,10 +48,28 @@
     "subtitle": "Découvrez un transport exécutif sans égal avec la flotte la plus luxueuse au monde et des chauffeurs dédiés 24h/24 et 7j/7.",
     "exploreFleet": "Explorer la Flotte de Luxe",
     "ourServices": "Nos Services Privilège",
+    "contactUs": "Nous Contacter",
     "featureSecurity": "Normes de Sécurité Maximales",
     "featurePunctuality": "Ponctualité Rigoureuse",
     "featureVip": "Confort Absolu VIP",
-    "featureSupport": "Assistance Conciergerie 24/7"
+    "featureSupport": "Assistance Conciergerie 24/7",
+    "slide2Title": "Transferts Aéroport & Ville",
+    "slide2Sub": "Prise en charge ponctuelle et dépose en douceur, à chaque fois.",
+    "slide3Title": "Notre Flotte de Luxe",
+    "slide3Sub": "Des véhicules haut de gamme avec chauffeurs professionnels, où que vous alliez.",
+    "cta": "Nos services",
+    "s1T": "Épinglez votre voyage",
+    "s1S": "Des trajets avec chauffeur qui vous retrouvent exactement là où vous êtes.",
+    "s2T": "Votre ville, votre rythme",
+    "s2S": "Des visites privées des lieux que les locaux adorent, guidées par un chauffeur qui connaît le chemin.",
+    "s3T": "Du jet au trottoir",
+    "s3S": "Arrivées en jet privé et à l'aéroport, avec votre voiture déjà là.",
+    "s4T": "De ville en ville, de porte à porte",
+    "s4S": "Des trajets interurbains confortables qui font de la route une partie du voyage.",
+    "s5T": "Arrivées officielles",
+    "s5S": "Un transport discret et ponctuel pour diplomates, délégations et dirigeants.",
+    "s6T": "Transferts aéroport & ville",
+    "s6S": "À l'heure au terminal, à l'heure à votre porte."
   },
   "servicesSection": {
     "tag": "Formules de Voyage Exclusives",
@@ -72,6 +95,46 @@
     "servicesAvailable": "services disponibles",
     "loading": "Chargement des catégories..."
   },
+  "reviews": {
+    "tag": "Histoires de passagers",
+    "title": "Avis les mieux notés",
+    "r1": "Mon chauffeur m'attendait aux arrivées avec une pancarte et une bouteille d'eau fraîche. La prise en charge la plus simple que j'aie connue.",
+    "r2": "Nous avons réservé une visite d'une demi-journée et découvert des endroits que nous n'aurions jamais trouvés seuls.",
+    "r3": "J'ai changé le lieu de dépose à la dernière minute et le chauffeur s'est simplement adapté. Aucun souci.",
+    "r4": "Voiture impeccable, chauffeur calme et timing parfait du terminal à l'hôtel après un long vol.",
+    "r5": "La réservation a été rapide et le trajet sans effort du début à la fin. Je réserverai de nouveau."
+  },
+  "stats": {
+    "rides": "Trajets réalisés",
+    "crossCity": "Trajets transfrontaliers",
+    "onTime": "Arrivées à l'heure",
+    "tours": "Visites urbaines",
+    "title": "Oudy en chiffres",
+    "desc": "Les chiffres derrière chaque trajet."
+  },
+  "instagram": {
+    "tag": "Suivez Notre Aventure",
+    "title": "Sur Instagram",
+    "follow": "Suivre sur Instagram",
+    "p1": "Avant chaque trajet : prêt, propre, à l'heure.",
+    "p2": "Un trajet premium, c'est bien plus qu'une voiture de luxe.",
+    "p3": "Arrivez avec style. Sûr. Privé. Avec chauffeur."
+  },
+  "megaMenu": {
+    "allServices": "Voir tous les services",
+    "montrealTitle": "Montréal",
+    "montrealDesc": "Découvrez Montréal comme jamais",
+    "transfers": "Transferts aéroport et ville",
+    "experiences": "Expériences urbaines privées",
+    "airport": "Transferts aéroport",
+    "airportDesc": "Prise en charge et dépose privées à l'aéroport avec chauffeurs professionnels, sans stress.",
+    "cityToCity": "Transferts entre villes",
+    "cityToCityDesc": "Trajets longue distance de luxe entre villes, avec confort, discrétion et service professionnel.",
+    "vip": "Service de chauffeur VIP",
+    "vipDesc": "Votre chauffeur et véhicule dédiés pour affaires, événements et occasions spéciales.",
+    "readMore": "En savoir plus",
+    "exploreMontreal": "Explorer Montréal"
+  },
   "contactSection": {
     "tag": "Contact & Réservations",
     "title": "Contactez-nous",
@@ -81,7 +144,8 @@
     "currency": "Devise Principale",
     "specialEvent": "Un événement spécial ou une délégation exécutive ?",
     "specialEventDesc": "Contactez notre équipe de direction pour des itinéraires VIP sur mesure.",
-    "instantAccount": "Créer un Compte Immédiat"
+    "instantAccount": "Créer un Compte Immédiat",
+    "whatsapp": "WhatsApp"
   },
   "dashboard": {
     "title": "Tableau de Bord Exécutif",
@@ -183,5 +247,79 @@
     "myAccount": "Mon Compte",
     "client": "Client",
     "admin": "Administrateur"
+  },
+  "ticker": {
+    "one": "DÉCOUVREZ CHAQUE DESTINATION AVEC LUXE, CONFORT ET ÉLÉGANCE",
+    "two": "VOYAGES DE LUXE AVEC CHAUFFEUR ENTRE LES VILLES ET AU-DELÀ",
+    "three": "TRAJETS AVEC CHAUFFEUR, OÙ QUE VOTRE VOYAGE VOUS MÈNE"
+  },
+  "footer": {
+    "quickLinks": "Liens rapides",
+    "explore": "Explorer",
+    "ourNumbers": "Nos Chiffres",
+    "contact": "Contactez-nous",
+    "about": "Oudy est un service de chauffeur moderne pour transferts aéroport, trajets interurbains et visites privées, pensé pour le confort, la ponctualité et la discrétion.",
+    "rights": "Tous droits réservés.",
+    "chat": "Discuter sur WhatsApp",
+    "chatNow": "Discuter maintenant"
+  },
+  "choose": {
+    "title": "Le luxe à chaque voyage",
+    "desc": "Choisissez l’expérience qui correspond à vos besoins de déplacement.",
+    "c1Title": "Transferts aéroport & ville",
+    "c1Desc": "Trajets privés vers et depuis l'aéroport.",
+    "c1Btn": "Réserver un transfert",
+    "c2Title": "Expériences urbaines privées",
+    "c2Desc": "Visites confortables en ville et au-delà.",
+    "c2Btn": "Découvrir les tours",
+    "kicker": "Commencez ici"
+  },
+  "pillars": {
+    "title": "Luxe. Précision. Distinction.",
+    "p1": "Service de chauffeur de luxe",
+    "p2": "Ponctualité sans compromis",
+    "p3": "Tarifs transparents et sur mesure",
+    "p4": "Expériences de voyage sur mesure",
+    "p5": "L'excellence à chaque trajet"
+  },
+  "featuresGrid": {
+    "f1T": "Service de chauffeur d'exception",
+    "f1D": "Profitez d'une expérience de voyage raffinée où confort, élégance et professionnalisme se rencontrent.",
+    "f2T": "Expériences de voyage personnalisées",
+    "f2D": "Chaque trajet est pensé avec soin selon vos préférences, pour une expérience unique.",
+    "f3T": "Réservation fluide",
+    "f3D": "Un processus de réservation simple et pratique, pour un voyage sans effort dès le départ.",
+    "f4T": "Le confort dans les moindres détails",
+    "f4D": "De la qualité du service au trajet lui-même, chaque détail est conçu autour de votre confort.",
+    "f5T": "Une fiabilité de confiance",
+    "f5D": "Voyagez en toute confiance, sachant que votre expérience est gérée avec soin et attention.",
+    "f6T": "Le luxe avec une touche moderne",
+    "f6D": "Découvrez une approche contemporaine du voyage de luxe, où sophistication et praticité se rejoignent."
+  },
+  "business": {
+    "overview": "Aperçu",
+    "overviewDesc": "Un transport avec chauffeur conçu pour les entreprises, les équipes et les organisations.",
+    "corporations": "Entreprises",
+    "corporationsDesc": "Un transport exécutif fiable pour votre personnel, vos clients et vos événements.",
+    "agencies": "Agences de voyage",
+    "agenciesDesc": "Un transport terrestre haut de gamme que votre agence peut offrir à ses voyageurs.",
+    "partnerships": "Partenariats stratégiques",
+    "partnershipsDesc": "Une collaboration à long terme avec les hôtels, les compagnies aériennes et les organisateurs d'événements."
+  },
+  "how": {
+    "kicker": "Trois étapes simples",
+    "title": "Comment ça marche",
+    "desc": "D'une épingle sur la carte jusqu'à votre porte.",
+    "s1T": "Réservez",
+    "s1D": "Dites-nous où et quand.",
+    "s2T": "Confirmez",
+    "s2D": "Nous confirmons votre trajet.",
+    "s3T": "Profitez",
+    "s3D": "Votre chauffeur s'occupe du reste."
+  },
+  "fleet": {
+    "kicker": "Les voitures",
+    "title": "Notre flotte",
+    "desc": "Spacieuses, impeccables et prêtes pour la route."
   }
 }

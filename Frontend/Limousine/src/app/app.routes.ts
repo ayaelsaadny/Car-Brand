@@ -18,6 +18,8 @@ import { langGuard } from './core/guards/lang.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { staffGuard } from './core/guards/staff.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { viewSlugGuard } from './core/guards/view-slug.guard';
+import { homeMatcher } from './core/routing/page-routes';
 
 export const routes: Routes = [
   // 1. Language prefixed routes: /en, /fr
@@ -25,10 +27,14 @@ export const routes: Routes = [
     path: ':lang',
     canActivate: [langGuard],
     children: [
-      // Landing page (Public APIs & booking)
+      // Landing page + all public sub pages (airport-transfers, vip-chauffeur, montreal, business/...)
+      // One route => HomeComponent is reused (navbar, slider, animations are not rebuilt).
+      // The page is read from the URL by HomeComponent (see core/routing/page-routes.ts).
       {
-        path: '',
-        component: HomeComponent
+        matcher: homeMatcher,
+        component: HomeComponent,
+        canActivate: [viewSlugGuard],
+        runGuardsAndResolvers: 'always'
       },
 
       // Auth routes (Dedicated public auth pages)

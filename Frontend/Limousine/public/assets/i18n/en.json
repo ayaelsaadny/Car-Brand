@@ -7,12 +7,17 @@
     "fleet": "Fleet",
     "vehicles": "Vehicles",
     "categories": "Categories",
+    "reviews": "Reviews",
     "bookings": "Bookings",
     "settings": "Settings",
     "contact": "Contact",
     "login": "Sign In",
     "register": "Register",
-    "logout": "Logout"
+    "logout": "Logout",
+    "ourServices": "Our Services",
+    "forBusiness": "For Business",
+    "help": "Help",
+    "contactUs": "Contact us"
   },
   "common": {
     "save": "Save Changes",
@@ -43,10 +48,28 @@
     "subtitle": "Experience unmatched executive transportation with the world's most luxurious fleet and 24/7 dedicated chauffeurs.",
     "exploreFleet": "Explore Luxury Fleet",
     "ourServices": "Our Premium Services",
+    "contactUs": "Contact Us",
     "featureSecurity": "Highest Safety Standards",
     "featurePunctuality": "Strict Punctuality",
     "featureVip": "Absolute VIP Comfort",
-    "featureSupport": "24/7 Concierge Support"
+    "featureSupport": "24/7 Concierge Support",
+    "slide2Title": "Airport & City Transfers",
+    "slide2Sub": "Punctual pickups and smooth drop-offs, every single time.",
+    "slide3Title": "Our Luxury Fleet",
+    "slide3Sub": "Premium vehicles with professional chauffeurs, where your journey takes you.",
+    "cta": "Our Services",
+    "s1T": "Oudy Fleet",
+    "s1S": "Luxury Chauffeur Services with a Premium Fleet for Every Journey.",
+    "s2T": "Oudy City Experience",
+    "s2S": "Explore the City’s Famous Landmarks and Hidden Gems in Comfort, Style, and Luxury.",
+    "s3T": "Private Jet Transfers",
+    "s3S": "Seamless Luxury Transfers from Private Jet Terminals to Your Final Destination.",
+    "s4T": "City-to-City Rides",
+    "s4S": "Travel Between Cities in Comfort and Privacy with Professional Chauffeurs and Luxury Vehicles.",
+    "s5T": "Diplomatic Arrivals",
+    "s5S": "Professional Chauffeur Services for Diplomats, Embassies, Official Delegations, and VIP Guests.",
+    "s6T": "Montreal, Made Memorable.",
+    "s6S": "Experience every journey in luxury, comfort, and style."
   },
   "servicesSection": {
     "tag": "Exclusive Travel Packages",
@@ -72,6 +95,46 @@
     "servicesAvailable": "services available",
     "loading": "Loading categories..."
   },
+  "reviews": {
+    "tag": "Rider stories",
+    "title": "Top-Rated Reviews",
+    "r1": "My driver was waiting at arrivals with a name sign and a cold bottle of water. The easiest airport pickup I have had.",
+    "r2": "We booked a half-day city tour and ended up seeing places we would never have found on our own.",
+    "r3": "I changed the drop-off at the last minute and the chauffeur simply adjusted. No fuss at all.",
+    "r4": "Spotless car, calm driver and perfect timing from the terminal to the hotel after a long flight.",
+    "r5": "Booking was quick and the ride felt effortless from start to finish. I will book again."
+  },
+  "stats": {
+    "rides": "Rides Completed",
+    "crossCity": "Cross-Border Trips",
+    "onTime": "On-Time Arrivals",
+    "tours": "City Tours",
+    "title": "Oudy in numbers",
+    "desc": "The numbers behind every ride we take."
+  },
+  "instagram": {
+    "tag": "Follow Our Journey",
+    "title": "On Instagram",
+    "follow": "Follow on Instagram",
+    "p1": "Before every ride: ready, clean, on time.",
+    "p2": "A premium ride is more than a luxury car.",
+    "p3": "Arrive in style. Safe. Private. Chauffeured."
+  },
+  "megaMenu": {
+    "allServices": "View all services",
+    "montrealTitle": "Montréal",
+    "montrealDesc": "Explore Montréal like never before",
+    "transfers": "Airport & City Transfers",
+    "experiences": "Private City Experiences",
+    "airport": "Airport Transfers",
+    "airportDesc": "Private airport pickup and drop-off with professional chauffeurs and stress-free service.",
+    "cityToCity": "City-to-City Transfers",
+    "cityToCityDesc": "Luxury long-distance rides between cities with comfort, privacy, and professional service.",
+    "vip": "VIP Chauffeur Service",
+    "vipDesc": "Your own chauffeur and vehicle for business, events and special occasions.",
+    "readMore": "Read More",
+    "exploreMontreal": "Explore Montréal"
+  },
   "contactSection": {
     "tag": "Contact & Dispatch",
     "title": "Get in Touch",
@@ -81,7 +144,8 @@
     "currency": "Base Currency",
     "specialEvent": "Planning a special event or executive delegation?",
     "specialEventDesc": "Connect with our executive team for custom VIP itineraries.",
-    "instantAccount": "Create Instant Booking Account"
+    "instantAccount": "Create Instant Booking Account",
+    "whatsapp": "WhatsApp"
   },
   "dashboard": {
     "title": "Executive Dashboard",
@@ -183,5 +247,79 @@
     "myAccount": "My Account",
     "client": "Client",
     "admin": "Admin"
+  },
+  "ticker": {
+    "one": "DISCOVER EVERY DESTINATION WITH LUXURY, COMFORT, AND CLASS",
+    "two": "LUXURY CHAUFFEURED TRAVEL BETWEEN CITIES AND BEYOND",
+    "three": "CHAUFFEURED RIDES, WHEREVER YOUR JOURNEY TAKES YOU"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "explore": "Explore",
+    "ourNumbers": "Our Numbers",
+    "contact": "Contact us",
+    "about": "Oudy is a modern chauffeur service for airport transfers, intercity rides and private city tours, built around comfort, punctuality and discretion.",
+    "rights": "All rights reserved.",
+    "chat": "Chat on WhatsApp",
+    "chatNow": "Chat now"
+  },
+  "choose": {
+    "title": "Luxury in Every Journey ",
+    "desc": "Select the experience that suits your travel needs.",
+    "c1Title": "Airport & City Transfers",
+    "c1Desc": "Private luxury rides to and from the airport and your destination.",
+    "c1Btn": "Book a transfer",
+    "c2Title": "Private City Experiences",
+    "c2Desc": "Discover Extraordinary Places in Unmatched Comfort and Style.",
+    "c2Btn": "Explore experiences",
+    "kicker": "Start here"
+  },
+  "pillars": {
+    "title": "Luxury. Precision. Distinction.",
+    "p1": "Luxury Chauffeur Service",
+    "p2": "Punctuality Without Compromise",
+    "p3": "Transparent, Tailored Pricing",
+    "p4": "Bespoke Travel Experiences",
+    "p5": "Excellence in Every Journey"
+  },
+  "featuresGrid": {
+    "f1T": "Exceptional Chauffeur Service",
+    "f1D": "Enjoy a refined travel experience where comfort, elegance, and professionalism come together.",
+    "f2T": "Personalized Travel Experiences",
+    "f2D": "Every journey is thoughtfully tailored to your preferences, making each experience uniquely yours.",
+    "f3T": "Seamless Booking Experience",
+    "f3D": "A simple and convenient booking process designed to make every journey effortless from the start.",
+    "f4T": "Comfort in Every Detail",
+    "f4D": "From the quality of service to the journey itself, every detail is designed around your comfort.",
+    "f5T": "Reliability You Can Trust",
+    "f5D": "Travel with confidence, knowing that your experience is handled with care and attention.",
+    "f6T": "Luxury with a Modern Touch",
+    "f6D": "Discover a contemporary approach to luxury travel, where sophistication meets convenience."
+  },
+  "business": {
+    "overview": "Overview",
+    "overviewDesc": "Chauffeured transportation designed for companies, teams and organizations.",
+    "corporations": "Corporations",
+    "corporationsDesc": "Reliable executive transport for your staff, clients and corporate events.",
+    "agencies": "Travel Agencies",
+    "agenciesDesc": "Premium ground transport your agency can offer to its travelers.",
+    "partnerships": "Strategic Partnerships",
+    "partnershipsDesc": "Long-term collaboration with hotels, airlines and event organizers."
+  },
+  "how": {
+    "kicker": "Three simple steps",
+    "title": "How it works",
+    "desc": "From a pin on the map to your front door.",
+    "s1T": "Book",
+    "s1D": "Tell us where and when.",
+    "s2T": "Confirm",
+    "s2D": "We confirm your ride.",
+    "s3T": "Enjoy",
+    "s3D": "Your chauffeur does the rest."
+  },
+  "fleet": {
+    "kicker": "The cars",
+    "title": "Our fleet",
+    "desc": "Spacious, spotless and ready for the road."
   }
 }

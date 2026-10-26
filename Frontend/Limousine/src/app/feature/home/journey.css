@@ -1,0 +1,227 @@
+/* =====================================================================
+   JOURNEY — road + pins + car + leaf-shaped photo cards.
+   Used by the "transfers" and "experiences" pages.
+   Everything here is driven by the list in home.component.ts (groups[x].items),
+   so adding a card there automatically adds a stop on the road.
+   ===================================================================== */
+
+.landing-page .journey {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-rows: 1fr;          /* every stop gets the same height, so pins sit exactly on the road */
+}
+
+/* ---- the road (an SVG stretched over the whole list) ---- */
+.landing-page .j-road {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+.landing-page .j-road path { fill: none; vector-effect: non-scaling-stroke; }
+.landing-page .j-road-bed   { stroke: #e8eef8; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+.landing-page .j-road-dash  { stroke: rgba(10, 31, 68, 0.32); stroke-width: 2; stroke-dasharray: 9 12; stroke-linecap: butt; stroke-linejoin: round; }
+.landing-page .j-road-trail { stroke: var(--c-red); stroke-width: 3; stroke-dasharray: 9 12; stroke-linecap: butt; stroke-linejoin: round; }
+
+/* ---- the car (follows the scroll) ---- */
+.landing-page .j-car {
+  position: absolute;
+  left: var(--cx, 50%);
+  top: var(--cy, 0%);
+  width: 22px;
+  height: 42px;
+  margin: -21px 0 0 -11px;
+  transform: rotate(var(--rot, 0deg));
+  z-index: 5;
+  pointer-events: none;
+  transition: left 0.12s linear, top 0.12s linear, transform 0.25s ease;
+  filter: drop-shadow(0 6px 8px rgba(179, 18, 42, 0.35));
+}
+.landing-page .j-car svg { display: block; width: 100%; height: 100%; }
+
+/* ---- one stop ---- */
+.landing-page .j-row {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  height: 240px;          /* height of one stop. Smaller = cards closer */
+  padding: 0;
+}
+.landing-page .j-row .j-card {
+  grid-column: 1;
+  justify-self: end;
+  width: min(100%, 480px);
+  margin-right: 44px;
+}
+.landing-page .j-row.flip .j-card {
+  grid-column: 2;
+  justify-self: start;
+  margin-right: 0;
+  margin-left: 44px;
+}
+
+/* ---- the pin (no numbers) ---- */
+.landing-page .j-pin {
+  position: absolute;
+  left: var(--px, 50%);
+  top: 50%;
+  width: 38px;
+  height: 48px;
+  transform: translate(-50%, -100%);
+  z-index: 4;
+  pointer-events: none;
+}
+.landing-page .j-pin svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(10, 31, 68, 0.25)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.landing-page .j-pin path   { fill: #fff; stroke: var(--c-navy); stroke-width: 6; transition: fill 0.4s ease, stroke 0.4s ease; }
+.landing-page .j-pin circle { fill: var(--c-navy); transition: fill 0.4s ease; }
+.landing-page .j-pin::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 22px;
+  height: 7px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: rgba(10, 31, 68, 0.22);
+  transition: background 0.4s ease;
+}
+/* the car reached this stop */
+.landing-page .j-pin.on svg { transform: translateY(-6px) scale(1.12); }
+.landing-page .j-pin.on path { fill: var(--c-red); stroke: var(--c-red); }
+.landing-page .j-pin.on circle { fill: #fff; }
+.landing-page .j-pin.on::after { background: rgba(179, 18, 42, 0.5); animation: jRipple 2.4s ease-out infinite; }
+@keyframes jRipple {
+  0%   { box-shadow: 0 0 0 0 rgba(179, 18, 42, 0.45); }
+  100% { box-shadow: 0 0 0 22px rgba(179, 18, 42, 0); }
+}
+
+/* ---- the card: a "leaf" shape (one big rounded corner) with a red frame behind it ---- */
+.landing-page .j-card {
+  --r: 110px 28px 28px 28px;
+  position: relative;
+  display: block;
+  height: 250px;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+  cursor: pointer;
+}
+.landing-page .j-row.flip .j-card { --r: 28px 110px 28px 28px; }
+
+.landing-page .j-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--c-red);
+  border-radius: var(--r);
+  transform: translate(14px, 14px);
+  z-index: -1;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .j-row.flip .j-card::before { transform: translate(-14px, 14px); }
+.landing-page .j-card:hover::before { transform: translate(7px, 7px); }
+.landing-page .j-row.flip .j-card:hover::before { transform: translate(-7px, 7px); }
+
+.landing-page .j-photo {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--c-navy-deep);
+  box-shadow: 0 18px 44px rgba(10, 31, 68, 0.22);
+}
+.landing-page .j-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .j-card:hover .j-img { transform: scale(1.07); }
+.landing-page .j-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 22, 52, 0) 60%, rgba(7, 22, 52, 0.5) 100%);
+}
+
+/* glass panel with the text: a small strip, so the photo stays visible */
+.landing-page .j-glass {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 9px 58px 9px 14px;   /* right padding leaves room for the round arrow */
+  border-radius: 16px;
+  background: rgba(7, 22, 52, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.landing-page .j-title { margin: 0 0 2px; font-size: 0.92rem; letter-spacing: 0.03em; color: #fff; line-height: 1.25; }
+.landing-page .j-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.82);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;          /* one line only */
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* "Read More" becomes a round red arrow on the right of the strip (the text is hidden) */
+.landing-page .j-more {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  font-size: 0;
+  gap: 0;
+}
+.landing-page .j-more svg {
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--c-red);
+  stroke: #fff;
+  transition: transform 0.3s ease;
+}
+.landing-page .j-card:hover .j-more svg { transform: translateX(4px); }
+
+/* ---- phones / tablets: cards zig-zag left / right, the road winds between them (like on desktop) ---- */
+@media (max-width: 860px) {
+  .landing-page .journey { max-width: 560px; }
+  .landing-page .j-road-bed  { stroke-width: 16; }
+  .landing-page .j-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+    height: 290px;          /* height of one stop on phones */
+    padding: 0;
+  }
+  .landing-page .j-row .j-card,
+  .landing-page .j-row.flip .j-card { grid-column: 1; width: 76%; margin: 0; }
+  .landing-page .j-row .j-card      { justify-self: start; --r: 70px 24px 24px 24px; }
+  .landing-page .j-row.flip .j-card { justify-self: end;   --r: 24px 70px 24px 24px; }
+  .landing-page .j-row .j-card::before      { transform: translate(8px, 8px); }
+  .landing-page .j-row.flip .j-card::before { transform: translate(-8px, 8px); }
+  .landing-page .j-pin { width: 32px; height: 41px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .j-car { transition: none; }
+  .landing-page .j-pin.on::after { animation: none; }
+}

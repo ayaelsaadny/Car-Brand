@@ -14,3 +14,19 @@ D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Application\obj\Debu
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\refint\Limousine.Application.dll
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.pdb
 D:\Projects Freelance\Limousine\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\ref\Limousine.Application.dll
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\bin\Debug\net10.0\Limousine.Application.deps.json
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\bin\Debug\net10.0\Limousine.Application.dll
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\bin\Debug\net10.0\Limousine.Application.pdb
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\bin\Debug\net10.0\Limousine.Core.dll
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\bin\Debug\net10.0\Limousine.Core.pdb
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.csproj.AssemblyReference.cache
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.AssemblyInfoInputs.cache
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.AssemblyInfo.cs
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.csproj.CoreCompileInputs.cache
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.sourcelink.json
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousin.761CA467.Up2Date
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.dll
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\refint\Limousine.Application.dll
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\Limousine.Application.pdb
+D:\Projects\Car-Brand\Limousine-Backend\Limousine.Application\obj\Debug\net10.0\ref\Limousine.Application.dll

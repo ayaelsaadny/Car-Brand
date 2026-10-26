@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("93a2e61e-c7ab-49aa-a0cd-990e56ed24e1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec2f364798d2afc913ad5abae15c2b43150773d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b59a51d6055fa1b0e73d8518cd8866da37ae3c18")]
 [assembly: System.Reflection.AssemblyProductAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
