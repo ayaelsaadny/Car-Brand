@@ -3791,23 +3791,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dell\\.nuget\\packages\\": {},
+    "C:\\Users\\TC\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.API\\Limousine.API.csproj",
+      "projectUniqueName": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Limousine.API.csproj",
       "projectName": "Limousine.API",
-      "projectPath": "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.API\\Limousine.API.csproj",
-      "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.API\\obj\\",
+      "projectPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\Limousine.API.csproj",
+      "packagesPath": "C:\\Users\\TC\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\TC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3824,16 +3824,21 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.Application\\Limousine.Application.csproj": {
-              "projectPath": "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.Application\\Limousine.Application.csproj"
+            "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Application\\Limousine.Application.csproj": {
+              "projectPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Application\\Limousine.Application.csproj"
             },
-            "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.Infrastracture\\Limousine.Infrastracture.csproj": {
-              "projectPath": "D:\\Projects\\Car-Brand\\Limousine-Backend\\Limousine.Infrastracture\\Limousine.Infrastracture.csproj"
+            "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Limousine.Infrastracture.csproj": {
+              "projectPath": "D:\\Projects Freelance\\Limousine\\Limousine-Backend\\Limousine.Infrastracture\\Limousine.Infrastracture.csproj"
             }
           }
         }
       },
       "warningProperties": {
+        "noWarn": [
+          "NU1902",
+          "NU1903",
+          "NU1904"
+        ],
         "warnAsError": [
           "NU1605"
         ]
@@ -3843,7 +3848,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.400"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
@@ -3896,7 +3901,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.402/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -4316,24 +4321,10 @@
   },
   "logs": [
     {
-      "code": "NU1902",
+      "code": "NU1900",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'System.Security.Cryptography.Pkcs' 9.0.11 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-2fmv-rv2c-59x7",
-      "libraryId": "System.Security.Cryptography.Pkcs",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Security.Cryptography.Pkcs' 9.0.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-846f-f764-76mx",
-      "libraryId": "System.Security.Cryptography.Pkcs",
-      "targetGraphs": [
-        "net10.0"
-      ]
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
     }
   ]
 }

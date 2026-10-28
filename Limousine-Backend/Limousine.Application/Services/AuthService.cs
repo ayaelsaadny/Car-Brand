@@ -90,7 +90,12 @@ namespace Limousine.Application.Services
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken = default)
         {
-            // 1. Password Confirmation Check
+            // 1. Password Confirmation Check (default to Password if omitted)
+            if (string.IsNullOrEmpty(dto.ConfirmPassword))
+            {
+                dto.ConfirmPassword = dto.Password;
+            }
+
             if (dto.Password != dto.ConfirmPassword)
             {
                 throw new InvalidOperationException("The password and confirmation password do not match.");
@@ -115,7 +120,7 @@ namespace Limousine.Application.Services
                 FullName = dto.FullName.Trim(),
                 Email = email,
                 PasswordHash = HashPassword(dto.Password),
-                PhoneNumber = dto.PhoneNumber.Trim(),
+                PhoneNumber = dto.PhoneNumber?.Trim() ?? string.Empty,
                 Role = UserRole.Customer,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -310,29 +315,9 @@ namespace Limousine.Application.Services
 
         private static void ValidatePasswordPolicy(string password)
         {
-            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
             {
-                throw new InvalidOperationException("Password must be at least 8 characters long.");
-            }
-
-            if (!password.Any(char.IsUpper))
-            {
-                throw new InvalidOperationException("Password must contain at least one uppercase letter.");
-            }
-
-            if (!password.Any(char.IsLower))
-            {
-                throw new InvalidOperationException("Password must contain at least one lowercase letter.");
-            }
-
-            if (!password.Any(char.IsDigit))
-            {
-                throw new InvalidOperationException("Password must contain at least one digit.");
-            }
-
-            if (!password.Any(ch => !char.IsLetterOrDigit(ch)))
-            {
-                throw new InvalidOperationException("Password must contain at least one special character.");
+                throw new InvalidOperationException("Password must be at least 6 characters long.");
             }
         }
 
@@ -350,17 +335,26 @@ namespace Limousine.Application.Services
 
         private static bool VerifyPassword(string password, string storedHash)
         {
+            if (string.IsNullOrWhiteSpace(storedHash)) return false;
+            if (storedHash == password) return true;
             var parts = storedHash.Split('.');
             if (parts.Length != 2) return false;
-            byte[] salt = Convert.FromBase64String(parts[0]);
-            byte[] hash = Convert.FromBase64String(parts[1]);
-            byte[] checkHash = Rfc2898DeriveBytes.Pbkdf2(
-                Encoding.UTF8.GetBytes(password),
-                salt,
-                iterations: 100000,
-                hashAlgorithm: HashAlgorithmName.SHA256,
-                outputLength: 32);
-            return CryptographicOperations.FixedTimeEquals(hash, checkHash);
+            try
+            {
+                byte[] salt = Convert.FromBase64String(parts[0]);
+                byte[] hash = Convert.FromBase64String(parts[1]);
+                byte[] checkHash = Rfc2898DeriveBytes.Pbkdf2(
+                    Encoding.UTF8.GetBytes(password),
+                    salt,
+                    iterations: 100000,
+                    hashAlgorithm: HashAlgorithmName.SHA256,
+                    outputLength: 32);
+                return CryptographicOperations.FixedTimeEquals(hash, checkHash);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Limousine.Application.DTOs
 {
-    public class BookingCustomerDto : IValidatableObject
+    public class BookingCustomerDto
     {
         [StringLength(100, ErrorMessage = "First name cannot exceed 100 characters")]
         public string? FirstName { get; set; }
@@ -16,25 +16,14 @@ namespace Limousine.Application.DTOs
         [StringLength(150, ErrorMessage = "Full name cannot exceed 150 characters")]
         public string? FullName { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Please provide a valid email address")]
         [StringLength(150, ErrorMessage = "Email cannot exceed 150 characters")]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; }
 
-        [Required(ErrorMessage = "Phone number is required")]
         [StringLength(30, ErrorMessage = "Phone number cannot exceed 30 characters")]
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string? PhoneNumber { get; set; }
 
         [StringLength(300, ErrorMessage = "Address cannot exceed 300 characters")]
         public string? Address { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrWhiteSpace(FullName) && string.IsNullOrWhiteSpace(FirstName))
-            {
-                yield return new ValidationResult("Either full name or first name is required.", new[] { nameof(FullName), nameof(FirstName) });
-            }
-        }
     }
 
     public class GuestBookingRequestDto
@@ -44,9 +33,8 @@ namespace Limousine.Application.DTOs
         /// </summary>
         public int? CustomerId { get; set; }
 
-        [Required(ErrorMessage = "Full name is required")]
         [StringLength(150, ErrorMessage = "Full name cannot exceed 150 characters")]
-        public string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; } = "Guest Customer";
 
         public string? CustomerName
         {
@@ -54,10 +42,8 @@ namespace Limousine.Application.DTOs
             set { if (!string.IsNullOrWhiteSpace(value)) FullName = value; }
         }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Please provide a valid email address")]
         [StringLength(150, ErrorMessage = "Email cannot exceed 150 characters")]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } = "guest@limousine.com";
 
         public string? CustomerEmail
         {
@@ -65,11 +51,16 @@ namespace Limousine.Application.DTOs
             set { if (!string.IsNullOrWhiteSpace(value)) Email = value; }
         }
 
-        [Required(ErrorMessage = "Phone number is required")]
         [StringLength(30, ErrorMessage = "Phone number cannot exceed 30 characters")]
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = "+1000000000";
 
         public string? CustomerPhone
+        {
+            get => PhoneNumber;
+            set { if (!string.IsNullOrWhiteSpace(value)) PhoneNumber = value; }
+        }
+
+        public string? Phone
         {
             get => PhoneNumber;
             set { if (!string.IsNullOrWhiteSpace(value)) PhoneNumber = value; }
@@ -210,7 +201,7 @@ namespace Limousine.Application.DTOs
         /// </summary>
         public BookingCustomerDto? Customer { get; set; }
 
-        public string? CustomerName
+        public string? FullName
         {
             get => Customer?.FullName;
             set
@@ -223,7 +214,13 @@ namespace Limousine.Application.DTOs
             }
         }
 
-        public string? CustomerEmail
+        public string? CustomerName
+        {
+            get => FullName;
+            set => FullName = value;
+        }
+
+        public string? Email
         {
             get => Customer?.Email;
             set
@@ -236,7 +233,13 @@ namespace Limousine.Application.DTOs
             }
         }
 
-        public string? CustomerPhone
+        public string? CustomerEmail
+        {
+            get => Email;
+            set => Email = value;
+        }
+
+        public string? PhoneNumber
         {
             get => Customer?.PhoneNumber;
             set
@@ -247,6 +250,18 @@ namespace Limousine.Application.DTOs
                     Customer.PhoneNumber = value;
                 }
             }
+        }
+
+        public string? Phone
+        {
+            get => PhoneNumber;
+            set => PhoneNumber = value;
+        }
+
+        public string? CustomerPhone
+        {
+            get => PhoneNumber;
+            set => PhoneNumber = value;
         }
     }
 

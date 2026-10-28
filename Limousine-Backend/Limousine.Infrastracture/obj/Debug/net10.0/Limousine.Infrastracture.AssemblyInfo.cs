@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Limousine.Infrastracture")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b59a51d6055fa1b0e73d8518cd8866da37ae3c18")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56a49ff0c542f68af66964cee93f1d7d6030fb28")]
 [assembly: System.Reflection.AssemblyProductAttribute("Limousine.Infrastracture")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Limousine.Infrastracture")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

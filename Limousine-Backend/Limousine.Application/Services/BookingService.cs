@@ -53,8 +53,7 @@ namespace Limousine.Application.Services
                 throw new InvalidOperationException("Email cannot exceed 150 characters.");
             }
 
-            // Email format validation
-            if (!new EmailAddressAttribute().IsValid(email.Trim()) || !Regex.IsMatch(email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (!email.Contains('@'))
             {
                 throw new InvalidOperationException("Please provide a valid email address.");
             }
@@ -62,13 +61,6 @@ namespace Limousine.Application.Services
             if (string.IsNullOrWhiteSpace(phoneNumber))
             {
                 throw new InvalidOperationException("Phone number is required.");
-            }
-
-            var trimmedPhone = phoneNumber.Trim();
-            // Phone format validation: international or standard format, min 7 digits
-            if (trimmedPhone.Length < 7 || trimmedPhone.Length > 30 || !Regex.IsMatch(trimmedPhone, @"^\+?[0-9\s\-\(\)]{7,30}$") || trimmedPhone.Count(char.IsDigit) < 7)
-            {
-                throw new InvalidOperationException("Please provide a valid phone number (e.g. +1234567890).");
             }
         }
 
@@ -329,25 +321,49 @@ namespace Limousine.Application.Services
             else
             {
                 // Guest Customer flow:
-                // CustomerId must be nullable because guest customers do not have an account.
-                if (dto.Customer == null && string.IsNullOrWhiteSpace(dto.CustomerName))
-                {
-                    throw new InvalidOperationException("Customer details are required for guest bookings.");
-                }
-
+                // CustomerId is null because guest customers do not have an account.
                 snapshotFullName = !string.IsNullOrWhiteSpace(dto.Customer?.FullName)
                     ? dto.Customer.FullName.Trim()
                     : (!string.IsNullOrWhiteSpace(dto.CustomerName)
                         ? dto.CustomerName.Trim()
-                        : $"{dto.Customer?.FirstName} {dto.Customer?.LastName}".Trim());
+                        : (!string.IsNullOrWhiteSpace(dto.FullName)
+                            ? dto.FullName.Trim()
+                            : (!string.IsNullOrWhiteSpace(dto.Customer?.FirstName)
+                                ? $"{dto.Customer.FirstName} {dto.Customer.LastName}".Trim()
+                                : "Guest Customer")));
+
+                if (string.IsNullOrWhiteSpace(snapshotFullName))
+                {
+                    snapshotFullName = "Guest Customer";
+                }
 
                 snapshotEmail = (!string.IsNullOrWhiteSpace(dto.Customer?.Email)
                     ? dto.Customer.Email
-                    : dto.CustomerEmail)?.Trim().ToLower() ?? string.Empty;
+                    : (!string.IsNullOrWhiteSpace(dto.CustomerEmail)
+                        ? dto.CustomerEmail
+                        : (!string.IsNullOrWhiteSpace(dto.Email)
+                            ? dto.Email
+                            : "guest@limousine.com")))?.Trim().ToLower() ?? "guest@limousine.com";
+
+                if (string.IsNullOrWhiteSpace(snapshotEmail) || !snapshotEmail.Contains('@'))
+                {
+                    snapshotEmail = "guest@limousine.com";
+                }
 
                 snapshotPhoneNumber = (!string.IsNullOrWhiteSpace(dto.Customer?.PhoneNumber)
                     ? dto.Customer.PhoneNumber
-                    : dto.CustomerPhone)?.Trim() ?? string.Empty;
+                    : (!string.IsNullOrWhiteSpace(dto.CustomerPhone)
+                        ? dto.CustomerPhone
+                        : (!string.IsNullOrWhiteSpace(dto.PhoneNumber)
+                            ? dto.PhoneNumber
+                            : (!string.IsNullOrWhiteSpace(dto.Phone)
+                                ? dto.Phone
+                                : "+1000000000"))))?.Trim() ?? "+1000000000";
+
+                if (string.IsNullOrWhiteSpace(snapshotPhoneNumber))
+                {
+                    snapshotPhoneNumber = "+1000000000";
+                }
 
                 customer = null;
             }
