@@ -1193,3 +1193,18 @@
   z-index: 10;
   margin: 0 0 36px !important;
 }
+
+/* ===== Service intro: start the text a bit higher ===== */
+.landing-page .svc-intro {
+  align-items: flex-start !important;
+}
+
+.landing-page .svc-intro-text {
+  padding-top: 40px;   /* adjust this number as you like */
+}
+
+.brand-logo {
+  filter: none !important;
+  height: 44px;
+  width: auto;
+}

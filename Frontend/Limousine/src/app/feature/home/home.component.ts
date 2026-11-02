@@ -12,8 +12,10 @@ import { ViewName, linkFor, viewForPath } from '../../core/routing/page-routes';
 import { RevealDirective } from './reveal.directive';
 import { Vehicle, ServiceItem, Category } from '../../core/interfaces/api.models';
 
-interface MenuItem { view: ViewName; titleKey: string; descKey: string; image: string; btnKey?: string; }
-interface MenuGroup { key: 'transfers' | 'experiences'; titleKey: string; items: MenuItem[]; }
+interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; btnKey?: string; }
+type GroupKey = 'airport' | 'experiences' | 'cityToCity' | 'vip';
+interface MenuGroup { key: GroupKey; titleKey: string; items: MenuItem[]; }
+interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey: string; image: string; }
 
 @Component({
   selector: 'app-home',
@@ -27,7 +29,7 @@ interface MenuGroup { key: 'transfers' | 'experiences'; titleKey: string; items:
     RevealDirective
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css', './journey.css']
+  styleUrls: ['./home.component.css', './journey.css', './service-page.css', './nav-menu.css', './choose-panels.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly publicService = inject(PublicService);
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // ===== Services dropdown (small, opens on click; Montréal only) =====
   megaOpen = signal(false);
-  activeGroup = signal<'transfers' | 'experiences' | null>(null);
+  activeGroup = signal<GroupKey | null>(null);
 
   // ===== Page views: now taken from the URL (e.g. /en/vip-chauffeur, /fr/chauffeur-vip) =====
   // The URL → view mapping lives in core/routing/page-routes.ts
@@ -66,22 +68,52 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Router link (array) for a page in the current language, e.g. link('vip') */
   link(v: ViewName): string[] { return linkFor(v, this.langService.currentLang()); }
 
+  // The 4 services under the hero ("Luxury in Every Journey"). To add one: add an item here + its texts (choose.cNTitle / cNDesc / cNBtn) in en.json and fr.json.
+  // Photos: public/assets/menu/
+  readonly chooseCards: ChooseCard[] = [
+    { view: 'airport',     titleKey: 'choose.c1Title', descKey: 'choose.c1Desc', btnKey: 'choose.c1Btn', image: 'assets/menu/airport.jpg' },
+    { view: 'experiences', titleKey: 'choose.c2Title', descKey: 'choose.c2Desc', btnKey: 'choose.c2Btn', image: 'assets/menu/city.jpg' },
+    { view: 'cityToCity',  titleKey: 'choose.c3Title', descKey: 'choose.c3Desc', btnKey: 'choose.c3Btn', image: 'assets/menu/city-to-city.jpg' },
+    { view: 'vip',         titleKey: 'choose.c4Title', descKey: 'choose.c4Desc', btnKey: 'choose.c4Btn', image: 'assets/menu/private-chauffeur.jpg' }
+  ];
+
   // Put the photos in public/assets/menu/ (airport.jpg, city.jpg, vip.jpg, montreal.jpg)
   readonly groups: MenuGroup[] = [
     {
-      key: 'transfers',
-      titleKey: 'megaMenu.transfers',
+      key: 'airport',
+      titleKey: 'megaMenu.airport',
       items: [
-        { view: 'airport', titleKey: 'megaMenu.airport', descKey: 'megaMenu.airportDesc', image: 'assets/menu/airport-pickup.jpg' },
-        { view: 'cityToCity', titleKey: 'megaMenu.cityToCity', descKey: 'megaMenu.cityToCityDesc', image: 'assets/menu/intercity-ride.jpg' },
-        { view: 'vip', titleKey: 'megaMenu.vip', descKey: 'megaMenu.vipDesc', image: 'assets/menu/vip-chauffeur.jpg' }
+        { view: 'airportPickup',  titleKey: 'sections.airportPickup',  descKey: 'sections.airportPickupDesc',  image: 'assets/menu/airport-pickup.jpg' },
+        { view: 'airportDropoff', titleKey: 'sections.airportDropoff', descKey: 'sections.airportDropoffDesc', image: 'assets/menu/airport-dropoff.jpg' }
       ]
     },
     {
       key: 'experiences',
       titleKey: 'megaMenu.experiences',
       items: [
-        { view: 'montreal', titleKey: 'megaMenu.montrealTitle', descKey: 'megaMenu.montrealDesc', image: 'assets/menu/montreal.jpg', btnKey: 'megaMenu.exploreMontreal' }
+        { view: 'montreal', titleKey: 'sections.montrealCity', descKey: 'sections.montrealCityDesc', image: 'assets/menu/montreal.jpg', btnKey: 'megaMenu.exploreMontreal' }
+      ]
+    },
+    {
+      key: 'cityToCity',
+      titleKey: 'megaMenu.cityToCity',
+      items: [
+        { view: 'ottawa',  titleKey: 'sections.ottawa',  descKey: 'sections.ottawaDesc',  image: 'assets/menu/intercity-ride.jpg' },
+        { view: 'quebec',  titleKey: 'sections.quebec',  descKey: 'sections.quebecDesc',  image: 'assets/menu/quebec-city.jpg' },
+        { view: 'toronto', titleKey: 'sections.toronto', descKey: 'sections.torontoDesc', image: 'assets/menu/toronto.jpg' },
+        { view: 'tremblant', titleKey: 'sections.tremblant', descKey: 'sections.tremblantDesc', image: 'assets/menu/mont-tremblant.jpg' },
+        { view: 'cityOther', titleKey: 'sections.cityOther', descKey: 'sections.cityOtherDesc', image: 'assets/menu/other-city.jpg', btnKey: 'common.bookNow' }
+      ]
+    },
+    {
+      key: 'vip',
+      titleKey: 'megaMenu.vip',
+      items: [
+        { view: 'weddings',    titleKey: 'sections.weddings',    descKey: 'sections.weddingsDesc',    image: 'assets/menu/wedding.jpg' },
+        { view: 'graduations', titleKey: 'sections.graduations', descKey: 'sections.graduationsDesc', image: 'assets/menu/graduations.jpg' },
+        { view: 'events',      titleKey: 'sections.events',      descKey: 'sections.eventsDesc',      image: 'assets/menu/events-parties.jpg' },
+        { view: 'shopping',    titleKey: 'sections.shopping',    descKey: 'sections.shoppingDesc',    image: 'assets/menu/shopping-errands.jpg' },
+        { view: 'hourly',      titleKey: 'sections.hourly',      descKey: 'sections.hourlyDesc',      image: 'assets/menu/business-hourly.jpg' }
       ]
     }
   ];
@@ -105,7 +137,47 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   currentItem = computed(() => [...this.groups.flatMap((g: MenuGroup) => g.items), ...this.businessItems].find(i => i.view === this.view()) ?? null);
 
-  // ===== Journey (road + pins + car) for the "transfers" and "experiences" pages =====
+  /** The service a section page belongs to (null on service pages, business pages and home) */
+  readonly parentGroup = computed<MenuGroup | null>(() => this.groups.find(g => g.items.some(i => i.view === this.view())) ?? null);
+
+  /** Title of the page (section title, or the service title on a service page) */
+  readonly pageTitleKey = computed(() => this.currentItem()?.titleKey ?? this.groups.find(g => g.key === this.view())?.titleKey ?? 'megaMenu.airport');
+
+  // ===== Booking request form (Airport / City-to-City / VIP pages) =====
+  // The request opens WhatsApp with the details already written (no server needed).
+  // Sections of Airport / City-to-City / Private Chauffeur show the booking form. Private City Experiences does not.
+  readonly isBookable = computed(() => { const g = this.parentGroup(); return !!g && g.key !== 'experiences'; });
+  readonly minDate = new Date().toISOString().slice(0, 10);   // earliest date the calendar allows (today)
+  booking = { name: '', email: '', phone: '', from: '', to: '', date: '', time: '', passengers: 1, message: '' };
+  bookingSent = signal(false);
+
+  scrollToBooking(ev?: Event): void {
+    ev?.preventDefault();
+    if (isPlatformBrowser(this.platformId)) document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  submitBooking(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const b = this.booking;
+    const item = this.currentItem();
+    const service = item ? this.transloco.translate(item.titleKey) : '';
+    const text = [
+      `New booking request: ${service}`,
+      `Name: ${b.name}`,
+      `Phone: ${b.phone}`,
+      b.email && `Email: ${b.email}`,
+      `From: ${b.from}`,
+      `To: ${b.to}`,
+      b.date && `Date: ${b.date}`,
+      b.time && `Time: ${b.time}`,
+      b.passengers && `Passengers: ${b.passengers}`,
+      b.message && `Message: ${b.message}`
+    ].filter(Boolean).join('\n');
+    window.open(`${this.contact.whatsappUrl}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    this.bookingSent.set(true);
+  }
+
+  // ===== Journey (road + pins + car) for the service pages =====
   // To add a new card: add an item to groups[x].items above. The road, the pins and the car grow by themselves.
   readonly isMobile = signal(false);   // true on phones / small tablets (the road is drawn differently)
   private readonly ROAD_SWAY = 7;   // how far the road leans left / right (in % of the width)
@@ -119,7 +191,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   /** x position (in % of the width) of the pin of card i: left, right, left, right... */
   pinX(i: number): number {
     // phone: the road runs on the right of the 1st card, on the left of the 2nd, and so on
-    if (this.isMobile()) return i % 2 === 0 ? 88 : 12;
+    if (this.isMobile()) return i % 2 === 0 ? 87 : 13;
     return 50 + (i % 2 === 0 ? this.ROAD_SWAY : -this.ROAD_SWAY);
   }
 
@@ -131,9 +203,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const i = Math.floor(t);
     const u = t - i;
     // desktop: a gentle S-curve over the whole distance
-    // phone: the road stays beside the card, then swings across in the gap between two cards
-    const w = this.isMobile() ? Math.min(1, Math.max(0, (u - 0.36) / 0.28)) : u;
-    const s = w * w * (3 - 2 * w);
+    // phone: a soft, wide wave (starts bending early, ends late, so there are no sharp turns)
+    const w = this.isMobile() ? Math.min(1, Math.max(0, (u - 0.12) / 0.76)) : u;
+    const s = this.isMobile() ? (1 - Math.cos(Math.PI * w)) / 2 : w * w * (3 - 2 * w);
     return this.pinX(i) + (this.pinX(i + 1) - this.pinX(i)) * s;
   }
 
@@ -185,8 +257,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   closeMega(): void { this.megaOpen.set(false); this.bizOpen.set(false); this.activeGroup.set(null); }
   /** Click a group => its small sub-menu opens (click again to close it) */
-  toggleGroup(k: 'transfers' | 'experiences'): void {
+  toggleGroup(k: GroupKey): void {
     this.activeGroup.update(cur => (cur === k ? null : k));
+  }
+
+  /** Click on a service: opens its page (the sections open on hover). On touch screens there is no hover, so the first tap opens the sections and the second tap opens the page. */
+  onGroupClick(k: GroupKey, ev?: Event): void {
+    const touch = isPlatformBrowser(this.platformId) && !!window.matchMedia?.('(hover: none)').matches;
+    if (touch && this.activeGroup() !== k) {
+      ev?.preventDefault();
+      ev?.stopPropagation();
+      this.activeGroup.set(k);
+      return;
+    }
+    this.openView(k, ev);
   }
 
   /** Closes the dropdowns and the mobile menu (used after clicking a link) */

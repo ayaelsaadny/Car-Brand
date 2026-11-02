@@ -35,11 +35,9 @@
             <div class="dd-row" *ngFor="let g of groups">
               <div class="dd-item" role="button" tabindex="0"
                    [class.active]="activeGroup() === g.key"
-                   (click)="openView(g.key, $event)" (keydown.enter)="openView(g.key, $event)">
+                   (click)="onGroupClick(g.key, $event)" (keydown.enter)="onGroupClick(g.key, $event)">
                 <span style="flex:1">{{ g.titleKey | transloco }}</span>
-                <span class="dd-chev" style="padding:6px 10px;margin:-6px -10px"
-                      (click)="toggleGroup(g.key); $event.stopPropagation()"
-                      [attr.aria-expanded]="activeGroup() === g.key">›</span>
+                <span class="dd-chev" aria-hidden="true">›</span>
               </div>
               <div class="dd-sub" [class.open]="activeGroup() === g.key">
                 <a *ngFor="let it of g.items" [routerLink]="link(it.view)" class="dd-sub-link" (click)="closeNav()">{{ it.titleKey | transloco }}</a>
@@ -197,29 +195,23 @@
         <h2 class="sec-title">{{ 'choose.title' | transloco }}</h2>
         <p class="sec-desc">{{ 'choose.desc' | transloco }}</p>
       </div>
-      <div class="route-grid">
-        <div class="route-cell" reveal="left" revealTilt [revealDelay]="0">
-          <article class="route-card" (click)="openView('transfers')">
-            <div class="route-media" style="background-image: url('assets/menu/airport.jpg'), url('assets/hero/hero-1.jpg'), linear-gradient(135deg,#071634,#143d7d)"></div>
-            <div class="route-shade"></div>
-            <div class="route-body">
-              <h3>{{ 'choose.c1Title' | transloco }}</h3>
-              <p>{{ 'choose.c1Desc' | transloco }}</p>
-              <button type="button" class="route-go" (click)="openView('transfers', $event)">{{ 'choose.c1Btn' | transloco }} →</button>
-            </div>
-          </article>
-        </div>
-        <div class="route-cell" reveal="right" revealTilt [revealDelay]="160">
-          <article class="route-card" (click)="openView('experiences')">
-            <div class="route-media" style="background-image: url('assets/menu/city.jpg'), url('assets/hero/hero-1.jpg'), linear-gradient(135deg,#071634,#143d7d)"></div>
-            <div class="route-shade"></div>
-            <div class="route-body">
-              <h3>{{ 'choose.c2Title' | transloco }}</h3>
-              <p>{{ 'choose.c2Desc' | transloco }}</p>
-              <button type="button" class="route-go" (click)="openView('experiences', $event)">{{ 'choose.c2Btn' | transloco }} →</button>
-            </div>
-          </article>
-        </div>
+      <div class="dest-grid">
+        <a class="dest-card" *ngFor="let c of chooseCards; let i = index"
+           [routerLink]="link(c.view)" reveal="zoom" [revealDelay]="i * 120">
+          <span class="dest-media">
+            <span class="dest-photo">
+              <span class="dest-img" [style.background-image]="'url(' + c.image + '), linear-gradient(135deg,#071634,#143d7d)'"></span>
+              <span class="dest-body">
+                <h3 class="dest-title">{{ c.titleKey | transloco }}</h3>
+                <p class="dest-desc">{{ c.descKey | transloco }}</p>
+                <span class="dest-more">
+                  {{ c.btnKey | transloco }}
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </span>
+            </span>
+          </span>
+        </a>
       </div>
     </div>
   </section>
@@ -351,41 +343,8 @@
     </div>
   </section>
 
-  <!-- Features (light) -->
-  <section class="features-section" reveal="fade">
-    <div class="features-grid">
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="0">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
-        <h3>{{ 'featuresGrid.f1T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f1D' | transloco }}</p>
-      </div>
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="130">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 3 6-2.5v-13L15 7 9 4z"/><path d="M9 4v13M15 7v13"/></svg></span>
-        <h3>{{ 'featuresGrid.f2T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f2D' | transloco }}</p>
-      </div>
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="260">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg></span>
-        <h3>{{ 'featuresGrid.f3T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f3D' | transloco }}</p>
-      </div>
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="0">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg></span>
-        <h3>{{ 'featuresGrid.f4T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f4D' | transloco }}</p>
-      </div>
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="130">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 4 5.6 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.6-4-9s1.2-6.4 4-9z"/></svg></span>
-        <h3>{{ 'featuresGrid.f5T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f5D' | transloco }}</p>
-      </div>
-      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="260">
-        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 5 13.5h6L10 22l9-12h-6.5z"/></svg></span>
-        <h3>{{ 'featuresGrid.f6T' | transloco }}</h3>
-        <p>{{ 'featuresGrid.f6D' | transloco }}</p>
-      </div>
-    </div>
-  </section>
+  <!-- Features (light): same block is also shown on the sub pages -->
+  <ng-container *ngTemplateOutlet="featuresTpl"></ng-container>
 
   <!-- Numbers (DARK band over a photo) -->
   <section id="stats" class="stats-section" reveal="fade">
@@ -447,13 +406,94 @@
   <!-- Sub pages : dark title band + photo cards -->
   <ng-container *ngIf="view() !== 'home'">
     <section class="page-hero" reveal="fade">
-      <h1>{{ (currentItem()?.titleKey || (view() === 'transfers' ? 'megaMenu.transfers' : 'megaMenu.experiences')) | transloco }}</h1>
+      <h1>{{ pageTitleKey() | transloco }}</h1>
     </section>
 
     <section class="section page-section">
       <div class="container">
-        <!-- Single service page -->
-        <div class="detail-wrap" reveal *ngIf="currentItem() as it">
+        <!-- Service page (Airport / City-to-City / VIP): intro (text + photo) and an elegant booking form -->
+        <ng-container *ngIf="isBookable() && currentItem() as it">
+          <section class="svc-intro" reveal>
+            <div class="svc-intro-text">
+              <h2>{{ it.titleKey | transloco }}</h2>
+              <p>{{ (it.pageDescKey || it.descKey) | transloco }}</p>
+              <div class="detail-actions">
+                <a href="#booking" class="svc-btn detail-btn" (click)="scrollToBooking($event)">{{ 'common.bookNow' | transloco }}</a>
+                <a *ngIf="parentGroup() as pg" [routerLink]="link(pg.key)" class="detail-back">← {{ pg.titleKey | transloco }}</a>
+              </div>
+            </div>
+            <div class="svc-intro-img">
+              <span class="svc-intro-photo" [style.background-image]="'url(' + it.image + '), linear-gradient(135deg,#071634,#143d7d)'"></span>
+            </div>
+          </section>
+
+          <section class="bk-section" id="booking" reveal>
+            <div class="bk-head">
+              <span class="svc-eyebrow">{{ 'bookingForm.eyebrow' | transloco }}</span>
+              <h2>{{ 'bookingForm.title' | transloco }}</h2>
+              <p>{{ 'bookingForm.sub' | transloco }}</p>
+            </div>
+
+            <form class="bk-form" #bf="ngForm" [class.submitted]="bf.submitted" (ngSubmit)="bf.valid && submitBooking()" novalidate>
+              <div class="bk-grid">
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.name' | transloco }} <i>*</i></span>
+                  <input type="text" name="name" [(ngModel)]="booking.name" required autocomplete="name">
+                </label>
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.email' | transloco }}</span>
+                  <input type="email" name="email" [(ngModel)]="booking.email" autocomplete="email">
+                </label>
+
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.phone' | transloco }} <i>*</i></span>
+                  <input type="tel" name="phone" [(ngModel)]="booking.phone" required autocomplete="tel">
+                </label>
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.service' | transloco }}</span>
+                  <input type="text" class="bk-readonly" name="service" [value]="it.titleKey | transloco" readonly>
+                </label>
+
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.from' | transloco }} <i>*</i></span>
+                  <input type="text" name="from" [(ngModel)]="booking.from" required>
+                </label>
+                <label class="bk-field span3">
+                  <span>{{ 'bookingForm.to' | transloco }} <i>*</i></span>
+                  <input type="text" name="to" [(ngModel)]="booking.to" required>
+                </label>
+
+                <label class="bk-field span2">
+                  <span>{{ 'bookingForm.date' | transloco }}</span>
+                  <input type="date" name="date" [(ngModel)]="booking.date" [min]="minDate">
+                </label>
+                <label class="bk-field span2">
+                  <span>{{ 'bookingForm.time' | transloco }}</span>
+                  <input type="time" name="time" [(ngModel)]="booking.time">
+                </label>
+                <label class="bk-field span2">
+                  <span>{{ 'bookingForm.passengers' | transloco }}</span>
+                  <input type="number" name="passengers" [(ngModel)]="booking.passengers" min="1" max="20">
+                </label>
+
+                <label class="bk-field span6">
+                  <span>{{ 'bookingForm.message' | transloco }}</span>
+                  <textarea name="message" rows="4" [(ngModel)]="booking.message"></textarea>
+                </label>
+              </div>
+
+              <button type="submit" class="bk-submit">
+                {{ 'bookingForm.send' | transloco }}
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="bk-note">{{ 'bookingForm.note' | transloco }}</p>
+              <p class="bk-ok" *ngIf="bookingSent()">{{ 'bookingForm.sent' | transloco }}</p>
+            </form>
+          </section>
+        </ng-container>
+
+        <!-- Other single pages (business pages) -->
+        <div class="detail-wrap" reveal *ngIf="!isBookable() && currentItem() as it">
           <ng-container *ngIf="view() !== 'montreal'">
             <div class="detail-img" [style.background-image]="'url(' + it.image + ')'"></div>
             <div class="detail-text">
@@ -461,14 +501,14 @@
               <p>{{ it.descKey | transloco }}</p>
               <div class="detail-actions">
                 <button type="button" class="svc-btn detail-btn" (click)="openAuthModal('login')">{{ 'common.bookNow' | transloco }}</button>
-                <a [routerLink]="link('transfers')" class="detail-back" *ngIf="!isBizView()">← {{ 'megaMenu.transfers' | transloco }}</a>
+                <a *ngIf="!isBizView() && parentGroup() as pg" [routerLink]="link(pg.key)" class="detail-back">← {{ pg.titleKey | transloco }}</a>
                 <a href="#top" class="detail-back" *ngIf="isBizView()" (click)="goTo('top', $event)">← {{ 'nav.home' | transloco }}</a>
               </div>
             </div>
           </ng-container>
         </div>
 
-        <!-- Journey: road + pins + car (transfers / experiences pages).
+        <!-- Journey: road + pins + car (service pages).
              The cards come from groups[x].items in the .ts file: add an item there and a new stop appears. -->
         <div class="journey" id="journey" *ngIf="journeyItems().length"
              [style.--cx]="journeyCar().x + '%'" [style.--cy]="(journeyCar().p * 100) + '%'" [style.--rot]="journeyCar().rot + 'deg'">
@@ -538,7 +578,47 @@
         <div *ngIf="view() === 'montreal' && services().length === 0" class="loading-state"><p>{{ 'servicesSection.noServices' | transloco }}</p></div>
       </div>
     </section>
+
+    <ng-container *ngTemplateOutlet="featuresTpl"></ng-container>
   </ng-container>
+
+  <!-- The 6 feature cards (used on the home page and on all sub pages) -->
+  <ng-template #featuresTpl>
+  <section class="features-section" reveal="fade">
+    <div class="features-grid">
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="0">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <h3>{{ 'featuresGrid.f1T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f1D' | transloco }}</p>
+      </div>
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="130">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 3 6-2.5v-13L15 7 9 4z"/><path d="M9 4v13M15 7v13"/></svg></span>
+        <h3>{{ 'featuresGrid.f2T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f2D' | transloco }}</p>
+      </div>
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="260">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg></span>
+        <h3>{{ 'featuresGrid.f3T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f3D' | transloco }}</p>
+      </div>
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="0">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg></span>
+        <h3>{{ 'featuresGrid.f4T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f4D' | transloco }}</p>
+      </div>
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="130">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 4 5.6 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.6-4-9s1.2-6.4 4-9z"/></svg></span>
+        <h3>{{ 'featuresGrid.f5T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f5D' | transloco }}</p>
+      </div>
+      <div class="feat-card" tabindex="0" reveal="blur" [revealDelay]="260">
+        <span class="feat-ico"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 5 13.5h6L10 22l9-12h-6.5z"/></svg></span>
+        <h3>{{ 'featuresGrid.f6T' | transloco }}</h3>
+        <p>{{ 'featuresGrid.f6D' | transloco }}</p>
+      </div>
+    </div>
+  </section>
+  </ng-template>
 
   <button type="button" class="to-top" [class.show]="showTop()" (click)="scrollTop()" aria-label="Back to top">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -557,8 +637,8 @@
       <div class="footer-col" reveal [revealDelay]="110">
         <h4>{{ 'footer.quickLinks' | transloco }}</h4>
         <div class="footer-links">
-          <a [routerLink]="link('airport')">{{ 'choose.c1Title' | transloco }}</a>
-          <a [routerLink]="link('experiences')">{{ 'choose.c2Title' | transloco }}</a>
+          <a [routerLink]="link('airport')">{{ 'megaMenu.airport' | transloco }}</a>
+          <a [routerLink]="link('experiences')">{{ 'megaMenu.experiences' | transloco }}</a>
           <a [href]="contact.whatsappUrl" target="_blank" rel="noopener">{{ 'nav.help' | transloco }}</a>
           <a href="#contact" (click)="goTo('contact', $event)">{{ 'nav.contactUs' | transloco }}</a>
           <a [routerLink]="['/' + langService.currentLang() + '/dashboard']">{{ 'nav.dashboard' | transloco }}</a>

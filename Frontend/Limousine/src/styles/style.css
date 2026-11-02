@@ -1,49 +1,66 @@
+/* =========================================================
+   CAR-BRAND — GLOBAL STYLES
+   Luxury Limousine | White / Red / Blue
+   Headings: Orbitron
+   Arabic & Body: Reem Kufi
+   ========================================================= */
 
-/* ===== Global theme — White / Red / Blue ===== */
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Reem+Kufi:wght@400;500;600;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&display=swap');
+/* =========================================================
+   1. THEME VARIABLES
+   ========================================================= */
 
-/* ===== Theme Variables ===== */
 :root {
-  /* Brand palette */
+  /* Brand Colors */
   --c-white: #ffffff;
   --c-red: #c92d3a;
   --c-red-600: #bb1c29;
-  --c-red-soft: rgba(215, 33, 48, 0.12);
+  --c-red-soft: rgba(201, 45, 58, 0.12);
+
   --c-blue: #0a5cb8;
   --c-blue-600: #08478f;
   --c-blue-soft: rgba(10, 92, 184, 0.12);
+
   --c-navy: #0a2447;
   --c-navy-2: #12356a;
   --c-navy-3: #1f4784;
 
-  /* Backward compatibility */
+  /* Compatibility Variables */
   --c-ink: var(--c-navy);
   --c-ink-2: var(--c-navy-2);
   --c-ink-3: var(--c-navy-3);
+
   --c-gold: var(--c-red);
   --c-gold-600: var(--c-red-600);
   --c-gold-soft: var(--c-red-soft);
 
+  /* Backgrounds */
   --c-bg: #ffffff;
   --c-bg-soft: #f3f6fb;
   --c-surface: #ffffff;
   --c-border: #dfe6f1;
+
+  /* Text */
   --c-text: #0a1a33;
   --c-text-muted: #55627a;
   --c-on-dark: #ffffff;
   --c-on-dark-muted: rgba(255, 255, 255, 0.75);
+
+  /* Status Colors */
   --c-star: #f0b04a;
   --c-success: #2e9d6b;
   --c-warning: #e0a030;
   --c-danger: #d3202f;
-  --c-info: #0a5cb8;
+  --c-info: var(--c-blue);
 
-  /* Typography — Reem Kufi */
-  --font-display: 'Reem Kufi', sans-serif;
+  /* Typography */
+  --font-display: 'Orbitron', sans-serif;
   --font-main: 'Reem Kufi', sans-serif;
   --site-font: 'Reem Kufi', sans-serif;
 
+  /* Font Sizes */
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-md: 1rem;
@@ -51,13 +68,14 @@
   --fs-xl: 1.625rem;
   --fs-2xl: 2.25rem;
 
-  /* Shape & depth */
+  /* Border Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 32px;
   --radius-pill: 999px;
 
+  /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.18);
@@ -74,14 +92,24 @@
   /* Layout */
   --sidebar-w: 260px;
   --header-h: 68px;
+
+  /* Animation */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* ===== Global Reset ===== */
+/* =========================================================
+   2. GLOBAL RESET
+   ========================================================= */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 html,
@@ -90,20 +118,60 @@ body {
   min-height: 100%;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--site-font);
   font-size: var(--fs-md);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--c-text);
   background: var(--c-bg-soft);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== Typography ===== */
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+img,
+video {
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  padding-inline-start: 1.5rem;
+}
+
+/* =========================================================
+   3. TYPOGRAPHY
+   ========================================================= */
+
+/* English display headings */
 h1,
 h2,
 h3,
@@ -112,21 +180,39 @@ h5,
 h6 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.3;
   margin: 0 0 var(--sp-3);
   letter-spacing: -0.02em;
 }
 
+/* English headings */
 h1 {
-  font-size: var(--fs-2xl);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
 }
 
 h2 {
-  font-size: var(--fs-xl);
+  font-size: clamp(1.4rem, 3vw, 2rem);
 }
 
 h3 {
   font-size: var(--fs-lg);
+}
+
+/* Arabic headings use the Arabic-friendly font */
+[lang='ar'] h1,
+[lang='ar'] h2,
+[lang='ar'] h3,
+[lang='ar'] h4,
+[lang='ar'] h5,
+[lang='ar'] h6,
+[dir='rtl'] h1,
+[dir='rtl'] h2,
+[dir='rtl'] h3,
+[dir='rtl'] h4,
+[dir='rtl'] h5,
+[dir='rtl'] h6 {
+  font-family: var(--font-main);
+  letter-spacing: 0;
 }
 
 p {
@@ -134,33 +220,82 @@ p {
   color: var(--c-text-muted);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+small {
+  font-size: var(--fs-xs);
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--c-blue);
 }
 
 :focus-visible {
-  outline: 2px solid var(--c-gold);
-  outline-offset: 2px;
+  outline: 2px solid var(--c-red);
+  outline-offset: 3px;
 }
 
-/* ===== Buttons ===== */
+/* =========================================================
+   4. LUXURY HERO TYPOGRAPHY
+   ========================================================= */
+
+.hero-title,
+.hero-heading,
+.section-title-en {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.35;
+}
+
+.hero-title {
+  font-size: clamp(1.4rem, 3.5vw, 2.7rem);
+}
+
+.hero-subtitle {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  line-height: 1.8;
+}
+
+.hero-title[dir='rtl'],
+.hero-heading[dir='rtl'],
+.section-title-en[dir='rtl'] {
+  font-family: 'Reem Kufi', sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   5. BUTTONS
+   ========================================================= */
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--sp-2);
-  height: 44px;
+
+  min-height: 44px;
   padding: 0 var(--sp-5);
+
   border: 0;
-  cursor: pointer;
+  border-radius: var(--radius-md);
+
   font-family: var(--site-font);
   font-size: var(--fs-sm);
   font-weight: 700;
-  line-height: 1;
-  border-radius: var(--radius-md);
+  line-height: 1.4;
+  text-align: center;
+
   transition:
     background 0.2s var(--ease),
+    color 0.2s var(--ease),
     transform 0.15s var(--ease),
     box-shadow 0.2s var(--ease);
 }
@@ -169,18 +304,13 @@ a {
   transform: translateY(1px);
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .btn-primary {
-  background: var(--c-ink);
-  color: var(--c-on-dark);
+  background: var(--c-navy);
+  color: #ffffff;
 }
 
 .btn-primary:hover {
-  background: var(--c-ink-2);
+  background: var(--c-navy-2);
   box-shadow: var(--shadow-md);
 }
 
@@ -209,18 +339,47 @@ a {
 }
 
 .btn-sm {
-  height: 36px;
+  min-height: 36px;
   padding: 0 var(--sp-4);
 }
 
 .btn-icon {
   width: 40px;
-  height: 40px;
+  min-height: 40px;
   padding: 0;
   border-radius: var(--radius-md);
 }
 
-/* ===== Outline Icons ===== */
+/* =========================================================
+   6. NAVIGATION
+   ========================================================= */
+
+.navbar,
+.site-header {
+  font-family: var(--site-font);
+}
+
+.navbar a,
+.site-header a {
+  transition: color 0.2s var(--ease);
+}
+
+.navbar a:hover,
+.site-header a:hover {
+  color: var(--c-red);
+}
+
+.navbar .brand,
+.site-header .brand {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   7. OUTLINE ICONS
+   ========================================================= */
+
 .icon-outline {
   display: inline-block;
   width: 1.25em;
@@ -254,13 +413,19 @@ a {
   height: 3.5rem;
 }
 
-/* ===== Cards ===== */
+/* =========================================================
+   8. CARDS
+   ========================================================= */
+
 .card {
+  padding: var(--sp-5);
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: var(--sp-5);
+  transition:
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
 }
 
 .card-dark {
@@ -273,7 +438,10 @@ a {
   color: var(--c-on-dark-muted);
 }
 
-/* ===== Forms ===== */
+/* =========================================================
+   9. FORMS
+   ========================================================= */
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -298,19 +466,23 @@ input[type='date'],
 select,
 textarea {
   width: 100%;
-  height: 46px;
+  min-height: 46px;
   padding: 0 var(--sp-4);
+
   font-family: var(--site-font);
   font-size: var(--fs-sm);
   color: var(--c-text);
+
   background: #ffffff;
   border: 1px solid var(--c-border);
   border-radius: var(--radius-md);
-  transition: border-color 0.2s, box-shadow 0.2s;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 textarea {
-  height: auto;
   min-height: 96px;
   padding: var(--sp-3) var(--sp-4);
   resize: vertical;
@@ -321,8 +493,8 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--c-gold);
-  box-shadow: 0 0 0 3px var(--c-gold-soft);
+  border-color: var(--c-red);
+  box-shadow: 0 0 0 3px var(--c-red-soft);
 }
 
 .is-invalid,
@@ -335,7 +507,10 @@ input.ng-invalid.ng-touched {
   font-size: var(--fs-xs);
 }
 
-/* ===== Tables ===== */
+/* =========================================================
+   10. TABLES
+   ========================================================= */
+
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--c-border);
@@ -345,17 +520,17 @@ input.ng-invalid.ng-touched {
 
 table.table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 640px;
+  border-collapse: collapse;
 }
 
 .table th {
+  padding: var(--sp-3) var(--sp-4);
   background: var(--c-ink);
   color: var(--c-on-dark);
   font-size: var(--fs-xs);
   font-weight: 600;
   text-align: start;
-  padding: var(--sp-3) var(--sp-4);
   white-space: nowrap;
 }
 
@@ -369,7 +544,10 @@ table.table {
   background: var(--c-bg-soft);
 }
 
-/* ===== Badges ===== */
+/* =========================================================
+   11. BADGES
+   ========================================================= */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -399,16 +577,21 @@ table.table {
   color: var(--c-red-600);
 }
 
-/* ===== Modal ===== */
+/* =========================================================
+   12. MODALS
+   ========================================================= */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 36, 71, 0.6);
-  backdrop-filter: blur(3px);
   z-index: 1000;
+
   display: grid;
   place-items: center;
+
   padding: var(--sp-4);
+  background: rgba(10, 36, 71, 0.6);
+  backdrop-filter: blur(3px);
 }
 
 .modal {
@@ -416,6 +599,7 @@ table.table {
   max-width: 560px;
   max-height: 90vh;
   overflow: auto;
+
   background: #ffffff;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
@@ -423,8 +607,9 @@ table.table {
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
   padding: var(--sp-5);
   background: var(--c-ink);
   color: #ffffff;
@@ -436,19 +621,23 @@ table.table {
 
 .modal-footer {
   display: flex;
-  gap: var(--sp-3);
   justify-content: flex-end;
+  gap: var(--sp-3);
+
   padding: var(--sp-4) var(--sp-5);
   border-top: 1px solid var(--c-border);
 }
 
-/* ===== Utilities ===== */
+/* =========================================================
+   13. UTILITIES
+   ========================================================= */
+
 .page-title {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: var(--sp-4);
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: var(--sp-4);
   margin-bottom: var(--sp-5);
 }
 
@@ -459,14 +648,55 @@ table.table {
   margin-bottom: var(--sp-5);
 }
 
-/* ===== Force One Font Across the Website ===== */
-html,
-body,
-body * {
-  font-family: 'Reem Kufi', sans-serif !important;
+.text-red {
+  color: var(--c-red);
 }
 
-/* ===== Responsive ===== */
+.text-blue {
+  color: var(--c-blue);
+}
+
+.text-navy {
+  color: var(--c-navy);
+}
+
+.bg-white {
+  background: #ffffff;
+}
+
+.bg-navy {
+  background: var(--c-navy);
+  color: #ffffff;
+}
+
+/* =========================================================
+   14. RTL SUPPORT
+   ========================================================= */
+
+[dir='rtl'] body,
+body[dir='rtl'] {
+  font-family: 'Reem Kufi', sans-serif;
+}
+
+[dir='rtl'] p,
+[dir='rtl'] label,
+[dir='rtl'] input,
+[dir='rtl'] textarea,
+[dir='rtl'] select,
+[dir='rtl'] button {
+  font-family: 'Reem Kufi', sans-serif;
+}
+
+[dir='rtl'] .hero-title,
+[dir='rtl'] .hero-heading {
+  font-family: 'Reem Kufi', sans-serif;
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   15. RESPONSIVE
+   ========================================================= */
+
 @media (max-width: 768px) {
   :root {
     --header-h: 60px;
@@ -480,6 +710,10 @@ body * {
     font-size: 1.25rem;
   }
 
+  .card {
+    padding: var(--sp-4);
+  }
+
   .modal {
     border-radius: var(--radius-lg);
   }
@@ -487,13 +721,21 @@ body * {
   .modal-footer .btn {
     flex: 1;
   }
+
+  .hero-title {
+    letter-spacing: 0.5px;
+  }
 }
 
-/* ===== Reduced Motion ===== */
+/* =========================================================
+   16. REDUCED MOTION
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
     transition: none !important;
     animation: none !important;
   }

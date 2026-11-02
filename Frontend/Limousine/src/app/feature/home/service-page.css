@@ -1,0 +1,166 @@
+/* =====================================================================
+   SERVICE PAGE — intro (text + photo) and the booking form.
+   Used by Airport Transfers, City-to-City Transfers and VIP Chauffeur.
+   ===================================================================== */
+
+/* ---- intro: text on the left, big photo on the right ---- */
+.landing-page .svc-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding: 24px 0 36px;
+}
+.landing-page .svc-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-red);
+}
+.landing-page .svc-intro-text h2 {
+  margin: 0 0 6px;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--c-navy);
+}
+.landing-page .svc-rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-bottom: 18px;
+  border-radius: 3px;
+  background: var(--c-red);
+}
+.landing-page .svc-intro-text p {
+  margin: 0 0 26px;
+  max-width: 480px;
+  line-height: 1.85;
+  color: #4b5873;
+}
+
+/* photo with a leaf-shaped corner and a red frame behind it (same style as the journey cards) */
+.landing-page .svc-intro-img { position: relative; isolation: isolate; }
+.landing-page .svc-intro-photo {
+  display: block;
+  height: 400px;
+  border-radius: 110px 28px 28px 28px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 22px 54px rgba(10, 31, 68, 0.22);
+}
+.landing-page .svc-intro-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--c-red);
+  border-radius: 110px 28px 28px 28px;
+  transform: translate(14px, 14px);
+  z-index: -1;
+}
+
+/* ---- booking form ---- */
+.landing-page .bk-section {
+  position: relative;
+  max-width: 920px;
+  margin: 30px auto 24px;
+  padding: 46px 46px 38px;
+  background: #fff;
+  border: 1px solid #e6ecf6;
+  border-radius: 28px;
+  box-shadow: 0 26px 64px rgba(10, 31, 68, 0.09);
+  overflow: hidden;
+}
+.landing-page .bk-section::before {            /* thin red / navy line on top of the card */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--c-red), var(--c-navy));
+}
+.landing-page .bk-head { text-align: center; margin-bottom: 30px; }
+.landing-page .bk-head h2 { margin: 8px 0 8px; font-size: clamp(1.5rem, 2.6vw, 2rem); color: var(--c-navy); }
+.landing-page .bk-head p { margin: 0 auto; max-width: 460px; color: #5b6784; line-height: 1.7; }
+
+.landing-page .bk-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+.landing-page .bk-field { display: flex; flex-direction: column; gap: 7px; }
+.landing-page .bk-field.span2 { grid-column: span 2; }
+.landing-page .bk-field.span3 { grid-column: span 3; }
+.landing-page .bk-field.span6 { grid-column: span 6; }
+.landing-page .bk-field > span {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-navy);
+}
+.landing-page .bk-field > span i { color: var(--c-red); font-style: normal; }
+
+.landing-page .bk-field input,
+.landing-page .bk-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px;
+  height: 50px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: #14213d;
+  background: #f7f9fd;
+  border: 1px solid #dfe6f2;
+  border-radius: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.landing-page .bk-field textarea { height: auto; padding: 14px 16px; resize: vertical; min-height: 110px; }
+.landing-page .bk-field input:focus,
+.landing-page .bk-field textarea:focus {
+  background: #fff;
+  border-color: var(--c-navy);
+  box-shadow: 0 0 0 4px rgba(20, 61, 125, 0.1);
+}
+.landing-page .bk-field input.bk-readonly { background: #eef2f9; color: var(--c-navy); font-weight: 600; cursor: default; }
+.landing-page .bk-form.submitted .bk-field input:invalid { border-color: var(--c-red); background: #fff7f8; }
+
+.landing-page .bk-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 56px;
+  margin-top: 26px;
+  font: 600 0.95rem/1 var(--font-main);
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: var(--c-red);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(179, 18, 42, 0.28);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+.landing-page .bk-submit:hover { background: var(--c-navy); box-shadow: 0 14px 30px rgba(10, 31, 68, 0.3); transform: translateY(-2px); }
+.landing-page .bk-note { margin: 14px 0 0; text-align: center; font-size: 0.8rem; color: #7a86a1; }
+.landing-page .bk-ok { margin: 10px 0 0; text-align: center; font-weight: 600; color: #1f8a4c; }
+
+/* ---- phones / tablets ---- */
+@media (max-width: 860px) {
+  .landing-page .svc-intro { grid-template-columns: 1fr; gap: 34px; padding-top: 6px; }
+  .landing-page .svc-intro-photo { height: 280px; border-radius: 70px 24px 24px 24px; }
+  .landing-page .svc-intro-img::before { border-radius: 70px 24px 24px 24px; transform: translate(10px, 10px); }
+  .landing-page .bk-section { padding: 34px 20px 28px; border-radius: 22px; margin-top: 18px; }
+  .landing-page .bk-field.span2 { grid-column: span 6; }
+  .landing-page .bk-field.span3 { grid-column: span 6; }
+}
+@media (max-width: 860px) and (min-width: 520px) {
+  .landing-page .bk-field.span2:not(:first-of-type) { grid-column: span 3; }
+}
+
+

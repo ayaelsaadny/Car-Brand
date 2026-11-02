@@ -1,0 +1,21 @@
+/* =====================================================================
+   "Our Services" dropdown: the sections of a service open when the mouse
+   is on it (desktop). On touch screens (no hover) the first tap opens them.
+   ===================================================================== */
+@media (hover: hover) {
+  .landing-page .dd-row:hover > .dd-sub,
+  .landing-page .dd-row:focus-within > .dd-sub {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+  .landing-page .dd-row:hover > .dd-item { background: var(--c-navy); color: #fff; }
+  .landing-page .dd-row:hover .dd-chev   { transform: translateX(3px); }
+  /* closes a little later, so the mouse can cross the small gap to the sections */
+  .landing-page .dd-row:not(:hover):not(:focus-within) > .dd-sub { transition-delay: 0.12s; }
+}
+/* invisible bridge between the service and its sections */
+.landing-page .dd-sub::before { content: ''; position: absolute; top: 0; bottom: 0; left: -14px; width: 14px; }
+
+/* mobile menu: there are more links now, so it needs more room when open */
+.landing-page .m-sub.open { max-height: 1200px; }

@@ -1,0 +1,106 @@
+/* =====================================================================
+   "Luxury in Every Journey" — the 4 services under the hero.
+   Postcard cards: the text sits on the photo (bottom).
+   Desktop: 2 cards per row. Phone: 1 column.
+   The cards come from the list `chooseCards` in home.component.ts.
+   ===================================================================== */
+
+.landing-page .dest-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 60px;
+  row-gap: 54px;
+  max-width: 1080px;
+  margin: 44px auto 0;
+  padding-bottom: 14px;
+}
+
+.landing-page .dest-card {
+  --r: 110px 28px 28px 28px;       /* the big rounded corner ("leaf") */
+  --fx: 14px;                      /* direction of the red frame */
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.landing-page .dest-card:nth-child(even) { --r: 28px 110px 28px 28px; --fx: -14px; }
+
+/* ---- the photo ---- */
+.landing-page .dest-media { position: relative; isolation: isolate; }
+.landing-page .dest-media::before {   /* red frame behind the photo */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--c-red);
+  border-radius: var(--r);
+  transform: translate(var(--fx), 14px);
+  z-index: -1;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .dest-card:hover .dest-media::before { transform: translate(calc(var(--fx) / 2), 7px); }
+
+.landing-page .dest-photo {
+  display: block;
+  position: relative;
+  height: 340px;                    /* <-- height of the card */
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--c-navy-deep);
+  box-shadow: 0 20px 48px rgba(10, 31, 68, 0.2);
+}
+.landing-page .dest-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.landing-page .dest-card:hover .dest-img { transform: scale(1.06); }
+
+/* dark fade at the bottom of the photo, so the text is easy to read */
+.landing-page .dest-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 22, 52, 0) 42%, rgba(7, 22, 52, 0.86) 100%);
+  pointer-events: none;
+}
+
+/* ---- the text on the photo ---- */
+.landing-page .dest-body { position: absolute; left: 24px; right: 24px; bottom: 22px; z-index: 2; display: block; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5); }
+.landing-page .dest-title { margin: 0 0 6px; font-size: 1.12rem; letter-spacing: 0.02em; line-height: 1.3; color: #fff; }
+.landing-page .dest-desc {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.landing-page .dest-more { display: inline-flex; align-items: center; gap: 10px; font: 600 0.82rem/1 var(--font-main); letter-spacing: 0.03em; color: #fff; }
+.landing-page .dest-more svg {
+  width: 30px;
+  height: 30px;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--c-red);
+  stroke: #fff;
+  transition: transform 0.3s ease;
+}
+.landing-page .dest-card:hover .dest-more svg { transform: translateX(5px); }
+
+/* ---- phones / tablets: one column ---- */
+@media (max-width: 860px) {
+  .landing-page .dest-grid { grid-template-columns: 1fr; row-gap: 38px; padding: 0 12px 10px; margin-top: 30px; }
+  .landing-page .dest-card:nth-child(n) { --r: 70px 24px 24px 24px; --fx: 10px; }
+  .landing-page .dest-photo { height: 300px; }
+  .landing-page .dest-body { left: 18px; right: 18px; bottom: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .dest-img, .landing-page .dest-media::before { transition: none; }
+}
