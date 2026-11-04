@@ -10,7 +10,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ViewName, linkFor, viewForPath } from '../../core/routing/page-routes';
 import { RevealDirective } from './reveal.directive';
-import { Vehicle, ServiceItem, Category } from '../../core/interfaces/api.models';
+import { Vehicle, ServiceItem, Category, Review, CreateReviewRequest } from '../../core/interfaces/api.models';
 
 interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; btnKey?: string; }
 type GroupKey = 'airport' | 'experiences' | 'cityToCity' | 'vip';
@@ -306,7 +306,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:keydown.escape')
-  onEscape(): void { this.closeMega(); }
+  onEscape(): void {
+    if (this.showWriteReviewModal()) {
+      this.closeWriteReviewModal();
+    } else if (this.showWelcomeModal()) {
+      this.closeWelcomeModal();
+    } else if (this.showAuthModal()) {
+      this.closeAuthModal();
+    } else {
+      this.closeMega();
+    }
+  }
 
   // ===== Language: ONE button. Shows current language (EN first), click => switches to the other =====
   readonly otherLang = computed(() => (this.langService.currentLang() === 'en' ? 'fr' : 'en'));
@@ -332,22 +342,100 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   currentSlide = signal(0);
   private sliderTimer: ReturnType<typeof setInterval> | null = null;
 
-  // ===== Reviews (edit names / cities / add more; the text lives in en.json & fr.json) =====
-  // SAMPLE reviews: replace these with real customer reviews (texts are in en.json / fr.json under "reviews").
-  readonly reviews = [
-    { name: 'Anna M.',   city: 'Vancouver', textKey: 'reviews.r1' },
-    { name: 'George D.', city: 'Boston',    textKey: 'reviews.r2' },
-    { name: 'Olivia W.', city: 'London',    textKey: 'reviews.r3' },
-    { name: 'Karim S.',  city: 'Dubai',     textKey: 'reviews.r4' },
-    { name: 'Sophie L.', city: 'Paris',     textKey: 'reviews.r5' }
-  ];
+  // ===== Reviews (Loaded dynamically from database) =====
+  readonly reviews = signal<Review[]>([]);
   currentReview = signal(0);
   private reviewTimer: ReturnType<typeof setInterval> | null = null;
 
   // How many review cards are visible at once (3 desktop / 2 tablet / 1 mobile)
   perView = signal(3);
-  private maxReviewIndex = computed(() => Math.max(0, this.reviews.length - this.perView()));
+  private maxReviewIndex = computed(() => Math.max(0, this.reviews().length - this.perView()));
   reviewDots = computed(() => Array.from({ length: this.maxReviewIndex() + 1 }, (_, i) => i));
+
+  // Write Review Modal State
+  showWriteReviewModal = signal(false);
+  reviewRating = signal(5);
+  reviewHoverRating = signal(0);
+  reviewAuthorName = signal('');
+  reviewCity = signal('');
+  reviewComment = signal('');
+  submittingReview = signal(false);
+  reviewSuccessMessage = signal<string | null>(null);
+  reviewErrorMessage = signal<string | null>(null);
+
+  setRating(stars: number): void {
+    this.reviewRating.set(stars);
+  }
+
+  setHoverRating(stars: number): void {
+    this.reviewHoverRating.set(stars);
+  }
+
+  openWriteReviewModal(): void {
+    this.reviewRating.set(5);
+    this.reviewHoverRating.set(0);
+    this.reviewComment.set('');
+    this.reviewSuccessMessage.set(null);
+    this.reviewErrorMessage.set(null);
+
+    const user = this.authService.currentUser();
+    if (user) {
+      this.reviewAuthorName.set(user.fullName);
+    } else {
+      this.reviewAuthorName.set('');
+      this.reviewCity.set('');
+    }
+
+    this.showWriteReviewModal.set(true);
+  }
+
+  closeWriteReviewModal(): void {
+    this.showWriteReviewModal.set(false);
+    this.reviewSuccessMessage.set(null);
+    this.reviewErrorMessage.set(null);
+  }
+
+  onSubmitReview(): void {
+    const user = this.authService.currentUser();
+    let name = this.reviewAuthorName().trim();
+    if (!user && !name) {
+      this.reviewErrorMessage.set(this.transloco.translate('reviews.nameRequiredError'));
+      return;
+    }
+    if (user && !name) {
+      name = user.fullName;
+    }
+
+    const rating = this.reviewRating();
+    if (rating < 1 || rating > 5) {
+      this.reviewErrorMessage.set(this.transloco.translate('reviews.selectRatingError'));
+      return;
+    }
+
+    this.submittingReview.set(true);
+    this.reviewErrorMessage.set(null);
+
+    const payload: CreateReviewRequest = {
+      rating,
+      comment: this.reviewComment().trim() || undefined,
+      authorName: name,
+      city: this.reviewCity().trim() || undefined
+    };
+
+    this.publicService.submitReview(payload).subscribe({
+      next: () => {
+        this.submittingReview.set(false);
+        this.reviewSuccessMessage.set(this.transloco.translate('reviews.successMsg'));
+        setTimeout(() => {
+          this.closeWriteReviewModal();
+        }, 3200);
+      },
+      error: (err) => {
+        this.submittingReview.set(false);
+        this.reviewErrorMessage.set(err?.error?.message || 'Error submitting review. Please try again.');
+      }
+    });
+  }
 
   @HostListener('window:resize')
   onResize(): void { this.updatePerView(); this.updateJourney(); }
@@ -478,6 +566,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   authSuccess = signal<string | null>(null);
   authLoading = signal(false);
 
+  // Welcome Promo Modal State
+  showWelcomeModal = signal(false);
+
+  closeWelcomeModal(): void {
+    this.showWelcomeModal.set(false);
+  }
+
+  openRegisterFromWelcome(): void {
+    this.closeWelcomeModal();
+    this.openAuthModal('register');
+  }
+
+  openLoginFromWelcome(): void {
+    this.closeWelcomeModal();
+    this.openAuthModal('login');
+  }
+
   // Mobile Dropdown Menu State
   readonly isMobileMenuOpen = signal<boolean>(false);
 
@@ -522,7 +627,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) setTimeout(() => this.heroReady.set(true), 60);
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => this.heroReady.set(true), 60);
+      if (!this.authService.isLoggedIn()) {
+        setTimeout(() => this.showWelcomeModal.set(true), 4000);
+      }
+    }
     this.updatePerView();
     this.restartSlider();
     this.restartReviews();
@@ -555,6 +665,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loadingCategories.set(false);
       },
       error: () => this.loadingCategories.set(false)
+    });
+
+    this.publicService.getReviews().subscribe({
+      next: (data) => {
+        this.reviews.set(data);
+        if (this.currentReview() > this.maxReviewIndex()) {
+          this.currentReview.set(0);
+        }
+        this.restartReviews();
+      }
     });
 
     this.publicService.getSettings().subscribe({

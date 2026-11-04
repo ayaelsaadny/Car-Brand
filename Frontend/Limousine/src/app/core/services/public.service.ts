@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
 import { environment } from '../../../enviroment/enviroment';
-import { ApiResponse, Vehicle, ServiceItem, Category, WebsiteSetting } from '../interfaces/api.models';
+import { ApiResponse, Vehicle, ServiceItem, Category, WebsiteSetting, Review, CreateReviewRequest } from '../interfaces/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +49,19 @@ export class PublicService {
         return of([]);
       })
     );
+  }
+
+  getReviews(): Observable<Review[]> {
+    return this.http.get<ApiResponse<Review[]>>(`${this.apiUrl}/Reviews`).pipe(
+      map(res => res.data || []),
+      catchError(err => {
+        console.error('Error fetching reviews:', err);
+        return of([]);
+      })
+    );
+  }
+
+  submitReview(payload: CreateReviewRequest): Observable<ApiResponse<Review>> {
+    return this.http.post<ApiResponse<Review>>(`${this.apiUrl}/Reviews`, payload);
   }
 }

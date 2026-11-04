@@ -29,6 +29,7 @@ namespace Limousine.Infrastracture.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Media> MediaFiles { get; set; }
         public DbSet<WebsiteSetting> WebsiteSettings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         #endregion
     }
 }

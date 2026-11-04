@@ -348,3 +348,25 @@ export interface CancelBookingRequest {
 export interface CompleteBookingRequest {
   notes?: string;
 }
+
+export interface Review {
+  id: number;
+  userId?: number | null;
+  authorName: string;
+  authorEmail?: string | null;
+  city?: string | null;
+  rating: number;
+  comment?: string | null;
+  isApproved: boolean;
+  createdAt: string;
+  reviewedAt?: string | null;
+  isGuest?: boolean;
+}
+
+export interface CreateReviewRequest {
+  rating: number;
+  comment?: string;
+  authorName?: string;
+  authorEmail?: string;
+  city?: string;
+}

@@ -1,0 +1,129 @@
+<div class="reviews-management-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'reviews.admin.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'reviews.admin.subtitle' | transloco }}</p>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button type="button" class="tab-btn" [class.active]="currentTab() === 'all'" (click)="setTab('all')">
+      {{ 'reviews.status.all' | transloco }}
+      <span class="tab-count">{{ counts().all }}</span>
+    </button>
+    <button type="button" class="tab-btn tab-pending" [class.active]="currentTab() === 'pending'" (click)="setTab('pending')">
+      {{ 'reviews.status.pending' | transloco }}
+      <span class="tab-count badge-warning">{{ counts().pending }}</span>
+    </button>
+    <button type="button" class="tab-btn tab-approved" [class.active]="currentTab() === 'approved'" (click)="setTab('approved')">
+      {{ 'reviews.status.approved' | transloco }}
+      <span class="tab-count badge-success">{{ counts().approved }}</span>
+    </button>
+    <button type="button" class="tab-btn tab-rejected" [class.active]="currentTab() === 'rejected'" (click)="setTab('rejected')">
+      {{ 'reviews.status.rejected' | transloco }}
+      <span class="tab-count badge-danger">{{ counts().rejected }}</span>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-state">
+    <div class="spinner"></div>
+    <span>{{ 'common.loading' | transloco }}</span>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && filteredReviews().length === 0" class="empty-state">
+    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+    <p>{{ 'reviews.noReviews' | transloco }}</p>
+  </div>
+
+  <!-- Reviews Cards Grid / Table -->
+  <div *ngIf="!loading() && filteredReviews().length > 0" class="reviews-grid">
+    <div *ngFor="let r of filteredReviews()" class="admin-review-card" [class.pending-card]="!r.isApproved && !r.reviewedAt">
+      <div class="card-top">
+        <div class="author-block">
+          <div class="author-avatar">{{ r.authorName.charAt(0) }}</div>
+          <div>
+            <div class="author-name-row">
+              <strong class="author-name">{{ r.authorName }}</strong>
+              <span class="author-type-badge" [class.guest-badge]="r.isGuest">
+                {{ (r.isGuest ? 'reviews.admin.guest' : 'reviews.admin.registered') | transloco }}
+              </span>
+            </div>
+            <span class="author-meta">{{ r.city || '-' }} • {{ r.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        <!-- Status Badge -->
+        <div>
+          <span *ngIf="!r.isApproved && !r.reviewedAt" class="status-badge badge-pending">
+            {{ 'reviews.status.pending' | transloco }}
+          </span>
+          <span *ngIf="r.isApproved" class="status-badge badge-approved">
+            {{ 'reviews.status.approved' | transloco }}
+          </span>
+          <span *ngIf="!r.isApproved && !!r.reviewedAt" class="status-badge badge-rejected">
+            {{ 'reviews.status.rejected' | transloco }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Star Rating -->
+      <div class="card-stars">
+        <span *ngFor="let s of [1,2,3,4,5]" class="star-icon" [class.filled]="s <= r.rating">★</span>
+        <span class="rating-number">({{ r.rating }} / 5)</span>
+      </div>
+
+      <!-- Comment Text -->
+      <p class="card-comment" *ngIf="r.comment">
+        “{{ r.comment }}”
+      </p>
+      <p class="card-comment no-comment" *ngIf="!r.comment">
+        <em>No written comment provided (Rating only)</em>
+      </p>
+
+      <!-- Actions Toolbar -->
+      <div class="card-actions">
+        <!-- Approve button -->
+        <button *ngIf="!r.isApproved"
+                type="button"
+                class="btn-action btn-approve"
+                [disabled]="actionLoadingId() === r.id"
+                (click)="approve(r)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>{{ 'reviews.admin.approveBtn' | transloco }}</span>
+        </button>
+
+        <!-- Reject button -->
+        <button *ngIf="r.isApproved || (!r.isApproved && !r.reviewedAt)"
+                type="button"
+                class="btn-action btn-reject"
+                [disabled]="actionLoadingId() === r.id"
+                (click)="reject(r)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          <span>{{ 'reviews.admin.rejectBtn' | transloco }}</span>
+        </button>
+
+        <!-- Delete button -->
+        <button type="button"
+                class="btn-action btn-delete"
+                [disabled]="actionLoadingId() === r.id"
+                (click)="deleteReview(r)"
+                aria-label="Delete review">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

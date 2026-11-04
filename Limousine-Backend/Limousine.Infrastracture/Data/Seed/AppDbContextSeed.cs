@@ -19,6 +19,43 @@ namespace Limousine.Infrastracture.Data.Seed
                 // Ensure database is created
                 await context.Database.EnsureCreatedAsync();
 
+                // Ensure Reviews table exists in case DB was created previously
+                await context.Database.ExecuteSqlRawAsync(@"
+                    IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Reviews')
+                    BEGIN
+                        CREATE TABLE [Reviews] (
+                            [Id] int NOT NULL IDENTITY(1,1),
+                            [UserId] int NULL,
+                            [AuthorName] nvarchar(max) NOT NULL,
+                            [AuthorEmail] nvarchar(max) NULL,
+                            [City] nvarchar(max) NULL,
+                            [Rating] int NOT NULL,
+                            [Comment] nvarchar(max) NULL,
+                            [IsApproved] bit NOT NULL,
+                            [CreatedAt] datetime2 NOT NULL,
+                            [ReviewedAt] datetime2 NULL,
+                            CONSTRAINT [PK_Reviews] PRIMARY KEY ([Id]),
+                            CONSTRAINT [FK_Reviews_ApplicationUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [ApplicationUsers] ([Id]) ON DELETE SET NULL
+                        );
+                    END
+                ");
+
+                // Seed initial approved reviews if empty
+                if (!await context.Reviews.AnyAsync())
+                {
+                    logger.LogInformation("Seeding initial approved customer reviews...");
+                    var sampleReviews = new List<Review>
+                    {
+                        new() { AuthorName = "Anna M.", City = "Vancouver", Rating = 5, Comment = "The most reliable luxury chauffeur service we've used in North America. Unmatched punctuality and spotless vehicles.", IsApproved = true, CreatedAt = DateTime.UtcNow.AddDays(-25) },
+                        new() { AuthorName = "George D.", City = "Boston", Rating = 5, Comment = "Airport transfer was completely seamless. The driver was waiting ahead of time and assisted with luggage.", IsApproved = true, CreatedAt = DateTime.UtcNow.AddDays(-20) },
+                        new() { AuthorName = "Olivia W.", City = "London", Rating = 5, Comment = "VIP service of the highest tier. Immaculate Mercedes S-Class and total discretion. Highly recommended.", IsApproved = true, CreatedAt = DateTime.UtcNow.AddDays(-15) },
+                        new() { AuthorName = "Karim S.", City = "Dubai", Rating = 5, Comment = "Exceptional corporate travel service for our executive team during international conferences.", IsApproved = true, CreatedAt = DateTime.UtcNow.AddDays(-10) },
+                        new() { AuthorName = "Sophie L.", City = "Paris", Rating = 5, Comment = "A truly royal experience for our wedding celebration. Professional, elegant, and attentive to every detail.", IsApproved = true, CreatedAt = DateTime.UtcNow.AddDays(-5) }
+                    };
+                    await context.Reviews.AddRangeAsync(sampleReviews);
+                    await context.SaveChangesAsync();
+                }
+
                 // 1. Seed Admin Account (admin@admin.com / admin123)
                 var adminEmail = "admin@admin.com";
                 var adminUser = await context.ApplicationUsers.FirstOrDefaultAsync(u => u.Email == adminEmail);

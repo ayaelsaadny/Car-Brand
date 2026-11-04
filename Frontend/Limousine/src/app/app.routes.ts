@@ -6,6 +6,7 @@ import { VehiclesListComponent } from './feature/vehicles/vehicles-list/vehicles
 import { BookingsListComponent } from './feature/bookings/bookings-list/bookings-list.component';
 import { ServicesListComponent } from './feature/services/services-list/services-list.component';
 import { CategoriesListComponent } from './feature/categories/categories-list/categories-list.component';
+import { ReviewsListComponent } from './feature/reviews/reviews-list/reviews-list.component';
 import { SettingsListComponent } from './feature/settings/settings-list/settings-list.component';
 import { LoginComponent } from './feature/auth/login/login.component';
 import { RegisterComponent } from './feature/auth/register/register.component';
@@ -58,6 +59,7 @@ export const routes: Routes = [
           { path: 'bookings', component: BookingsListComponent, canActivate: [staffGuard] },
           { path: 'services', component: ServicesListComponent, canActivate: [staffGuard] },
           { path: 'categories', component: CategoriesListComponent, canActivate: [staffGuard] },
+          { path: 'reviews', component: ReviewsListComponent, canActivate: [staffGuard] },
 
           // Admin-only management
           { path: 'users', component: UsersListComponent, canActivate: [adminGuard] },

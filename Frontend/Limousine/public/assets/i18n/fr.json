@@ -102,7 +102,47 @@
     "r2": "Nous avons réservé une visite d'une demi-journée et découvert des endroits que nous n'aurions jamais trouvés seuls.",
     "r3": "J'ai changé le lieu de dépose à la dernière minute et le chauffeur s'est simplement adapté. Aucun souci.",
     "r4": "Voiture impeccable, chauffeur calme et timing parfait du terminal à l'hôtel après un long vol.",
-    "r5": "La réservation a été rapide et le trajet sans effort du début à la fin. Je réserverai de nouveau."
+    "r5": "La réservation a été rapide et le trajet sans effort du début à la fin. Je réserverai de nouveau.",
+    "writeReview": "Laisser un avis",
+    "modalTitle": "Partagez votre expérience",
+    "modalSubtitle": "Évaluez notre service de luxe et partagez vos impressions.",
+    "ratingLabel": "Votre évaluation",
+    "stars": "étoiles",
+    "yourName": "Votre nom",
+    "yourNamePlaceholder": "ex. Alexandre Dumas",
+    "city": "Ville / Localité (Facultatif)",
+    "cityPlaceholder": "ex. Montréal",
+    "comment": "Votre avis (Facultatif)",
+    "commentPlaceholder": "Parlez-nous de votre chauffeur, du confort du véhicule ou de votre trajet...",
+    "submitting": "Envoi en cours...",
+    "submitBtn": "Envoyer l'avis",
+    "successMsg": "Merci ! Votre avis a été envoyé avec succès et sera publié après validation par notre équipe.",
+    "loggedInAs": "Publié en tant que",
+    "guestNotice": "Vous pouvez laisser un avis en tant qu'invité ou avec votre compte.",
+    "selectRatingError": "Veuillez sélectionner une note de 1 à 5 étoiles.",
+    "nameRequiredError": "Veuillez entrer votre nom.",
+    "noReviews": "Aucun avis pour le moment. Soyez le premier à partager votre expérience !",
+    "status": {
+      "all": "Tous les avis",
+      "pending": "En attente",
+      "approved": "Approuvés",
+      "rejected": "Rejetés"
+    },
+    "admin": {
+      "title": "Gestion des avis clients",
+      "subtitle": "Modérez, approuvez ou rejetez les retours clients et les évaluations.",
+      "approveBtn": "Approuver",
+      "rejectBtn": "Rejeter",
+      "deleteBtn": "Supprimer",
+      "author": "Auteur",
+      "rating": "Note",
+      "comment": "Commentaire",
+      "date": "Date",
+      "status": "Statut",
+      "actions": "Actions",
+      "guest": "Invité",
+      "registered": "Client"
+    }
   },
   "stats": {
     "rides": "Trajets réalisés",
@@ -346,7 +386,7 @@
     "note": "Votre demande s'ouvre dans WhatsApp pour une confirmation rapide.",
     "sent": "Merci ! Votre demande est prête dans WhatsApp."
   },
-    "sections": {
+  "sections": {
     "airportPickup": "Prise en charge à l'aéroport",
     "airportPickupDesc": "Un chauffeur vous attend aux arrivées pour vous conduire du terminal à votre destination.",
     "airportDropoff": "Dépose à l'aéroport",
@@ -373,5 +413,16 @@
     "shoppingDesc": "Magasinez à votre rythme. Votre chauffeur vous attend, porte vos sacs et vous conduit d'un arrêt à l'autre.",
     "hourly": "Affaires à l'heure",
     "hourlyDesc": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible adapté à vous."
+  },
+  "welcomeModal": {
+    "badge": "PRIVILÈGES VIP",
+    "title": "Suivez vos réservations & voyagez en toute sérénité",
+    "description": "Créez votre compte pour suivre vos trajets en temps réel, gérer vos réservations et profiter d'avantages VIP exclusifs.",
+    "benefit1": "Suivi du chauffeur & du trajet en temps réel",
+    "benefit2": "Gestion des réservations & historique complet",
+    "benefit3": "Tarifs membres exclusifs & service prioritaire",
+    "signUp": "S'inscrire",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter"
   }
 }

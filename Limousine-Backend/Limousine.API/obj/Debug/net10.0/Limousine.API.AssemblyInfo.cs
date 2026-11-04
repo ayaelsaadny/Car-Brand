@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56a49ff0c542f68af66964cee93f1d7d6030fb28")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3fedc5166732ee5cb636f1821eff1695f5d5665b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Limousine.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

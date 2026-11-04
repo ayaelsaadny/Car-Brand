@@ -10,7 +10,7 @@ export interface NavItem {
   link: string;
   icon?: string;
   iconClass?: string;
-  iconKey?: 'globe' | 'dashboard' | 'vehicles' | 'bookings' | 'services' | 'categories' | 'users' | 'settings' | 'profile';
+  iconKey?: 'globe' | 'dashboard' | 'vehicles' | 'bookings' | 'services' | 'categories' | 'users' | 'settings' | 'profile' | 'reviews';
   badge?: string | number;
 }
 
@@ -87,6 +87,8 @@ export class MainLayoutComponent {
         { label: this.transloco.translate('nav.bookings'), link: `/${lang}/bookings`, iconKey: 'bookings' },
         { label: this.transloco.translate('nav.services'), link: `/${lang}/services`, iconKey: 'services' },
         { label: this.transloco.translate('nav.categories'), link: `/${lang}/categories`, iconKey: 'categories' },
+        { label: this.transloco.translate('nav.reviews'), link: `/${lang}/reviews`, iconKey: 'reviews' },
+        { label: this.transloco.translate('nav.reviews'), link: `/${lang}/reviews`, iconKey: 'reviews' },
         { label: this.transloco.translate('nav.users'), link: `/${lang}/users`, iconKey: 'users' },
         { label: this.transloco.translate('nav.settings'), link: `/${lang}/settings`, iconKey: 'settings' },
         { label: this.transloco.translate('nav.profile'), link: `/${lang}/account/profile`, iconKey: 'profile' }

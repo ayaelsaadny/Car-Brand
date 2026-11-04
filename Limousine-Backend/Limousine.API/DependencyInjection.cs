@@ -39,6 +39,7 @@ namespace Limousine.API
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IServiceManagementService, ServiceManagementService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IFileService, FileService>();

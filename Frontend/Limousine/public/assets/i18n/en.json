@@ -102,7 +102,47 @@
     "r2": "We booked a half-day city tour and ended up seeing places we would never have found on our own.",
     "r3": "I changed the drop-off at the last minute and the chauffeur simply adjusted. No fuss at all.",
     "r4": "Spotless car, calm driver and perfect timing from the terminal to the hotel after a long flight.",
-    "r5": "Booking was quick and the ride felt effortless from start to finish. I will book again."
+    "r5": "Booking was quick and the ride felt effortless from start to finish. I will book again.",
+    "writeReview": "Write a Review",
+    "modalTitle": "Share Your Experience",
+    "modalSubtitle": "Rate our luxury service and share your feedback.",
+    "ratingLabel": "Your Rating",
+    "stars": "stars",
+    "yourName": "Your Name",
+    "yourNamePlaceholder": "e.g. Alexandre Dumas",
+    "city": "City / Location (Optional)",
+    "cityPlaceholder": "e.g. Montreal",
+    "comment": "Your Review (Optional)",
+    "commentPlaceholder": "Tell us about your chauffeur, vehicle comfort, or overall journey...",
+    "submitting": "Submitting review...",
+    "submitBtn": "Submit Review",
+    "successMsg": "Thank you! Your review has been submitted and will appear once approved by our team.",
+    "loggedInAs": "Posting as",
+    "guestNotice": "You can review as a guest or with your registered account.",
+    "selectRatingError": "Please select a star rating from 1 to 5.",
+    "nameRequiredError": "Please enter your name.",
+    "noReviews": "No reviews available yet. Be the first to share your experience!",
+    "status": {
+      "all": "All Reviews",
+      "pending": "Pending Approval",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "admin": {
+      "title": "Customer Reviews Management",
+      "subtitle": "Moderate, approve, or reject customer feedback and star ratings.",
+      "approveBtn": "Approve",
+      "rejectBtn": "Reject",
+      "deleteBtn": "Delete",
+      "author": "Author",
+      "rating": "Rating",
+      "comment": "Comment",
+      "date": "Date",
+      "status": "Status",
+      "actions": "Actions",
+      "guest": "Guest",
+      "registered": "Customer"
+    }
   },
   "stats": {
     "rides": "Rides Completed",
@@ -346,7 +386,7 @@
     "note": "Your request opens in WhatsApp so we can confirm quickly.",
     "sent": "Thank you! Your request is ready in WhatsApp."
   },
-    "sections": {
+  "sections": {
     "airportPickup": "Airport Pickup",
     "airportPickupDesc": "A chauffeur waiting at arrivals to take you from the terminal to your destination.",
     "airportDropoff": "Airport Drop-off",
@@ -373,5 +413,16 @@
     "shoppingDesc": "Shop at your own pace. Your chauffeur waits for you, carries your bags and takes you from one stop to the next.",
     "hourly": "Business by the Hour",
     "hourlyDesc": "A chauffeur at your disposal for meetings, site visits and full business days, with a flexible schedule built around you."
+  },
+  "welcomeModal": {
+    "badge": "VIP MEMBERSHIP",
+    "title": "Track Your Bookings & Travel in Luxury",
+    "description": "Create an account to manage your rides effortlessly, track your chauffeur in real time, and unlock exclusive VIP privileges.",
+    "benefit1": "Live ride status & real-time chauffeur tracking",
+    "benefit2": "Manage upcoming bookings & view ride history",
+    "benefit3": "Exclusive VIP rates & priority dispatch",
+    "signUp": "Sign Up",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign In"
   }
 }
