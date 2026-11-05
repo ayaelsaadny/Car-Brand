@@ -10,12 +10,14 @@ import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ViewName, linkFor, viewForPath } from '../../core/routing/page-routes';
 import { RevealDirective } from './reveal.directive';
+import { ImageSliderComponent } from '../../shared/components/image-slider/image-slider.component';
 import { Vehicle, ServiceItem, Category, Review, CreateReviewRequest } from '../../core/interfaces/api.models';
 
-interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; btnKey?: string; }
+// `image` = the main photo (always). `images` (optional) = more photos: when it has 2 or more, a slider appears.
+interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; images?: string[]; btnKey?: string; }
 type GroupKey = 'airport' | 'experiences' | 'cityToCity' | 'vip';
 interface MenuGroup { key: GroupKey; titleKey: string; items: MenuItem[]; }
-interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey: string; image: string; }
+interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey: string; image: string; images?: string[]; }
 
 @Component({
   selector: 'app-home',
@@ -26,7 +28,8 @@ interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey
     RouterLink,
     DecimalPipe,
     TranslocoPipe,
-    RevealDirective
+    RevealDirective,
+    ImageSliderComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css', './journey.css', './service-page.css', './nav-menu.css', './choose-panels.css']
@@ -70,6 +73,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // The 4 services under the hero ("Luxury in Every Journey"). To add one: add an item here + its texts (choose.cNTitle / cNDesc / cNBtn) in en.json and fr.json.
   // Photos: public/assets/menu/
+  // To show a slider on a card: add `images: ['assets/menu/a.jpg', 'assets/menu/b.jpg', ...]` (2 or more). With only `image` it stays a single photo.
   readonly chooseCards: ChooseCard[] = [
     { view: 'airport',     titleKey: 'choose.c1Title', descKey: 'choose.c1Desc', btnKey: 'choose.c1Btn', image: 'assets/menu/airport.jpg' },
     { view: 'experiences', titleKey: 'choose.c2Title', descKey: 'choose.c2Desc', btnKey: 'choose.c2Btn', image: 'assets/menu/city.jpg' },
@@ -78,6 +82,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   // Put the photos in public/assets/menu/ (airport.jpg, city.jpg, vip.jpg, montreal.jpg)
+  // Example of a slider (put the main photo first in `images` too):
+  //   { view: 'ottawa', ..., image: 'assets/menu/intercity-ride.jpg',
+  //     images: ['assets/menu/intercity-ride.jpg', 'assets/menu/ottawa-2.jpg', 'assets/menu/ottawa-3.jpg'] }
   readonly groups: MenuGroup[] = [
     {
       key: 'airport',
@@ -98,10 +105,39 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       key: 'cityToCity',
       titleKey: 'megaMenu.cityToCity',
       items: [
-        { view: 'ottawa',  titleKey: 'sections.ottawa',  descKey: 'sections.ottawaDesc',  image: 'assets/menu/intercity-ride.jpg' },
-        { view: 'quebec',  titleKey: 'sections.quebec',  descKey: 'sections.quebecDesc',  image: 'assets/menu/quebec-city.jpg' },
-        { view: 'toronto', titleKey: 'sections.toronto', descKey: 'sections.torontoDesc', image: 'assets/menu/toronto.jpg' },
-        { view: 'tremblant', titleKey: 'sections.tremblant', descKey: 'sections.tremblantDesc', image: 'assets/menu/mont-tremblant.jpg' },
+        { view: 'ottawa',  titleKey: 'sections.ottawa',  descKey: 'sections.ottawaDesc',  image: 'assets/menu/Ottawa.jpg',
+           images: [
+    'assets/menu/Ottawa.jpg',  
+    'assets/menu/Ottawa-1.jpg',
+    'assets/menu/Ottawa-2.jpg',
+    'assets/menu/Ottawa-3.jpg'
+  ]
+         },
+        { view: 'quebec',  titleKey: 'sections.quebec',  descKey: 'sections.quebecDesc',  image: 'assets/menu/quebec-city.jpg',
+                   images: [
+    'assets/menu/quebec-city.jpg',  
+    'assets/menu/quebec-1.jpg',
+    'assets/menu/quebec-2.jpg',
+    'assets/menu/quebec-3.jpg'
+  ]
+         },
+        { view: 'tremblant', titleKey: 'sections.tremblant', descKey: 'sections.tremblantDesc', image: 'assets/menu/mont-tremblant.jpg',
+            images: [
+    'assets/menu/Ottawa.jpg',  
+    'assets/menu/Ottawa.jpg',
+    'assets/menu/Ottawa.jpg',
+    'assets/menu/Ottawa.jpg'
+  ]
+          
+         },
+        { view: 'toronto', titleKey: 'sections.toronto', descKey: 'sections.torontoDesc', image: 'assets/menu/toronto.jpg',
+            images: [
+    'assets/menu/Ottawa.jpg',  
+    'assets/menu/Ottawa.jpg',
+    'assets/menu/Ottawa.jpg',
+    'assets/menu/Ottawa.jpg'
+  ]
+         },
         { view: 'cityOther', titleKey: 'sections.cityOther', descKey: 'sections.cityOtherDesc', image: 'assets/menu/other-city.jpg', btnKey: 'common.bookNow' }
       ]
     },
@@ -136,6 +172,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   currentItem = computed(() => [...this.groups.flatMap((g: MenuGroup) => g.items), ...this.businessItems].find(i => i.view === this.view()) ?? null);
+
+  /** Long text of a section page (sections.<name>Page). If it does not exist, the short text is used. */
+  pageText(it: MenuItem): string {
+    const key = it.pageDescKey ?? it.descKey.replace(/Desc$/, 'Page');
+    const text = this.transloco.translate(key);
+    return text && text !== key ? text : this.transloco.translate(it.descKey);
+  }
 
   /** The service a section page belongs to (null on service pages, business pages and home) */
   readonly parentGroup = computed<MenuGroup | null>(() => this.groups.find(g => g.items.some(i => i.view === this.view())) ?? null);

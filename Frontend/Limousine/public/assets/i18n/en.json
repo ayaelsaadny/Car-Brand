@@ -387,33 +387,57 @@
     "sent": "Thank you! Your request is ready in WhatsApp."
   },
   "sections": {
-    "airportPickup": "Airport Pickup",
-    "airportPickupDesc": "A chauffeur waiting at arrivals to take you from the terminal to your destination.",
-    "airportDropoff": "Airport Drop-off",
-    "airportDropoffDesc": "A private ride from your door to the terminal, on time and without stress.",
-    "montrealCity": "Montréal City Tour",
-    "montrealCityDesc": "Take a private tour of Montréal's landmarks and hidden gems in comfort with your own chauffeur.",
-    "ottawa": "Montréal to Ottawa",
-    "ottawaDesc": "Travel to Canada's capital in comfort, with a private chauffeur taking you straight to Parliament Hill, your hotel or your meeting.",
-    "quebec": "Montréal to Québec City",
-    "quebecDesc": "Reach the charm of Old Québec in style. Relax in a premium vehicle while your chauffeur handles the road, door to door.",
-    "toronto": "Montréal to Toronto",
-    "torontoDesc": "A long journey made effortless. Enjoy a private, spacious ride between Canada's two biggest cities, with space to work or rest.",
-    "tremblant": "Montréal to Mont-Tremblant",
-    "tremblantDesc": "Head to the Laurentians for a weekend, a ski trip or a getaway. Your chauffeur takes you from your door to the resort village.",
-    "cityOther": "Other City",
-    "cityOtherDesc": "Traveling to a different city? Tell us where you are going and we will arrange your private ride.",
+   "airportPickup": "Airport Pickup",
+   "airportPickupDesc": "Your chauffeur is waiting for you at arrivals when your flight lands...",
+   "airportPickupPage": "Your chauffeur is waiting for you at arrivals when your flight lands. We track your flight in case of delays, help you with your luggage, and drive you straight to your destination in a comfortable luxury vehicle. No queues, no hunting for a taxi, just a smooth arrival with OUDY.",
+
+  "airportDropoff": "Airport Drop-off",
+  "airportDropoffDesc": "A private ride from your door to the terminal, on time and without stress...",
+  "airportDropoffPage": "A private ride from your door to the terminal, on time and without stress. OUDY's chauffeur arrives at the agreed time, loads your luggage, and drives you to the airport in comfort, so you reach your terminal relaxed and with time to spare.",
+
+
+  "montrealCity": "Montréal City Tour",
+  "montrealCityDesc": "Take a private tour of Montréal's landmarks and hidden gems in comfort with your own chauffeur.",
+
+  "ottawa": "Montréal to Ottawa",
+"ottawaDesc": "Private ride from Montréal to Ottawa, in comfort and safety with a professional chauffeur...",
+"ottawaPage": "Private ride from Montréal to Ottawa, in comfort and safety with a professional chauffeur. He picks you up at your door and takes you to your destination in a comfortable vehicle.",
+
+"quebec": "Montréal to Québec City",
+"quebecDesc": "Travel from Montréal to Québec City in a luxury vehicle, while your chauffeur handles the road from start to finish...",
+"quebecPage": "Travel from Montréal to Québec City in a luxury vehicle, while your chauffeur handles the road from start to finish. Relax and enjoy your time until you arrive.",
+
+"toronto": "Montréal to Toronto",
+"torontoDesc": "A long journey from Montréal to Toronto, made comfortable in a spacious vehicle with a private chauffeur...",
+"torontoPage": "A long journey from Montréal to Toronto, made comfortable in a spacious vehicle with a private chauffeur. You have the space to work or rest all the way.",
+
+"tremblant": "Montréal to Mont-Tremblant",
+"tremblantDesc": "Heading to Mont-Tremblant? We take you there from Montréal smoothly and comfortably, from your door to your destination...",
+"tremblantPage": "Heading to Mont-Tremblant? We take you there from Montréal smoothly and comfortably, from your door to your destination. A professional chauffeur and a comfortable vehicle are waiting for you.",
+
+"cityOther": "Other City",
+"cityOtherDesc": "Traveling to a different city? Tell us where you are going and we will arrange your ride from Montréal...",
+"cityOtherPage": "Traveling to a different city? Tell us where you are going and we will arrange your ride from Montréal. A professional chauffeur and a comfortable vehicle are waiting for you.",
+
     "weddings": "Weddings",
-    "weddingsDesc": "Make your grand arrival unforgettable. An elegant chauffeur and a polished vehicle, ready for the most important day of your life.",
-    "graduations": "Graduations",
-    "graduationsDesc": "Celebrate your achievement in style. A private chauffeur takes you and your family to the ceremony and on to the celebration.",
-    "events": "Events & Parties",
-    "eventsDesc": "Enjoy the night without worrying about the road. Your chauffeur drives you there and brings you home safely.",
-    "shopping": "Shopping & Personal Errands",
-    "shoppingDesc": "Shop at your own pace. Your chauffeur waits for you, carries your bags and takes you from one stop to the next.",
-    "hourly": "Business by the Hour",
-    "hourlyDesc": "A chauffeur at your disposal for meetings, site visits and full business days, with a flexible schedule built around you."
-  },
+"weddingsDesc": "Make an unforgettable arrival, with an elegant chauffeur and an impeccable vehicle for the most beautiful day of your life...",
+"weddingsPage": "Make an unforgettable arrival, with an elegant chauffeur and an impeccable vehicle for the most beautiful day of your life. We take care of every detail of your transportation so your day stays calm and well organized.",
+
+"graduations": "Graduations",
+"graduationsDesc": "Celebrate your success in style, with a private chauffeur taking you and your family to the ceremony and then to the celebration...",
+"graduationsPage": "Celebrate your success in style, with a private chauffeur taking you and your family to the ceremony and then to the celebration. You arrive relaxed and on time.",
+
+"events": "Events & Parties",
+"eventsDesc": "Enjoy your evening without thinking about the road, as your chauffeur takes you there and brings you back safely...",
+"eventsPage": "Enjoy your evening without thinking about the road, as your chauffeur takes you there and brings you back safely. You go and return in complete comfort, from your door to your door.",
+
+"shopping": "Shopping & Personal Errands",
+"shoppingDesc": "Shop at your own pace, while your chauffeur waits for you, carries your bags and drives you from one stop to the next...",
+"shoppingPage": "Shop at your own pace, while your chauffeur waits for you, carries your bags and drives you from one stop to the next. You get your errands done in less time and with less effort.",
+
+"hourly": "Hourly Chauffeur Service",
+"hourlyDesc": "A chauffeur at your disposal for your meetings, site visits and full business days, with a flexible schedule that suits you...",
+"hourlyPage": "A chauffeur at your disposal for your meetings, site visits and full business days, with a flexible schedule that suits you. You move between appointments without worrying about driving or finding parking." },
   "welcomeModal": {
     "badge": "VIP MEMBERSHIP",
     "title": "Track Your Bookings & Travel in Luxury",

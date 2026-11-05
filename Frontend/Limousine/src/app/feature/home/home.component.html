@@ -200,7 +200,10 @@
            [routerLink]="link(c.view)" reveal="zoom" [revealDelay]="i * 120">
           <span class="dest-media">
             <span class="dest-photo">
-              <span class="dest-img" [style.background-image]="'url(' + c.image + '), linear-gradient(135deg,#071634,#143d7d)'"></span>
+              <!-- SLIDER: one photo (image) or many (images) -->
+              <span class="dest-img">
+                <app-image-slider [image]="c.image" [images]="c.images"></app-image-slider>
+              </span>
               <span class="dest-body">
                 <h3 class="dest-title">{{ c.titleKey | transloco }}</h3>
                 <p class="dest-desc">{{ c.descKey | transloco }}</p>
@@ -433,14 +436,17 @@
           <section class="svc-intro" reveal>
             <div class="svc-intro-text">
               <h2>{{ it.titleKey | transloco }}</h2>
-              <p>{{ (it.pageDescKey || it.descKey) | transloco }}</p>
+              <p>{{ pageText(it) }}</p>
               <div class="detail-actions">
                 <a href="#booking" class="svc-btn detail-btn" (click)="scrollToBooking($event)">{{ 'common.bookNow' | transloco }}</a>
                 <a *ngIf="parentGroup() as pg" [routerLink]="link(pg.key)" class="detail-back">← {{ pg.titleKey | transloco }}</a>
               </div>
             </div>
             <div class="svc-intro-img">
-              <span class="svc-intro-photo" [style.background-image]="'url(' + it.image + '), linear-gradient(135deg,#071634,#143d7d)'"></span>
+              <!-- SLIDER: one photo (image) or many (images) -->
+              <span class="svc-intro-photo">
+                <app-image-slider [image]="it.image" [images]="it.images"></app-image-slider>
+              </span>
             </div>
           </section>
 
@@ -512,7 +518,10 @@
         <!-- Other single pages (business pages) -->
         <div class="detail-wrap" reveal *ngIf="!isBookable() && currentItem() as it">
           <ng-container *ngIf="view() !== 'montreal'">
-            <div class="detail-img" [style.background-image]="'url(' + it.image + ')'"></div>
+            <!-- SLIDER: one photo (image) or many (images) -->
+            <div class="detail-img">
+              <app-image-slider [image]="it.image" [images]="it.images"></app-image-slider>
+            </div>
             <div class="detail-text">
               <h2>{{ it.titleKey | transloco }}</h2>
               <p>{{ it.descKey | transloco }}</p>
@@ -562,7 +571,10 @@
 
             <a class="j-card" [routerLink]="link(it.view)" reveal="zoom" [revealDelay]="0">
               <span class="j-photo">
-                <span class="j-img" [style.background-image]="'url(' + it.image + '), linear-gradient(135deg,#071634,#143d7d)'"></span>
+                <!-- SLIDER: one photo (image) or many (images) -->
+               <span class="j-img">
+  <app-image-slider [image]="it.image"></app-image-slider>
+</span>
               </span>
               <span class="j-glass">
                 <h3 class="j-title">{{ it.titleKey | transloco }}</h3>

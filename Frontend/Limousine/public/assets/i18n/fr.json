@@ -387,33 +387,56 @@
     "sent": "Merci ! Votre demande est prête dans WhatsApp."
   },
   "sections": {
-    "airportPickup": "Prise en charge à l'aéroport",
-    "airportPickupDesc": "Un chauffeur vous attend aux arrivées pour vous conduire du terminal à votre destination.",
-    "airportDropoff": "Dépose à l'aéroport",
-    "airportDropoffDesc": "Un trajet privé de votre porte jusqu'au terminal, à l'heure et sans stress.",
-    "montrealCity": "Visite de la ville de Montréal",
-    "montrealCityDesc": "Faites une visite privée des sites emblématiques et des trésors cachés de Montréal, en tout confort avec votre chauffeur.",
-    "ottawa": "Montréal à Ottawa",
-    "ottawaDesc": "Rendez-vous dans la capitale du Canada en toute tranquillité, avec un chauffeur privé qui vous dépose à la Colline du Parlement, à votre hôtel ou à votre rendez-vous.",
-    "quebec": "Montréal à Québec",
-    "quebecDesc": "Découvrez le charme du Vieux-Québec avec style. Détendez-vous dans un véhicule haut de gamme pendant que votre chauffeur s'occupe de la route, de porte à porte.",
-    "toronto": "Montréal à Toronto",
-    "torontoDesc": "Un long trajet rendu facile. Profitez d'un voyage privé et spacieux entre les deux plus grandes villes du Canada, pour travailler ou vous reposer.",
-    "tremblant": "Montréal à Mont-Tremblant",
-    "tremblantDesc": "Direction les Laurentides pour un week-end, un séjour de ski ou une escapade. Votre chauffeur vous conduit de chez vous jusqu'au village de la station.",
-    "cityOther": "Autre ville",
-    "cityOtherDesc": "Vous allez dans une autre ville ? Dites-nous où et nous organisons votre trajet privé.",
-    "weddings": "Mariages",
-    "weddingsDesc": "Faites une arrivée inoubliable. Un chauffeur élégant et un véhicule impeccable pour le plus beau jour de votre vie.",
-    "graduations": "Remises de diplômes",
-    "graduationsDesc": "Célébrez votre réussite avec style. Un chauffeur privé vous conduit, vous et votre famille, à la cérémonie puis à la fête.",
-    "events": "Événements et fêtes",
-    "eventsDesc": "Profitez de la soirée sans penser à la route. Votre chauffeur vous emmène et vous ramène en toute sécurité.",
-    "shopping": "Magasinage et courses personnelles",
-    "shoppingDesc": "Magasinez à votre rythme. Votre chauffeur vous attend, porte vos sacs et vous conduit d'un arrêt à l'autre.",
-    "hourly": "Affaires à l'heure",
-    "hourlyDesc": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible adapté à vous."
-  },
+    "airportPickup": "Accueil aéroport",
+    "airportPickupDesc": "Votre chauffeur vous attend à l'arrivée dès l'atterrissage de votre vol...",
+    "airportPickupPage": "Votre chauffeur vous attend à l'arrivée dès l'atterrissage de votre vol. Nous suivons votre vol en cas de retard, nous vous aidons avec vos bagages, puis nous vous conduisons directement à votre destination dans un véhicule de luxe confortable. Pas de files d'attente, pas de taxi à chercher, juste une arrivée fluide avec OUDY.",
+
+   "airportDropoff": "Transfert vers l'aéroport",
+   "airportDropoffDesc": "Un trajet privé de votre porte jusqu'au terminal, à l'heure et sans stress...",
+   "airportDropoffPage": "Un trajet privé de votre porte jusqu'au terminal, à l'heure et sans stress. Le chauffeur OUDY arrive à l'heure convenue, charge vos bagages et vous conduit à l'aéroport en tout confort, pour que vous arriviez détendu et avec de l'avance.",
+
+  "montrealCity": "Visite de la ville de Montréal",
+   "montrealCityDesc": "Faites une visite privée des sites emblématiques et des trésors cachés de Montréal, en tout confort avec votre chauffeur.",
+    
+   "ottawa": "De Montréal à Ottawa",
+"ottawaDesc": "Un trajet privé de Montréal à Ottawa, en tout confort et en toute sécurité avec un chauffeur professionnel...",
+"ottawaPage": "Un trajet privé de Montréal à Ottawa, en tout confort et en toute sécurité avec un chauffeur professionnel. Il vous prend à votre porte et vous conduit à destination dans un véhicule confortable.",
+
+"quebec": "De Montréal à Québec",
+"quebecDesc": "Voyagez de Montréal à Québec dans un véhicule de luxe, pendant que votre chauffeur s'occupe de la route du début à la fin...",
+"quebecPage": "Voyagez de Montréal à Québec dans un véhicule de luxe, pendant que votre chauffeur s'occupe de la route du début à la fin. Détendez-vous et profitez de votre temps jusqu'à l'arrivée.",
+
+"toronto": "De Montréal à Toronto",
+"torontoDesc": "Un long trajet de Montréal à Toronto, rendu confortable dans un véhicule spacieux avec chauffeur privé...",
+"torontoPage": "Un long trajet de Montréal à Toronto, rendu confortable dans un véhicule spacieux avec chauffeur privé. Vous avez l'espace pour travailler ou vous reposer tout au long du chemin.",
+
+"tremblant": "De Montréal à Mont-Tremblant",
+"tremblantDesc": "Direction Mont-Tremblant ? Nous vous y conduisons depuis Montréal en douceur et en confort, de votre porte à votre destination...",
+"tremblantPage": "Direction Mont-Tremblant ? Nous vous y conduisons depuis Montréal en douceur et en confort, de votre porte à votre destination. Un chauffeur professionnel et un véhicule confortable vous attendent.",
+
+"cityOther": "Autre ville",
+"cityOtherDesc": "Vous voyagez vers une autre ville ? Dites-nous où vous allez et nous organiserons votre trajet depuis Montréal...",
+"cityOtherPage": "Vous voyagez vers une autre ville ? Dites-nous où vous allez et nous organiserons votre trajet depuis Montréal. Un chauffeur professionnel et un véhicule confortable vous attendent.",
+
+   "weddings": "Mariages",
+"weddingsDesc": "Faites une arrivée inoubliable, avec un chauffeur élégant et un véhicule impeccable pour le plus beau jour de votre vie...",
+"weddingsPage": "Faites une arrivée inoubliable, avec un chauffeur élégant et un véhicule impeccable pour le plus beau jour de votre vie. Nous nous occupons de chaque détail de votre transport pour que votre journée reste calme et bien organisée.",
+
+"graduations": "Remises de diplômes",
+"graduationsDesc": "Célébrez votre réussite avec style, avec un chauffeur privé qui vous conduit, vous et votre famille, à la cérémonie puis à la fête...",
+"graduationsPage": "Célébrez votre réussite avec style, avec un chauffeur privé qui vous conduit, vous et votre famille, à la cérémonie puis à la fête. Vous arrivez détendu et à l'heure.",
+
+"events": "Événements et fêtes",
+"eventsDesc": "Profitez de votre soirée sans penser à la route, car votre chauffeur vous emmène et vous ramène en toute sécurité...",
+"eventsPage": "Profitez de votre soirée sans penser à la route, car votre chauffeur vous emmène et vous ramène en toute sécurité. Vous partez et revenez en tout confort, de votre porte à votre porte.",
+
+"shopping": "Magasinage et courses personnelles",
+"shoppingDesc": "Magasinez à votre rythme, pendant que votre chauffeur vous attend, porte vos sacs et vous conduit d'un arrêt à l'autre...",
+"shoppingPage": "Magasinez à votre rythme, pendant que votre chauffeur vous attend, porte vos sacs et vous conduit d'un arrêt à l'autre. Vous faites vos courses en moins de temps et avec moins d'efforts.",
+
+"hourly": "Chauffeur à l'heure",
+"hourlyDesc": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible qui vous convient...",
+"hourlyPage": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible qui vous convient. Vous passez d'un rendez-vous à l'autre sans vous soucier de la conduite ni du stationnement." },
   "welcomeModal": {
     "badge": "PRIVILÈGES VIP",
     "title": "Suivez vos réservations & voyagez en toute sérénité",

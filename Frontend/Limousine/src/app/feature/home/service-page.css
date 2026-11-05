@@ -43,6 +43,8 @@
 /* photo with a leaf-shaped corner and a red frame behind it (same style as the journey cards) */
 .landing-page .svc-intro-img { position: relative; isolation: isolate; }
 .landing-page .svc-intro-photo {
+  position: relative;      /* جديد */
+  overflow: hidden;        /* جديد */
   display: block;
   height: 400px;
   border-radius: 110px 28px 28px 28px;
