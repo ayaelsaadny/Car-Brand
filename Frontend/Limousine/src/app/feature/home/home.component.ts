@@ -123,22 +123,29 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
          },
         { view: 'tremblant', titleKey: 'sections.tremblant', descKey: 'sections.tremblantDesc', image: 'assets/menu/mont-tremblant.jpg',
             images: [
-    'assets/menu/Ottawa.jpg',  
-    'assets/menu/Ottawa.jpg',
-    'assets/menu/Ottawa.jpg',
-    'assets/menu/Ottawa.jpg'
+    'assets/menu/mont-tremblant.jpg',  
+    'assets/menu/monttremblant-1.jpg',
+    'assets/menu/monttremblant-2.jpg',
+    'assets/menu/monttremblant-3.jpg'
   ]
           
          },
         { view: 'toronto', titleKey: 'sections.toronto', descKey: 'sections.torontoDesc', image: 'assets/menu/toronto.jpg',
             images: [
-    'assets/menu/Ottawa.jpg',  
-    'assets/menu/Ottawa.jpg',
-    'assets/menu/Ottawa.jpg',
-    'assets/menu/Ottawa.jpg'
+    'assets/menu/toronto.jpg',  
+    'assets/menu/toronto-1.jpg',
+    'assets/menu/toronto-2.jpg',
+    'assets/menu/toronto-3.jpg'
   ]
          },
-        { view: 'cityOther', titleKey: 'sections.cityOther', descKey: 'sections.cityOtherDesc', image: 'assets/menu/other-city.jpg', btnKey: 'common.bookNow' }
+        { view: 'cityOther', titleKey: 'sections.cityOther', descKey: 'sections.cityOtherDesc', image: 'assets/menu/other-city.jpg', btnKey: 'common.bookNow',
+          images: [
+    'assets/menu/other-city.jpg',  
+    'assets/menu/other-1.jpg',
+    'assets/menu/other-2.jpg',
+   'assets/menu/other-3.jpg'
+  ]
+         }
       ]
     },
     {
@@ -191,8 +198,37 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // Sections of Airport / City-to-City / Private Chauffeur show the booking form. Private City Experiences does not.
   readonly isBookable = computed(() => { const g = this.parentGroup(); return !!g && g.key !== 'experiences'; });
   readonly minDate = new Date().toISOString().slice(0, 10);   // earliest date the calendar allows (today)
-  booking = { name: '', email: '', phone: '', from: '', to: '', date: '', time: '', passengers: 1, message: '' };
+
+  booking = {
+    name: '', email: '', phone: '', from: '', to: '', date: '', time: '', message: '',
+    stops: [] as { value: string }[],          // optional stops between pickup and drop-off
+    adults: 1, children: 0, infants: 0,        // passengers by type
+    carSeat: 'no' as 'yes' | 'no',
+    carSeatType: 'infant' as 'infant' | 'child' | 'booster'
+  };
   bookingSent = signal(false);
+
+  // The three passenger counters shown in the form
+  readonly paxTypes = [
+    { key: 'adults'   as const, label: 'bookingForm.adults',   hint: 'bookingForm.adultsHint',   min: 1 },
+    { key: 'children' as const, label: 'bookingForm.children', hint: 'bookingForm.childrenHint', min: 0 },
+    { key: 'infants'  as const, label: 'bookingForm.infants',  hint: 'bookingForm.infantsHint',  min: 0 }
+  ];
+
+  /** Stops along the way (max 3) */
+  addStop(): void {
+    if (this.booking.stops.length < 3) this.booking.stops.push({ value: '' });
+  }
+  removeStop(i: number): void { this.booking.stops.splice(i, 1); }
+
+  /** + / - buttons of the passenger counters */
+  changeCount(key: 'adults' | 'children' | 'infants', delta: number): void {
+    const min = key === 'adults' ? 1 : 0;
+    this.booking[key] = Math.min(10, Math.max(min, this.booking[key] + delta));
+    if (!this.hasKids()) this.booking.carSeat = 'no';   // no child / infant => no car seat
+  }
+  hasKids(): boolean { return this.booking.children + this.booking.infants > 0; }
+  totalPassengers(): number { return this.booking.adults + this.booking.children + this.booking.infants; }
 
   scrollToBooking(ev?: Event): void {
     ev?.preventDefault();
@@ -204,16 +240,26 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const b = this.booking;
     const item = this.currentItem();
     const service = item ? this.transloco.translate(item.titleKey) : '';
+    const stops = b.stops.map(s => s.value.trim()).filter(Boolean);
+    const seatNames = { infant: 'Infant seat (rear-facing)', child: 'Child seat', booster: 'Booster seat' };
+    const pax = [
+      `${b.adults} adult(s)`,
+      b.children ? `${b.children} child(ren)` : '',
+      b.infants ? `${b.infants} infant(s)` : ''
+    ].filter(Boolean).join(', ');
+
     const text = [
       `New booking request: ${service}`,
       `Name: ${b.name}`,
       `Phone: ${b.phone}`,
       b.email && `Email: ${b.email}`,
       `From: ${b.from}`,
+      ...stops.map((s, i) => `Stop ${i + 1}: ${s}`),
       `To: ${b.to}`,
       b.date && `Date: ${b.date}`,
       b.time && `Time: ${b.time}`,
-      b.passengers && `Passengers: ${b.passengers}`,
+      `Passengers: ${this.totalPassengers()} (${pax})`,
+      this.hasKids() && `Car seat: ${b.carSeat === 'yes' ? 'Yes - ' + seatNames[b.carSeatType] : 'No'}`,
       b.message && `Message: ${b.message}`
     ].filter(Boolean).join('\n');
     window.open(`${this.contact.whatsappUrl}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');

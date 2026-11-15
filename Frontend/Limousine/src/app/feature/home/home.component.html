@@ -477,6 +477,7 @@
                   <input type="text" class="bk-readonly" name="service" [value]="it.titleKey | transloco" readonly>
                 </label>
 
+                <!-- Pickup + Drop-off -->
                 <label class="bk-field span3">
                   <span>{{ 'bookingForm.from' | transloco }} <i>*</i></span>
                   <input type="text" name="from" [(ngModel)]="booking.from" required>
@@ -486,18 +487,73 @@
                   <input type="text" name="to" [(ngModel)]="booking.to" required>
                 </label>
 
-                <label class="bk-field span2">
+                <!-- Optional stops along the way -->
+                <div class="bk-field span6 bk-stops">
+                  <span>{{ 'bookingForm.stopsLabel' | transloco }}</span>
+                  <small class="bk-hint">{{ 'bookingForm.stopsHint' | transloco }}</small>
+
+                  <div class="bk-stop-row" *ngFor="let s of booking.stops; let i = index">
+                    <span class="bk-stop-num" aria-hidden="true">{{ i + 1 }}</span>
+                    <input type="text" [name]="'stop' + i" [(ngModel)]="s.value"
+                           [placeholder]="'bookingForm.stopPlaceholder' | transloco">
+                    <button type="button" class="bk-stop-remove" (click)="removeStop(i)"
+                            [attr.aria-label]="'bookingForm.removeStop' | transloco">×</button>
+                  </div>
+
+                  <button type="button" class="bk-add-stop" *ngIf="booking.stops.length < 3" (click)="addStop()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                    {{ 'bookingForm.addStop' | transloco }}
+                  </button>
+                </div>
+
+                <label class="bk-field span3">
                   <span>{{ 'bookingForm.date' | transloco }}</span>
                   <input type="date" name="date" [(ngModel)]="booking.date" [min]="minDate">
                 </label>
-                <label class="bk-field span2">
+                <label class="bk-field span3">
                   <span>{{ 'bookingForm.time' | transloco }}</span>
                   <input type="time" name="time" [(ngModel)]="booking.time">
                 </label>
-                <label class="bk-field span2">
+
+                <!-- Passengers: adults / children / infants -->
+                <div class="bk-field span6 bk-pax">
                   <span>{{ 'bookingForm.passengers' | transloco }}</span>
-                  <input type="number" name="passengers" [(ngModel)]="booking.passengers" min="1" max="20">
-                </label>
+
+                  <div class="bk-pax-row" *ngFor="let p of paxTypes">
+                    <div class="bk-pax-info">
+                      <strong>{{ p.label | transloco }}</strong>
+                      <small>{{ p.hint | transloco }}</small>
+                    </div>
+                    <div class="bk-counter">
+                      <button type="button" (click)="changeCount(p.key, -1)" [disabled]="booking[p.key] <= p.min" aria-label="-">−</button>
+                      <output>{{ booking[p.key] }}</output>
+                      <button type="button" (click)="changeCount(p.key, 1)" [disabled]="booking[p.key] >= 10" aria-label="+">+</button>
+                    </div>
+                  </div>
+
+                  <!-- Car seat: only when there is a child or an infant -->
+                  <div class="bk-seat" *ngIf="hasKids()">
+                    <div class="bk-seat-q">{{ 'bookingForm.carSeatQ' | transloco }}</div>
+                    <div class="bk-toggle" role="group">
+                      <button type="button" [class.active]="booking.carSeat === 'yes'" (click)="booking.carSeat = 'yes'">{{ 'bookingForm.yes' | transloco }}</button>
+                      <button type="button" [class.active]="booking.carSeat === 'no'" (click)="booking.carSeat = 'no'">{{ 'bookingForm.no' | transloco }}</button>
+                    </div>
+                    <select class="bk-select" name="carSeatType" *ngIf="booking.carSeat === 'yes'" [(ngModel)]="booking.carSeatType">
+                      <option value="infant">{{ 'bookingForm.seatInfant' | transloco }}</option>
+                      <option value="child">{{ 'bookingForm.seatChild' | transloco }}</option>
+                      <option value="booster">{{ 'bookingForm.seatBooster' | transloco }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Summary -->
+                  <div class="bk-summary">
+                    <strong>{{ 'bookingForm.total' | transloco }}: {{ totalPassengers() }}</strong>
+                    <span class="bk-chip">{{ booking.adults }} {{ 'bookingForm.adults' | transloco }}</span>
+                    <span class="bk-chip" *ngIf="booking.children">{{ booking.children }} {{ 'bookingForm.children' | transloco }}</span>
+                    <span class="bk-chip" *ngIf="booking.infants">{{ booking.infants }} {{ 'bookingForm.infants' | transloco }}</span>
+                    <span class="bk-chip bk-chip-seat" *ngIf="hasKids() && booking.carSeat === 'yes'">{{ 'bookingForm.carSeat' | transloco }}</span>
+                  </div>
+                </div>
 
                 <label class="bk-field span6">
                   <span>{{ 'bookingForm.message' | transloco }}</span>
