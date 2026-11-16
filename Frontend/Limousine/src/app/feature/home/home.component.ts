@@ -12,9 +12,13 @@ import { ViewName, linkFor, viewForPath } from '../../core/routing/page-routes';
 import { RevealDirective } from './reveal.directive';
 import { ImageSliderComponent } from '../../shared/components/image-slider/image-slider.component';
 import { Vehicle, ServiceItem, Category, Review, CreateReviewRequest } from '../../core/interfaces/api.models';
+<<<<<<< HEAD
 import { BookingsService, GuestBookingRequest } from '../../core/services/bookings.service';
 import { AdminBadgeService } from '../../core/services/admin-badge.service';
 import { isValidNorthAmericanPhone, formatNorthAmericanPhone } from '../../core/utils/phone.utils';
+=======
+import { HelpComponent } from '../help/help.component';
+>>>>>>> f4099048b6b0edeeda5c27b2727a1caeb28183b8
 
 // `image` = the main photo (always). `images` (optional) = more photos: when it has 2 or more, a slider appears.
 interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; images?: string[]; btnKey?: string; }
@@ -32,7 +36,8 @@ interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey
     DecimalPipe,
     TranslocoPipe,
     RevealDirective,
-    ImageSliderComponent
+    ImageSliderComponent,
+    HelpComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css', './journey.css', './service-page.css', './nav-menu.css', './choose-panels.css']

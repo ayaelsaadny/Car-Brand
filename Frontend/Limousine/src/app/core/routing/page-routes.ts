@@ -6,7 +6,7 @@ export type ViewName =
   | 'airportPickup' | 'airportDropoff' |'montreal' | 'ottawa'
   | 'quebec' | 'toronto' | 'tremblant'| 'cityOther'|  'weddings' | 'graduations' | 'events'
   | 'shopping' | 'hourly' | 'bizOverview' | 'bizCorporations' | 'bizAgencies'
-  | 'bizPartners' 
+  | 'bizPartners' | 'help'
 
 export type PageView = Exclude<ViewName, 'home'>;
 
@@ -33,7 +33,8 @@ export const PAGE_SLUGS: Record<PageView, Record<SupportedLanguage, string>> = {
   bizOverview:     { en: "business/overview", fr: "entreprises/apercu" },
   bizCorporations: { en: "business/corporations", fr: "entreprises/societes" },
   bizAgencies:     { en: "business/agencies", fr: "entreprises/agences" },
-  bizPartners:     { en: "business/partners", fr: "entreprises/partenaires" }
+  bizPartners:     { en: "business/partners", fr: "entreprises/partenaires" },
+  help: { en: "help", fr: "aide" }
 };
 
 /** Old links (bookmarks, Google) that still work: they redirect to the new address */

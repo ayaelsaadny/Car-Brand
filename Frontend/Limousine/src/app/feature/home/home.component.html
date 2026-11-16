@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <a [href]="contact.whatsappUrl" target="_blank" rel="noopener" class="nav-link">{{ 'nav.help' | transloco }}</a>
+        <a [routerLink]="link('help')" class="nav-link" [class.active]="view() === 'help'" (click)="closeNav()">{{ 'nav.help' | transloco }}</a>
         <a href="#contact" class="nav-link" (click)="goTo('contact', $event)">{{ 'nav.contactUs' | transloco }}</a>
       </nav>
 
@@ -160,7 +160,7 @@
             </div>
           </div>
 
-          <a [href]="contact.whatsappUrl" target="_blank" rel="noopener" class="m-link">{{ 'nav.help' | transloco }}</a>
+          <a [routerLink]="link('help')" class="m-link" (click)="closeNav()">{{ 'nav.help' | transloco }}</a>
           <a href="#contact" class="m-link" (click)="goTo('contact', $event)">{{ 'nav.contactUs' | transloco }}</a>
         </nav>
       </div>
@@ -423,8 +423,8 @@
 
   </ng-container>
 
-  <!-- Sub pages : dark title band + photo cards -->
-  <ng-container *ngIf="view() !== 'home'">
+  <!-- Sub pages : dark title band + photo cards (not used by the Help page) -->
+  <ng-container *ngIf="view() !== 'home' && view() !== 'help'">
     <section class="page-hero" reveal="fade">
       <h1>{{ pageTitleKey() | transloco }}</h1>
     </section>
@@ -668,6 +668,11 @@
     <ng-container *ngTemplateOutlet="featuresTpl"></ng-container>
   </ng-container>
 
+  <!-- Help page -->
+  <ng-container *ngIf="view() === 'help'">
+    <app-help [whatsappUrl]="contact.whatsappUrl" [email]="contact.email" />
+  </ng-container>
+
   <!-- The 6 feature cards (used on the home page and on all sub pages) -->
   <ng-template #featuresTpl>
   <section class="features-section" reveal="fade">
@@ -725,7 +730,7 @@
         <div class="footer-links">
           <a [routerLink]="link('airport')">{{ 'megaMenu.airport' | transloco }}</a>
           <a [routerLink]="link('experiences')">{{ 'megaMenu.experiences' | transloco }}</a>
-          <a [href]="contact.whatsappUrl" target="_blank" rel="noopener">{{ 'nav.help' | transloco }}</a>
+          <a [routerLink]="link('help')">{{ 'nav.help' | transloco }}</a>
           <a href="#contact" (click)="goTo('contact', $event)">{{ 'nav.contactUs' | transloco }}</a>
           <a [routerLink]="['/' + langService.currentLang() + '/dashboard']">{{ 'nav.dashboard' | transloco }}</a>
         </div>

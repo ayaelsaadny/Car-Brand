@@ -458,7 +458,92 @@
 "hourly": "Chauffeur à l'heure",
 "hourlyDesc": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible qui vous convient...",
 "hourlyPage": "Un chauffeur à votre disposition pour vos réunions, visites de chantier et journées d'affaires complètes, avec un horaire flexible qui vous convient. Vous passez d'un rendez-vous à l'autre sans vous soucier de la conduite ni du stationnement." },
-  "welcomeModal": {
+  
+
+
+
+  "help": {
+    "title": "Comment pouvons-nous vous aider ?",
+    "subtitle": "Des réponses rapides sur la réservation, les transferts aéroport, les tarifs et nos services.",
+    "searchPlaceholder": "Rechercher une question…",
+    "searchLabel": "Rechercher dans le centre d'aide",
+    "clearSearch": "Effacer la recherche",
+    "tabsLabel": "Sujets d'aide",
+    "resultsFor": "Résultats pour",
+    "noResults": "Nous n'avons pas trouvé de réponse. Essayez d'autres mots ou contactez-nous directement.",
+    "stillNeed": "Besoin d'aide ?",
+    "stillNeedDesc": "Notre équipe est disponible 24h/24 et 7j/7. Écrivez-nous et nous répondrons dès que possible.",
+    "whatsapp": "Écrire sur WhatsApp",
+    "email": "Envoyer un courriel",
+    "cats": {
+      "booking": "Réservation",
+      "airport": "Aéroport",
+      "pricing": "Tarifs",
+      "services": "Nos services",
+      "business": "Entreprises"
+    },
+    "faq": {
+      "b1": {
+        "q": "Comment réserver un chauffeur ?",
+        "a": "Ouvrez le service souhaité, remplissez le formulaire de réservation avec la date, l'heure et les adresses, puis envoyez-le. Nous confirmerons votre trajet avec vous. Vous pouvez aussi nous écrire sur WhatsApp."
+      },
+      "b2": {
+        "q": "Combien de temps à l'avance dois-je réserver ?",
+        "a": "Le plus tôt possible, surtout pour les mariages, les événements et les transferts aéroport en période de pointe. Pour un trajet de dernière minute, écrivez-nous sur WhatsApp et nous vérifierons la disponibilité."
+      },
+      "b3": {
+        "q": "Puis-je modifier ou annuler ma réservation ?",
+        "a": "Oui, contactez-nous le plus tôt possible avec les détails de votre réservation et nous vous indiquerons les options disponibles pour votre trajet."
+      },
+      "a1": {
+        "q": "Suivez-vous mon vol ?",
+        "a": "Oui. Pour les prises en charge à l'aéroport, nous suivons votre vol : votre chauffeur est là même si l'avion est en avance ou en retard."
+      },
+      "a2": {
+        "q": "Où mon chauffeur m'attendra-t-il ?",
+        "a": "Votre chauffeur vous attend aux arrivées et vous conduit de l'aéroport à votre destination."
+      },
+      "a3": {
+        "q": "Offrez-vous aussi la dépose à l'aéroport ?",
+        "a": "Oui. Nous venons vous chercher à votre porte et vous déposons au terminal de l'aéroport, à l'heure et sans stress."
+      },
+      "p1": {
+        "q": "Comment le prix de mon trajet est-il établi ?",
+        "a": "Il dépend du service, du trajet, de la durée et du véhicule. Contactez-nous avec les détails de votre déplacement et nous confirmerons le prix avant votre trajet."
+      },
+      "p2": {
+        "q": "Comment obtenir une soumission ?",
+        "a": "Envoyez-nous les détails de votre déplacement par le formulaire de réservation ou sur WhatsApp, et nous vous répondrons avec une soumission claire."
+      },
+      "s1": {
+        "q": "Quels services offrez-vous ?",
+        "a": "Transferts aéroport, expériences privées en ville à Montréal, transferts entre villes, et chauffeur privé pour mariages, remises de diplômes, événements, magasinage et affaires à l'heure."
+      },
+      "s2": {
+        "q": "Puis-je engager un chauffeur à l'heure ?",
+        "a": "Oui. Notre service d'affaires à l'heure met un chauffeur privé à votre disposition pour vos réunions et vos journées complètes."
+      },
+      "s3": {
+        "q": "Pouvez-vous aller dans une ville qui n'est pas listée ?",
+        "a": "Oui. Dans les transferts entre villes, choisissez autres destinations, dites-nous où vous allez et nous organiserons votre trajet privé."
+      },
+      "z1": {
+        "q": "Offrez-vous des services pour les entreprises ?",
+        "a": "Oui. Nous proposons des solutions de chauffeur haut de gamme pour les sociétés, les agences et les partenaires. Consultez la section Entreprises du menu."
+      },
+      "z2": {
+        "q": "Comment mon agence peut-elle devenir partenaire ?",
+        "a": "Ouvrez la page Partenariats dans le menu Entreprises ou contactez-nous, et nous discuterons de la façon d'offrir nos services de chauffeur à vos clients."
+      }
+    }
+  },
+
+
+
+
+
+
+"welcomeModal": {
     "badge": "PRIVILÈGES VIP",
     "title": "Suivez vos réservations & voyagez en toute sérénité",
     "description": "Créez votre compte pour suivre vos trajets en temps réel, gérer vos réservations et profiter d'avantages VIP exclusifs.",
