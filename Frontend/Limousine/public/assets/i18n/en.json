@@ -273,6 +273,8 @@
     "password": "Password",
     "fullName": "Full Name",
     "phone": "Phone Number (Optional)",
+    "phonePlaceholder": "+1 647 952 5412",
+    "phoneInvalid": "Please enter a valid US/Canada phone number (e.g. +1 647 952 5412).",
     "signInBtn": "Sign In",
     "registerBtn": "Create Account",
     "signingIn": "Signing in...",

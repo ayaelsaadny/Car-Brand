@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { UsersService } from '../../../core/services/users.service';
+import { AdminBadgeService } from '../../../core/services/admin-badge.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { UserItem } from '../../../core/interfaces/api.models';
@@ -23,6 +24,7 @@ import { UserDetailModalComponent } from '../user-detail-modal/user-detail-modal
 })
 export class UsersListComponent implements OnInit {
   private readonly usersService = inject(UsersService);
+  private readonly adminBadgeService = inject(AdminBadgeService);
   readonly authService = inject(AuthService);
   private readonly langService = inject(LanguageService);
   private readonly transloco = inject(TranslocoService);

@@ -74,6 +74,9 @@
               class="form-control"
               [placeholder]="'auth.phonePlaceholder' | transloco" />
           </div>
+          @if (registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid) {
+            <span class="field-error">{{ 'auth.phoneInvalid' | transloco }}</span>
+          }
         </div>
 
         <div class="form-group">

@@ -1,3 +1,4 @@
+using Limousine.Application.Common;
 using Limousine.Application.DTOs;
 using Limousine.Application.Interfaces;
 using Limousine.Core.Entities;
@@ -120,7 +121,7 @@ namespace Limousine.Application.Services
                 FullName = dto.FullName.Trim(),
                 Email = email,
                 PasswordHash = HashPassword(dto.Password),
-                PhoneNumber = dto.PhoneNumber?.Trim() ?? string.Empty,
+                PhoneNumber = PhoneHelper.NormalizeNorthAmericanPhone(dto.PhoneNumber),
                 Role = UserRole.Customer,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -214,8 +215,9 @@ namespace Limousine.Application.Services
             var fullName = dto.GetEffectiveFullName();
             var (firstName, lastName) = dto.GetNames();
 
+            var normalizedPhone = PhoneHelper.NormalizeNorthAmericanPhone(dto.PhoneNumber);
             user.FullName = fullName;
-            user.PhoneNumber = dto.PhoneNumber.Trim();
+            user.PhoneNumber = normalizedPhone;
             _unitOfWork.Repository<ApplicationUser>().Update(user);
 
             var customer = await _unitOfWork.Repository<Customer>()
@@ -225,7 +227,7 @@ namespace Limousine.Application.Services
             {
                 customer.FirstName = firstName;
                 customer.LastName = lastName;
-                customer.PhoneNumber = dto.PhoneNumber.Trim();
+                customer.PhoneNumber = normalizedPhone;
                 customer.Address = dto.Address?.Trim();
                 _unitOfWork.Repository<Customer>().Update(customer);
             }
@@ -237,7 +239,7 @@ namespace Limousine.Application.Services
                     FirstName = firstName,
                     LastName = lastName,
                     Email = user.Email,
-                    PhoneNumber = dto.PhoneNumber.Trim(),
+                    PhoneNumber = normalizedPhone,
                     Address = dto.Address?.Trim(),
                     CreatedAt = DateTime.UtcNow
                 };

@@ -1,4 +1,5 @@
 using Limousine.Core.Enums;
+using Limousine.Application.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,6 +26,7 @@ namespace Limousine.Application.DTOs
         [StringLength(150, ErrorMessage = "Email cannot exceed 150 characters")]
         public string Email { get; set; } = string.Empty;
 
+        [NorthAmericanPhone]
         [StringLength(30, ErrorMessage = "Phone number cannot exceed 30 characters")]
         public string? PhoneNumber { get; set; }
 
@@ -79,6 +81,7 @@ namespace Limousine.Application.DTOs
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Phone number is required")]
+        [NorthAmericanPhone]
         [StringLength(30, ErrorMessage = "Phone number cannot exceed 30 characters")]
         public string PhoneNumber { get; set; } = string.Empty;
 

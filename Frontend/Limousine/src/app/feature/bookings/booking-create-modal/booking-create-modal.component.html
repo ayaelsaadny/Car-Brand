@@ -78,11 +78,11 @@
               type="tel"
               formControlName="phoneNumber"
               class="form-control"
-              placeholder="+966 50 123 4567"
+              placeholder="+1 647 952 5412"
               [class.is-invalid]="form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched"
             />
             @if (form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid) {
-              <span class="form-error">Valid phone number is required.</span>
+              <span class="form-error">{{ 'auth.phoneInvalid' | transloco }}</span>
             }
           </div>
         </div>

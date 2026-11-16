@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { northAmericanPhoneValidator, formatNorthAmericanPhone } from '../../../core/utils/phone.utils';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +33,7 @@ export class RegisterComponent {
   readonly registerForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    phoneNumber: ['', [Validators.pattern('^[+0-9\\s-]{8,20}$')]],
+    phoneNumber: ['', [northAmericanPhoneValidator()]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]]
   }, {
@@ -57,11 +58,12 @@ export class RegisterComponent {
     this.errorMessage.set(null);
 
     const formValue = this.registerForm.value;
+    const phone = formValue.phoneNumber ? formatNorthAmericanPhone(formValue.phoneNumber) : undefined;
 
     this.authService.register({
       fullName: formValue.fullName,
       email: formValue.email,
-      phoneNumber: formValue.phoneNumber,
+      phoneNumber: phone,
       password: formValue.password,
       confirmPassword: formValue.confirmPassword
     }).subscribe({

@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AdminReviewsService } from '../../../core/services/admin-reviews.service';
+import { AdminBadgeService } from '../../../core/services/admin-badge.service';
 import { Review } from '../../../core/interfaces/api.models';
 
 type FilterTab = 'all' | 'pending' | 'approved' | 'rejected';
@@ -15,6 +16,7 @@ type FilterTab = 'all' | 'pending' | 'approved' | 'rejected';
 })
 export class ReviewsListComponent implements OnInit {
   private readonly adminReviewsService = inject(AdminReviewsService);
+  private readonly adminBadgeService = inject(AdminBadgeService);
   private readonly transloco = inject(TranslocoService);
 
   readonly reviews = signal<Review[]>([]);

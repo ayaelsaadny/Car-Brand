@@ -25,7 +25,8 @@ namespace Limousine.Application.Services
                 .FindAsync(r => r.IsApproved, cancellationToken);
 
             return reviews
-                .OrderByDescending(r => r.CreatedAt)
+                .OrderBy(r => r.CreatedAt)
+                .ThenBy(r => r.Id)
                 .Select(MapToDto)
                 .ToList();
         }
@@ -45,7 +46,8 @@ namespace Limousine.Application.Services
             }
 
             return reviews
-                .OrderByDescending(r => r.CreatedAt)
+                .OrderBy(r => r.CreatedAt)
+                .ThenBy(r => r.Id)
                 .Select(MapToDto)
                 .ToList();
         }

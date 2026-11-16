@@ -6,6 +6,7 @@ import { BookingsService, GuestBookingRequest } from '../../../core/services/boo
 import { AdminServicesService } from '../../../core/services/admin-services.service';
 import { AdminVehiclesService } from '../../../core/services/admin-vehicles.service';
 import { ServiceItem, Vehicle, BookingRequestItem } from '../../../core/interfaces/api.models';
+import { northAmericanPhoneValidator, formatNorthAmericanPhone } from '../../../core/utils/phone.utils';
 
 @Component({
   selector: 'app-booking-create-modal',
@@ -41,7 +42,7 @@ export class BookingCreateModalComponent implements OnInit {
   readonly form: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.maxLength(150)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
-    phoneNumber: ['', [Validators.required, Validators.maxLength(30)]],
+    phoneNumber: ['', [Validators.required, northAmericanPhoneValidator(), Validators.maxLength(30)]],
     serviceId: [null, [Validators.required]],
     vehicleId: [null],
     pickupLocation: ['', [Validators.required, Validators.maxLength(250)]],
@@ -134,7 +135,7 @@ export class BookingCreateModalComponent implements OnInit {
     const payload: GuestBookingRequest = {
       fullName: val.fullName.trim(),
       email: val.email.trim(),
-      phoneNumber: val.phoneNumber.trim(),
+      phoneNumber: formatNorthAmericanPhone(val.phoneNumber.trim()),
       serviceId: Number(val.serviceId),
       vehicleId: val.vehicleId ? Number(val.vehicleId) : undefined,
       pickupLocation: val.pickupLocation.trim(),

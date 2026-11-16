@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { TranslocoService } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/services/language.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { AdminBadgeService } from '../../../core/services/admin-badge.service';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 export interface NavItem {
@@ -36,6 +37,7 @@ export class MainLayoutComponent {
   private readonly languageService = inject(LanguageService);
   private readonly transloco = inject(TranslocoService);
   readonly authService = inject(AuthService);
+  readonly adminBadgeService = inject(AdminBadgeService);
   private readonly router = inject(Router);
 
   appName = input<string>('Limousine');
@@ -80,16 +82,34 @@ export class MainLayoutComponent {
     ];
 
     // Admin sees all operational pages + Users Management + Settings + Profile
+    const bookingsBadge = this.adminBadgeService.bookingsBadge();
+    const reviewsBadge = this.adminBadgeService.reviewsBadge();
+    const usersBadge = this.adminBadgeService.usersBadge();
+
     if (isAdmin) {
       items.push(
         { label: this.transloco.translate('nav.dashboard'), link: `/${lang}/dashboard`, iconKey: 'dashboard' },
         { label: this.transloco.translate('nav.vehicles'), link: `/${lang}/vehicles`, iconKey: 'vehicles' },
-        { label: this.transloco.translate('nav.bookings'), link: `/${lang}/bookings`, iconKey: 'bookings' },
+        {
+          label: this.transloco.translate('nav.bookings'),
+          link: `/${lang}/bookings`,
+          iconKey: 'bookings',
+          badge: bookingsBadge > 0 ? bookingsBadge : undefined
+        },
         { label: this.transloco.translate('nav.services'), link: `/${lang}/services`, iconKey: 'services' },
         { label: this.transloco.translate('nav.categories'), link: `/${lang}/categories`, iconKey: 'categories' },
-        { label: this.transloco.translate('nav.reviews'), link: `/${lang}/reviews`, iconKey: 'reviews' },
-        { label: this.transloco.translate('nav.reviews'), link: `/${lang}/reviews`, iconKey: 'reviews' },
-        { label: this.transloco.translate('nav.users'), link: `/${lang}/users`, iconKey: 'users' },
+        {
+          label: this.transloco.translate('nav.reviews'),
+          link: `/${lang}/reviews`,
+          iconKey: 'reviews',
+          badge: reviewsBadge > 0 ? reviewsBadge : undefined
+        },
+        {
+          label: this.transloco.translate('nav.users'),
+          link: `/${lang}/users`,
+          iconKey: 'users',
+          badge: usersBadge > 0 ? usersBadge : undefined
+        },
         { label: this.transloco.translate('nav.settings'), link: `/${lang}/settings`, iconKey: 'settings' },
         { label: this.transloco.translate('nav.profile'), link: `/${lang}/account/profile`, iconKey: 'profile' }
       );
@@ -98,7 +118,12 @@ export class MainLayoutComponent {
       items.push(
         { label: this.transloco.translate('nav.dashboard'), link: `/${lang}/dashboard`, iconKey: 'dashboard' },
         { label: this.transloco.translate('nav.vehicles'), link: `/${lang}/vehicles`, iconKey: 'vehicles' },
-        { label: this.transloco.translate('nav.bookings'), link: `/${lang}/bookings`, iconKey: 'bookings' },
+        {
+          label: this.transloco.translate('nav.bookings'),
+          link: `/${lang}/bookings`,
+          iconKey: 'bookings',
+          badge: bookingsBadge > 0 ? bookingsBadge : undefined
+        },
         { label: this.transloco.translate('nav.services'), link: `/${lang}/services`, iconKey: 'services' },
         { label: this.transloco.translate('nav.categories'), link: `/${lang}/categories`, iconKey: 'categories' },
         { label: this.transloco.translate('nav.profile'), link: `/${lang}/account/profile`, iconKey: 'profile' }

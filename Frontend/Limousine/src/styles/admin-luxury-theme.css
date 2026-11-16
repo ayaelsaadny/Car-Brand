@@ -1,0 +1,528 @@
+/* ==========================================================================
+   ADMIN LUXURY THEME
+   Unified with User / Landing Page Luxury White, Navy, Crimson & Royal Blue
+   Fonts: Orbitron (Headings/Display) + Jost / Reem Kufi (Body)
+   ========================================================================== */
+
+:root {
+  --adm-navy: #0a1f44;
+  --adm-navy-2: #102a5c;
+  --adm-navy-deep: #071634;
+  --adm-blue: #1b4f9c;
+  --adm-blue-600: #143d7d;
+  --adm-red: #b3122a;
+  --adm-red-600: #8f0e21;
+  --adm-red-light: #d63a4f;
+  --adm-sky: #eef2f9;
+
+  --adm-bg: #ffffff;
+  --adm-bg-alt: #f5f7fb;
+  --adm-line: #e1e7f1;
+  --adm-border: #dfe6f1;
+  --adm-text: #0a1f44;
+  --adm-muted: #5b6679;
+  --adm-shadow: 0 4px 20px rgba(10, 31, 68, 0.05);
+  --adm-shadow-lg: 0 12px 36px rgba(10, 31, 68, 0.12);
+}
+
+/* ==========================================
+   1. PAGE CONTAINERS & HEADERS
+   ========================================== */
+
+.layout,
+.bookings-page,
+.vehicles-page,
+.services-container,
+.categories-container,
+.users-container,
+.settings-page,
+.customer-bookings-page,
+.reviews-management-page {
+  color: var(--adm-text) !important;
+  font-family: var(--site-font, 'Reem Kufi', sans-serif);
+}
+
+.page-header {
+  background: #ffffff !important;
+  border: 1px solid var(--adm-line) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--adm-shadow) !important;
+  color: var(--adm-text) !important;
+  backdrop-filter: none !important;
+}
+
+.header-crest {
+  background: rgba(27, 79, 156, 0.08) !important;
+  border: 1px solid rgba(27, 79, 156, 0.22) !important;
+  color: var(--adm-blue) !important;
+  border-radius: 12px !important;
+}
+
+.header-crest svg {
+  stroke: var(--adm-blue) !important;
+  color: var(--adm-blue) !important;
+}
+
+.header-badge {
+  background: rgba(179, 18, 42, 0.08) !important;
+  border: 1px solid rgba(179, 18, 42, 0.22) !important;
+  color: var(--adm-red) !important;
+  border-radius: 20px !important;
+}
+
+.header-badge.badge-staff {
+  background: rgba(27, 79, 156, 0.08) !important;
+  border-color: rgba(27, 79, 156, 0.25) !important;
+  color: var(--adm-blue) !important;
+}
+
+.header-title,
+.page-title {
+  color: var(--adm-navy) !important;
+  font-family: var(--font-display, 'Orbitron', sans-serif) !important;
+  font-weight: 700 !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--adm-navy) !important;
+}
+
+.header-subtitle,
+.page-subtitle {
+  color: var(--adm-muted) !important;
+}
+
+/* ==========================================
+   2. BUTTONS
+   ========================================== */
+
+.btn-luxury-primary,
+.btn-primary-action {
+  background: linear-gradient(135deg, var(--adm-red), var(--adm-red-600)) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(179, 18, 42, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(179, 18, 42, 0.28) !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-luxury-primary:hover:not(:disabled),
+.btn-primary-action:hover:not(:disabled) {
+  background: var(--adm-red-600) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(179, 18, 42, 0.38) !important;
+  transform: translateY(-1px);
+}
+
+.btn-luxury-secondary,
+.btn-secondary-action {
+  background: #ffffff !important;
+  color: var(--adm-navy) !important;
+  border: 1px solid var(--adm-border) !important;
+  box-shadow: 0 2px 6px rgba(10, 31, 68, 0.04) !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-luxury-secondary:hover:not(:disabled),
+.btn-secondary-action:hover:not(:disabled) {
+  background: var(--adm-bg-alt) !important;
+  border-color: var(--adm-blue) !important;
+  color: var(--adm-blue) !important;
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   3. STATS STRIP & METRIC CARDS
+   ========================================== */
+
+.stat-card {
+  background: #ffffff !important;
+  border: 1px solid var(--adm-line) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--adm-shadow) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--adm-shadow-lg) !important;
+  border-color: rgba(27, 79, 156, 0.3) !important;
+}
+
+.stat-icon-wrapper {
+  background: rgba(10, 31, 68, 0.05) !important;
+  border: 1px solid rgba(10, 31, 68, 0.1) !important;
+  color: var(--adm-navy) !important;
+}
+
+.stat-icon-wrapper.amber-tint {
+  background: rgba(224, 160, 48, 0.1) !important;
+  border-color: rgba(224, 160, 48, 0.25) !important;
+  color: #b27b14 !important;
+}
+
+.stat-icon-wrapper.green-tint {
+  background: rgba(46, 157, 107, 0.1) !important;
+  border-color: rgba(46, 157, 107, 0.25) !important;
+  color: #1e704a !important;
+}
+
+.stat-icon-wrapper.purple-tint,
+.stat-icon-wrapper.blue-tint {
+  background: rgba(27, 79, 156, 0.1) !important;
+  border-color: rgba(27, 79, 156, 0.25) !important;
+  color: var(--adm-blue) !important;
+}
+
+.stat-label {
+  color: var(--adm-muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+}
+
+.stat-value {
+  color: var(--adm-navy) !important;
+  font-family: var(--font-display, 'Orbitron', sans-serif) !important;
+  font-weight: 700 !important;
+}
+
+.text-amber { color: #b27b14 !important; }
+.text-green { color: #1e704a !important; }
+.text-purple { color: var(--adm-blue) !important; }
+
+/* ==========================================
+   4. TOOLBAR, SEARCH & FILTER TABS
+   ========================================== */
+
+.toolbar-section,
+.filter-bar,
+.filter-strip {
+  background: #ffffff !important;
+  border: 1px solid var(--adm-line) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--adm-shadow) !important;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-icon {
+  color: var(--adm-muted) !important;
+}
+
+.search-input,
+.filter-select,
+.form-control,
+.form-input,
+.form-select,
+.form-textarea {
+  background: #f8fafc !important;
+  border: 1px solid var(--adm-border) !important;
+  color: var(--adm-navy) !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.search-input:focus,
+.filter-select:focus,
+.form-control:focus,
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none !important;
+  border-color: var(--adm-blue) !important;
+  box-shadow: 0 0 0 3px rgba(27, 79, 156, 0.15) !important;
+  background: #ffffff !important;
+}
+
+.search-input::placeholder,
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #8e9ab0 !important;
+}
+
+.tab-pill,
+.tab-btn {
+  background: #f8fafc !important;
+  border: 1px solid var(--adm-border) !important;
+  color: var(--adm-muted) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.tab-pill:hover,
+.tab-btn:hover {
+  background: var(--adm-bg-alt) !important;
+  color: var(--adm-navy) !important;
+}
+
+.tab-pill.active,
+.tab-btn.active {
+  background: var(--adm-navy) !important;
+  border-color: var(--adm-navy) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(10, 31, 68, 0.2) !important;
+}
+
+.tab-badge,
+.tab-count {
+  background: rgba(10, 31, 68, 0.08) !important;
+  color: var(--adm-navy) !important;
+  font-weight: 700 !important;
+}
+
+.tab-pill.active .tab-badge,
+.tab-btn.active .tab-count {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================
+   5. DATA TABLES & CARDS
+   ========================================== */
+
+.table-card,
+.card,
+.admin-card {
+  background: #ffffff !important;
+  border: 1px solid var(--adm-line) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--adm-shadow) !important;
+}
+
+.data-table {
+  width: 100% !important;
+}
+
+.data-table th {
+  background: #f8fafc !important;
+  color: var(--adm-navy) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 2px solid var(--adm-line) !important;
+  padding: 1rem 1.25rem !important;
+}
+
+.data-table td {
+  padding: 1rem 1.25rem !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: var(--adm-navy) !important;
+}
+
+.data-table tbody tr:hover {
+  background: #f8fafc !important;
+}
+
+.client-name,
+.vehicle-name,
+.service-title,
+.category-name,
+.setting-key-title,
+.author-name {
+  color: var(--adm-navy) !important;
+  font-weight: 600 !important;
+}
+
+.client-contact,
+.vehicle-sub,
+.service-desc,
+.category-desc,
+.author-meta {
+  color: var(--adm-muted) !important;
+}
+
+.ref-tag {
+  color: var(--adm-blue) !important;
+  font-weight: 700 !important;
+  background: rgba(27, 79, 156, 0.08) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+.fare-val {
+  color: var(--adm-red) !important;
+  font-weight: 700 !important;
+  font-family: var(--font-display, 'Orbitron', sans-serif) !important;
+}
+
+.route-point {
+  color: var(--adm-navy) !important;
+}
+
+/* Action Buttons */
+.btn-action,
+.action-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid var(--adm-border) !important;
+  color: var(--adm-navy) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-action:hover,
+.action-btn:hover {
+  background: var(--adm-navy) !important;
+  color: #ffffff !important;
+  border-color: var(--adm-navy) !important;
+}
+
+.btn-action.btn-reject:hover,
+.btn-action.btn-cancel-action:hover,
+.btn-delete:hover,
+.action-btn-danger:hover {
+  background: var(--adm-red) !important;
+  border-color: var(--adm-red) !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================
+   6. STATUS BADGES
+   ========================================== */
+
+.status-badge,
+.badge {
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+
+.status-pending,
+.badge-warning {
+  background: rgba(224, 160, 48, 0.12) !important;
+  border: 1px solid rgba(224, 160, 48, 0.3) !important;
+  color: #b27b14 !important;
+}
+
+.status-confirmed,
+.status-accepted,
+.badge-success {
+  background: rgba(46, 157, 107, 0.12) !important;
+  border: 1px solid rgba(46, 157, 107, 0.3) !important;
+  color: #1e704a !important;
+}
+
+.status-inprogress,
+.badge-info {
+  background: rgba(27, 79, 156, 0.1) !important;
+  border: 1px solid rgba(27, 79, 156, 0.25) !important;
+  color: var(--adm-blue) !important;
+}
+
+.status-completed {
+  background: rgba(10, 31, 68, 0.08) !important;
+  border: 1px solid rgba(10, 31, 68, 0.2) !important;
+  color: var(--adm-navy) !important;
+}
+
+.status-cancelled,
+.status-rejected,
+.badge-danger {
+  background: rgba(179, 18, 42, 0.1) !important;
+  border: 1px solid rgba(179, 18, 42, 0.25) !important;
+  color: var(--adm-red) !important;
+}
+
+/* ==========================================
+   7. MODALS & POPUPS
+   ========================================== */
+
+.modal-backdrop,
+.backdrop {
+  background: rgba(7, 22, 52, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.modal-card,
+.modal-container,
+.modal-dialog {
+  background: #ffffff !important;
+  color: var(--adm-navy) !important;
+  border: 1px solid var(--adm-line) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--adm-shadow-lg) !important;
+}
+
+.modal-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--adm-line) !important;
+  color: var(--adm-navy) !important;
+}
+
+.modal-title {
+  color: var(--adm-navy) !important;
+  font-family: var(--font-display, 'Orbitron', sans-serif) !important;
+  font-weight: 700 !important;
+}
+
+.modal-subtitle {
+  color: var(--adm-muted) !important;
+}
+
+.modal-body {
+  color: var(--adm-navy) !important;
+}
+
+.modal-footer {
+  background: #f8fafc !important;
+  border-top: 1px solid var(--adm-line) !important;
+}
+
+.close-modal-btn,
+.btn-close {
+  color: var(--adm-muted) !important;
+  background: #f1f5f9 !important;
+  border-radius: 8px !important;
+}
+
+.close-modal-btn:hover,
+.btn-close:hover {
+  background: #e2e8f0 !important;
+  color: var(--adm-navy) !important;
+}
+
+.form-label,
+label {
+  color: var(--adm-navy) !important;
+  font-weight: 600 !important;
+}
+
+/* ==========================================
+   8. ALERTS & EMPTY STATES
+   ========================================== */
+
+.alert-success {
+  background: rgba(46, 157, 107, 0.1) !important;
+  border: 1px solid rgba(46, 157, 107, 0.3) !important;
+  color: #1e704a !important;
+}
+
+.alert-danger {
+  background: rgba(179, 18, 42, 0.1) !important;
+  border: 1px solid rgba(179, 18, 42, 0.3) !important;
+  color: var(--adm-red) !important;
+}
+
+.empty-state {
+  color: var(--adm-muted) !important;
+}
+
+.empty-state svg {
+  color: var(--adm-muted) !important;
+}
+
+.empty-state p {
+  color: var(--adm-muted) !important;
+}
+
+.spinner-luxury {
+  border-color: rgba(179, 18, 42, 0.15) !important;
+  border-top-color: var(--adm-red) !important;
+}
+
+.loading-text {
+  color: var(--adm-muted) !important;
+}

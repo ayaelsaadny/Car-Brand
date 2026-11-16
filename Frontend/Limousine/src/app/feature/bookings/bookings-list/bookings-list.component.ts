@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { BookingsService } from '../../../core/services/bookings.service';
+import { AdminBadgeService } from '../../../core/services/admin-badge.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { BookingRequestItem } from '../../../core/interfaces/api.models';
@@ -28,6 +29,7 @@ import { BookingCreateModalComponent } from '../booking-create-modal/booking-cre
 })
 export class BookingsListComponent implements OnInit {
   private readonly bookingsService = inject(BookingsService);
+  private readonly adminBadgeService = inject(AdminBadgeService);
   readonly authService = inject(AuthService);
   private readonly langService = inject(LanguageService);
   private readonly transloco = inject(TranslocoService);

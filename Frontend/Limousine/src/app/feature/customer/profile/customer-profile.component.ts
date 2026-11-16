@@ -7,6 +7,7 @@ import { CustomerService } from '../../../core/services/customer.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { CustomerProfile, UpdateProfileRequest } from '../../../core/interfaces/api.models';
+import { northAmericanPhoneValidator, formatNorthAmericanPhone } from '../../../core/utils/phone.utils';
 
 @Component({
   selector: 'app-customer-profile',
@@ -36,7 +37,7 @@ export class CustomerProfileComponent implements OnInit {
 
   readonly profileForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
-    phoneNumber: ['', [Validators.pattern('^[+0-9\\s-]{8,20}$')]],
+    phoneNumber: ['', [northAmericanPhoneValidator()]],
     address: ['']
   });
 
@@ -88,9 +89,11 @@ export class CustomerProfileComponent implements OnInit {
     const phoneNumber = val.phoneNumber?.trim() || '';
     const address = val.address?.trim() || '';
 
+    const formattedPhone = phoneNumber ? formatNorthAmericanPhone(phoneNumber) : '';
+
     const dto: UpdateProfileRequest = {
       fullName,
-      phoneNumber,
+      phoneNumber: formattedPhone,
       address
     };
 
@@ -101,7 +104,7 @@ export class CustomerProfileComponent implements OnInit {
         if (res.data) {
           this.profile.set(res.data);
         }
-        this.authService.updateCurrentUserProfile(fullName, phoneNumber);
+        this.authService.updateCurrentUserProfile(fullName, formattedPhone);
         setTimeout(() => this.successMessage.set(null), 4000);
       },
       error: (err: any) => {

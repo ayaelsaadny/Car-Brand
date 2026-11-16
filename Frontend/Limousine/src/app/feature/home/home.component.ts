@@ -12,6 +12,9 @@ import { ViewName, linkFor, viewForPath } from '../../core/routing/page-routes';
 import { RevealDirective } from './reveal.directive';
 import { ImageSliderComponent } from '../../shared/components/image-slider/image-slider.component';
 import { Vehicle, ServiceItem, Category, Review, CreateReviewRequest } from '../../core/interfaces/api.models';
+import { BookingsService, GuestBookingRequest } from '../../core/services/bookings.service';
+import { AdminBadgeService } from '../../core/services/admin-badge.service';
+import { isValidNorthAmericanPhone, formatNorthAmericanPhone } from '../../core/utils/phone.utils';
 
 // `image` = the main photo (always). `images` (optional) = more photos: when it has 2 or more, a slider appears.
 interface MenuItem { view: ViewName; titleKey: string; descKey: string; pageDescKey?: string; image: string; images?: string[]; btnKey?: string; }
@@ -36,6 +39,8 @@ interface ChooseCard { view: ViewName; titleKey: string; descKey: string; btnKey
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly publicService = inject(PublicService);
+  private readonly bookingsService = inject(BookingsService);
+  private readonly adminBadgeService = inject(AdminBadgeService);
   readonly authService = inject(AuthService);
   readonly langService = inject(LanguageService);
   private readonly transloco = inject(TranslocoService);
@@ -207,6 +212,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     carSeatType: 'infant' as 'infant' | 'child' | 'booster'
   };
   bookingSent = signal(false);
+  bookingPhoneError = signal(false);
+
+  onBookingPhoneBlur(): void {
+    if (this.booking.phone && this.booking.phone.trim()) {
+      if (isValidNorthAmericanPhone(this.booking.phone)) {
+        this.booking.phone = formatNorthAmericanPhone(this.booking.phone);
+        this.bookingPhoneError.set(false);
+      } else {
+        this.bookingPhoneError.set(true);
+      }
+    } else {
+      this.bookingPhoneError.set(false);
+    }
+  }
 
   // The three passenger counters shown in the form
   readonly paxTypes = [
@@ -238,6 +257,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   submitBooking(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     const b = this.booking;
+
+    if (!b.phone || !isValidNorthAmericanPhone(b.phone)) {
+      this.bookingPhoneError.set(true);
+      return;
+    }
+    this.bookingPhoneError.set(false);
+    b.phone = formatNorthAmericanPhone(b.phone);
+
     const item = this.currentItem();
     const service = item ? this.transloco.translate(item.titleKey) : '';
     const stops = b.stops.map(s => s.value.trim()).filter(Boolean);
@@ -262,7 +289,55 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.hasKids() && `Car seat: ${b.carSeat === 'yes' ? 'Yes - ' + seatNames[b.carSeatType] : 'No'}`,
       b.message && `Message: ${b.message}`
     ].filter(Boolean).join('\n');
+    // 1. Open WhatsApp / chat immediately in a new tab/window
     window.open(`${this.contact.whatsappUrl}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    this.bookingSent.set(true);
+
+    // 2. Save booking to backend so it reaches the Admin Dashboard & updates unread badge
+    const notesParts: string[] = [];
+    if (service) notesParts.push(`Service: ${service}`);
+    if (stops.length > 0) notesParts.push(`Stops: ${stops.join(' -> ')}`);
+    notesParts.push(`Passengers: ${this.totalPassengers()} (${pax})`);
+    if (this.hasKids()) notesParts.push(`Car seat: ${b.carSeat === 'yes' ? seatNames[b.carSeatType] : 'No'}`);
+    if (b.message) notesParts.push(`Client Note: ${b.message}`);
+
+    let serviceId = 1;
+    const availableServices = this.services();
+    if (availableServices && availableServices.length > 0) {
+      const matched = availableServices.find(s =>
+        s.name?.toLowerCase().includes((service || '').toLowerCase()) ||
+        (service || '').toLowerCase().includes(s.name?.toLowerCase())
+      );
+      serviceId = matched ? matched.id : availableServices[0].id;
+    }
+
+    const pickupDateTime = (b.date && b.time)
+      ? `${b.date}T${b.time}:00`
+      : (b.date ? `${b.date}T12:00:00` : new Date(Date.now() + 2 * 3600000).toISOString());
+
+    const guestPayload: GuestBookingRequest = {
+      fullName: (b.name || '').trim() || 'Guest Customer',
+      email: (b.email && b.email.trim()) ? b.email.trim() : 'guest@limousine.com',
+      phoneNumber: (b.phone || '').trim() || '+1 647 952 5412',
+      serviceId: serviceId,
+      pickupLocation: (b.from || '').trim() || 'Client Location',
+      dropoffLocation: (b.to || '').trim() || 'Destination',
+      pickupDateTime: pickupDateTime,
+      numberOfPassengers: Math.max(1, this.totalPassengers()),
+      numberOfLuggage: 0,
+      customerNotes: notesParts.join('\n')
+    };
+
+    const bookingObs = this.authService.isLoggedIn()
+      ? this.bookingsService.createBooking(guestPayload)
+      : this.bookingsService.createGuestBooking(guestPayload);
+
+    bookingObs.subscribe({
+      next: () => {
+        this.adminBadgeService.refresh();
+      },
+      error: (err) => console.error('Booking submission error:', err)
+    });
     this.bookingSent.set(true);
   }
 
@@ -695,6 +770,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     phoneNumber: '',
     password: ''
   };
+  registerPhoneError = signal(false);
+
+  onRegisterPhoneBlur(): void {
+    if (this.registerData.phoneNumber && this.registerData.phoneNumber.trim()) {
+      if (isValidNorthAmericanPhone(this.registerData.phoneNumber)) {
+        this.registerData.phoneNumber = formatNorthAmericanPhone(this.registerData.phoneNumber);
+        this.registerPhoneError.set(false);
+      } else {
+        this.registerPhoneError.set(true);
+      }
+    } else {
+      this.registerPhoneError.set(false);
+    }
+  }
 
   constructor() {
     // Re-position the car when the page (view) changes
@@ -758,7 +847,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.publicService.getReviews().subscribe({
       next: (data) => {
-        this.reviews.set(data);
+        const sorted = [...(data || [])].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        this.reviews.set(sorted);
         if (this.currentReview() > this.maxReviewIndex()) {
           this.currentReview.set(0);
         }
@@ -821,10 +911,27 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    if (this.registerData.phoneNumber && this.registerData.phoneNumber.trim()) {
+      if (!isValidNorthAmericanPhone(this.registerData.phoneNumber)) {
+        this.registerPhoneError.set(true);
+        this.authError.set(this.transloco.translate('auth.phoneInvalid'));
+        return;
+      }
+      this.registerData.phoneNumber = formatNorthAmericanPhone(this.registerData.phoneNumber);
+      this.registerPhoneError.set(false);
+    }
+
     this.authLoading.set(true);
     this.authError.set(null);
 
-    this.authService.register(this.registerData).subscribe({
+    const payload = {
+      fullName: this.registerData.fullName,
+      email: this.registerData.email,
+      password: this.registerData.password,
+      phoneNumber: this.registerData.phoneNumber?.trim() || undefined
+    };
+
+    this.authService.register(payload).subscribe({
       next: () => {
         this.authLoading.set(false);
         this.authSuccess.set(this.transloco.translate('auth.registerSuccess'));

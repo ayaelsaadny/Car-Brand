@@ -1,12 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
+import { AdminBookingsService } from '../../core/services/admin-bookings.service';
+import { PublicService } from '../../core/services/public.service';
+import { BookingRequestItem, Vehicle } from '../../core/interfaces/api.models';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, TranslocoPipe],
+  imports: [CommonModule, DatePipe, RouterLink, TranslocoPipe],
   template: `
     <div class="page-container" dir="ltr">
       <div class="page-header">
@@ -31,7 +35,7 @@ import { LanguageService } from '../../core/services/language.service';
           </div>
           <div class="stat-info">
             <span class="stat-label">{{ 'dashboard.totalVehicles' | transloco }}</span>
-            <strong class="stat-value">24</strong>
+            <strong class="stat-value">{{ totalVehiclesCount() }}</strong>
             <span class="stat-trend positive">{{ 'dashboard.newVehiclesTrend' | transloco }}</span>
           </div>
         </div>
@@ -45,7 +49,7 @@ import { LanguageService } from '../../core/services/language.service';
           </div>
           <div class="stat-info">
             <span class="stat-label">{{ 'dashboard.activeBookings' | transloco }}</span>
-            <strong class="stat-value">18</strong>
+            <strong class="stat-value">{{ activeBookingsCount() }}</strong>
             <span class="stat-trend">{{ 'dashboard.today' | transloco }}</span>
           </div>
         </div>
@@ -98,34 +102,27 @@ import { LanguageService } from '../../core/services/language.service';
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#LIMO-1042</td>
-                  <td>Alexandre Dupont</td>
-                  <td>Mercedes Maybach S-Class</td>
-                  <td>{{ 'common.today' | transloco }}, 18:00</td>
-                  <td><span class="badge badge-success">{{ 'common.confirmed' | transloco }}</span></td>
-                </tr>
-                <tr>
-                  <td>#LIMO-1041</td>
-                  <td>Sophia Laurent</td>
-                  <td>Cadillac Escalade Platinum</td>
-                  <td>{{ 'common.today' | transloco }}, 20:30</td>
-                  <td><span class="badge badge-warning">{{ 'common.pending' | transloco }}</span></td>
-                </tr>
-                <tr>
-                  <td>#LIMO-1040</td>
-                  <td>Jean-Paul Beaumont</td>
-                  <td>Rolls-Royce Ghost</td>
-                  <td>{{ 'common.tomorrow' | transloco }}, 14:00</td>
-                  <td><span class="badge badge-success">{{ 'common.confirmed' | transloco }}</span></td>
-                </tr>
-                <tr>
-                  <td>#LIMO-1039</td>
-                  <td>Apex Global Ventures</td>
-                  <td>BMW 7 Series</td>
-                  <td>{{ 'common.tomorrow' | transloco }}, 09:00</td>
-                  <td><span class="badge badge-info">{{ 'common.inProgress' | transloco }}</span></td>
-                </tr>
+                @if (recentBookings().length === 0) {
+                  <tr>
+                    <td colspan="5" style="text-align: center; color: #8c93a0; padding: 28px;">
+                      {{ 'bookingsPage.noBookings' | transloco }}
+                    </td>
+                  </tr>
+                } @else {
+                  @for (b of recentBookings(); track b.id) {
+                    <tr>
+                      <td><strong>{{ b.bookingReference }}</strong></td>
+                      <td>{{ b.customerName }}</td>
+                      <td>{{ b.vehicleName || b.serviceName || 'Executive Chauffeur' }}</td>
+                      <td>{{ b.pickupDate || (b.pickupDateTime | date:'shortDate') }} {{ b.pickupTime || '' }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="getStatusBadgeClass(b.statusName || b.status)">
+                          {{ b.statusName || b.status }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                }
               </tbody>
             </table>
           </div>
@@ -195,13 +192,14 @@ import { LanguageService } from '../../core/services/language.service';
       gap: 16px;
     }
     .page-title {
+      font-family: var(--font-display, 'Orbitron', sans-serif);
       font-size: 1.75rem;
       font-weight: 700;
-      color: var(--c-text);
+      color: #0a1f44;
       margin: 0 0 4px;
     }
     .page-subtitle {
-      color: var(--c-text-muted);
+      color: #5b6679;
       margin: 0;
       font-size: 0.95rem;
     }
@@ -215,10 +213,16 @@ import { LanguageService } from '../../core/services/language.service';
       cursor: pointer;
       text-decoration: none;
       border: none;
+      transition: all 0.2s ease;
     }
     .btn-primary {
-      background: var(--c-gold);
-      color: var(--c-ink);
+      background: linear-gradient(135deg, #b3122a, #8f0e21);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(179, 18, 42, 0.25);
+    }
+    .btn-primary:hover {
+      background: #8f0e21;
+      box-shadow: 0 6px 18px rgba(179, 18, 42, 0.35);
     }
     .stats-grid {
       display: grid;
@@ -226,14 +230,19 @@ import { LanguageService } from '../../core/services/language.service';
       gap: 20px;
     }
     .stat-card {
-      background: var(--c-surface);
-      border: 1px solid var(--c-border);
+      background: #ffffff;
+      border: 1px solid #dfe6f1;
       border-radius: var(--radius-lg);
       padding: 20px;
       display: flex;
       align-items: center;
       gap: 16px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 16px rgba(10, 31, 68, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(10, 31, 68, 0.08);
     }
     .stat-icon {
       width: 48px;
@@ -243,15 +252,16 @@ import { LanguageService } from '../../core/services/language.service';
       place-items: center;
       font-size: 1.5rem;
     }
-    .stat-icon.gold { background: var(--c-gold-soft); }
-    .stat-icon.success { background: rgba(46, 157, 107, 0.12); }
-    .stat-icon.info { background: rgba(59, 125, 221, 0.12); }
-    .stat-icon.warning { background: rgba(224, 160, 48, 0.15); }
-    .stat-info { display: flex; flex-direction: column; }
-    .stat-label { font-size: 0.85rem; color: var(--c-text-muted); }
-    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--c-text); line-height: 1.2; margin: 2px 0; }
-    .stat-trend { font-size: 0.75rem; color: var(--c-text-muted); }
-    .stat-trend.positive { color: var(--c-success); font-weight: 600; }
+    .stat-icon.gold { background: rgba(179, 18, 42, 0.08); color: #b3122a; }
+    .stat-icon.success { background: rgba(46, 157, 107, 0.12); color: #1e704a; }
+    .stat-icon.info { background: rgba(27, 79, 156, 0.1); color: #1b4f9c; }
+    .stat-icon.warning { background: rgba(224, 160, 48, 0.12); color: #b27b14; }
+
+    .stat-info { display: flex; flex-direction: column; gap: 2px; }
+    .stat-label { font-size: 0.85rem; color: #5b6679; font-weight: 500; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: #0a1f44; font-family: var(--font-display, 'Orbitron', sans-serif); }
+    .stat-trend { font-size: 0.75rem; color: #5b6679; }
+    .stat-trend.positive { color: #1e704a; font-weight: 600; }
 
     .content-grid {
       display: grid;
@@ -262,11 +272,11 @@ import { LanguageService } from '../../core/services/language.service';
       .content-grid { grid-template-columns: 1fr; }
     }
     .card {
-      background: var(--c-surface);
-      border: 1px solid var(--c-border);
+      background: #ffffff;
+      border: 1px solid #dfe6f1;
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 16px rgba(10, 31, 68, 0.05);
     }
     .card-header {
       display: flex;
@@ -274,16 +284,18 @@ import { LanguageService } from '../../core/services/language.service';
       align-items: center;
       margin-bottom: 20px;
     }
-    .card-header h3 { margin: 0; font-size: 1.15rem; }
-    .card-link { color: var(--c-gold-600); font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+    .card-header h3 { margin: 0; font-size: 1.15rem; color: #0a1f44; font-family: var(--font-display, 'Orbitron', sans-serif); }
+    .card-link { color: #1b4f9c; font-size: 0.85rem; font-weight: 700; text-decoration: none; }
+    .card-link:hover { color: #143d7d; }
     .table-responsive { overflow-x: auto; }
     .data-table { width: 100%; border-collapse: collapse; text-align: start; }
-    .data-table th { padding: 12px; font-size: 0.8rem; color: var(--c-text-muted); border-bottom: 1px solid var(--c-border); font-weight: 600; }
-    .data-table td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid var(--c-border); }
-    .badge { padding: 4px 10px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 600; }
-    .badge-success { background: rgba(46, 157, 107, 0.12); color: var(--c-success); }
-    .badge-warning { background: rgba(224, 160, 48, 0.15); color: var(--c-warning); }
-    .badge-info { background: rgba(59, 125, 221, 0.12); color: var(--c-info); }
+    .data-table th { padding: 12px; font-size: 0.8rem; color: #0a1f44; border-bottom: 2px solid #dfe6f1; font-weight: 700; background: #f8fafc; }
+    .data-table td { padding: 14px 12px; font-size: 0.9rem; color: #0a1f44; border-bottom: 1px solid #f1f5f9; }
+    .badge { padding: 4px 10px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 600; display: inline-block; }
+    .badge-success { background: rgba(46, 157, 107, 0.12); color: #1e704a; }
+    .badge-warning { background: rgba(224, 160, 48, 0.15); color: #b27b14; }
+    .badge-info { background: rgba(27, 79, 156, 0.12); color: #1b4f9c; }
+    .badge-danger { background: rgba(179, 18, 42, 0.12); color: #b3122a; }
 
     .fleet-list { display: flex; flex-direction: column; gap: 16px; }
     .fleet-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--c-border); }
@@ -294,6 +306,42 @@ import { LanguageService } from '../../core/services/language.service';
     .fleet-details small { font-size: 0.75rem; color: var(--c-text-muted); }
   `]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   readonly langService = inject(LanguageService);
+  private readonly adminBookingsService = inject(AdminBookingsService);
+  private readonly publicService = inject(PublicService);
+
+  readonly bookings = signal<BookingRequestItem[]>([]);
+  readonly vehicles = signal<Vehicle[]>([]);
+
+  readonly activeBookingsCount = computed(() => {
+    return this.bookings().filter(b => {
+      const s = String(b.statusName || b.status || '').toLowerCase();
+      return s === 'pending' || s === 'confirmed' || s === 'accepted' || s === '1' || s === '2';
+    }).length;
+  });
+
+  readonly totalVehiclesCount = computed(() => this.vehicles().length || 1);
+
+  readonly recentBookings = computed(() => this.bookings().slice(0, 5));
+
+  ngOnInit(): void {
+    this.adminBookingsService.getAllBookings().subscribe({
+      next: (res) => this.bookings.set(res.data || []),
+      error: () => {}
+    });
+
+    this.publicService.getVehicles().subscribe({
+      next: (res) => this.vehicles.set(res || []),
+      error: () => {}
+    });
+  }
+
+  getStatusBadgeClass(status: string | number | undefined): string {
+    const s = String(status || '').toLowerCase();
+    if (s === 'confirmed' || s === 'accepted' || s === 'completed' || s === '2' || s === '3') return 'badge-success';
+    if (s === 'pending' || s === '1') return 'badge-warning';
+    if (s === 'cancelled' || s === 'rejected' || s === '4' || s === '5') return 'badge-danger';
+    return 'badge-info';
+  }
 }

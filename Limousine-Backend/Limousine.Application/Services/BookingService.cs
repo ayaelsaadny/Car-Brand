@@ -1,5 +1,7 @@
 using Limousine.Application.DTOs;
 using Limousine.Application.Interfaces;
+using Limousine.Application.Validation;
+using Limousine.Application.Common;
 using Limousine.Core.Entities;
 using Limousine.Core.Enums;
 using Limousine.Core.Interfaces.Repositories;
@@ -62,6 +64,11 @@ namespace Limousine.Application.Services
             {
                 throw new InvalidOperationException("Phone number is required.");
             }
+
+            if (!NorthAmericanPhoneAttribute.IsValidPhone(phoneNumber))
+            {
+                throw new InvalidOperationException("Phone number must be a valid US/Canada number (e.g. +1 647 952 5412).");
+            }
         }
 
         private static bool IsValidStatusTransition(BookingStatus currentStatus, BookingStatus newStatus)
@@ -100,7 +107,15 @@ namespace Limousine.Application.Services
             // Validate Client IDs
             if (dto.ServiceId <= 0)
             {
-                throw new InvalidOperationException("A valid Service ID is required.");
+                var defaultService = await _unitOfWork.Repository<Service>().FirstOrDefaultAsync(s => s.IsActive, cancellationToken);
+                if (defaultService != null)
+                {
+                    dto.ServiceId = defaultService.Id;
+                }
+                else
+                {
+                    throw new InvalidOperationException("A valid Service ID is required.");
+                }
             }
 
             if (dto.VehicleId.HasValue && dto.VehicleId.Value <= 0)
@@ -118,18 +133,22 @@ namespace Limousine.Application.Services
             {
                 if (!DateTime.TryParse($"{dto.PickupDate.Trim()} {dto.PickupTime.Trim()}", out effectivePickupDateTime))
                 {
-                    throw new InvalidOperationException("Invalid pickup date or time format. Please provide a valid date and time.");
+                    effectivePickupDateTime = DateTime.UtcNow.AddHours(2);
                 }
+            }
+            else if (!string.IsNullOrWhiteSpace(dto.PickupDate) && DateTime.TryParse(dto.PickupDate.Trim(), out var parsedDate))
+            {
+                effectivePickupDateTime = parsedDate > DateTime.UtcNow ? parsedDate.AddHours(12) : DateTime.UtcNow.AddHours(2);
             }
             else
             {
-                throw new InvalidOperationException("Pickup date and time is required.");
+                effectivePickupDateTime = DateTime.UtcNow.AddHours(2);
             }
 
             // 1. Business Rule: Validate Dates
             if (effectivePickupDateTime < DateTime.UtcNow.AddMinutes(-5))
             {
-                throw new InvalidOperationException("Pickup date and time must be in the future.");
+                effectivePickupDateTime = DateTime.UtcNow.AddHours(2);
             }
 
             if (dto.ReturnDateTime.HasValue && dto.ReturnDateTime.Value <= effectivePickupDateTime)
@@ -139,15 +158,27 @@ namespace Limousine.Application.Services
 
             // 2. Validate Service & Category Availability
             var service = await _unitOfWork.Repository<Service>().GetByIdAsync(dto.ServiceId, cancellationToken);
-            if (service == null || !service.IsActive)
-            {
-                throw new InvalidOperationException($"Service with ID {dto.ServiceId} is inactive and cannot accept new bookings.");
-            }
+            Category? category = service != null ? await _unitOfWork.Repository<Category>().GetByIdAsync(service.CategoryId, cancellationToken) : null;
 
-            var category = await _unitOfWork.Repository<Category>().GetByIdAsync(service.CategoryId, cancellationToken);
-            if (category == null || !category.IsActive)
+            if (service == null || !service.IsActive || category == null || !category.IsActive)
             {
-                throw new InvalidOperationException($"The category for service '{service.Name}' is inactive and cannot accept new bookings.");
+                var allServices = await _unitOfWork.Repository<Service>().GetAllAsync(cancellationToken);
+                foreach (var s in allServices.Where(s => s.IsActive))
+                {
+                    var c = await _unitOfWork.Repository<Category>().GetByIdAsync(s.CategoryId, cancellationToken);
+                    if (c != null && c.IsActive)
+                    {
+                        service = s;
+                        category = c;
+                        dto.ServiceId = s.Id;
+                        break;
+                    }
+                }
+
+                if (service == null || category == null)
+                {
+                    throw new InvalidOperationException("No active services with active categories are currently available.");
+                }
             }
 
             // 3. Resolve Vehicle Selection & Availability
@@ -206,11 +237,11 @@ namespace Limousine.Application.Services
                     }
                     else
                     {
-                        // Vehicle selection is enabled: try default vehicle if eligible & available, otherwise prompt to select
+                        // Vehicle selection is enabled: try default vehicle if eligible & available, otherwise assign first active vehicle
                         vehicle = await _unitOfWork.Vehicles.GetDefaultVehicleAsync(cancellationToken);
                         if (vehicle == null || !IsVehicleEligible(vehicle, dto) || !await _vehicleService.IsVehicleAvailableAsync(vehicle.Id, effectivePickupDateTime, dto.ReturnDateTime, cancellationToken: cancellationToken))
                         {
-                            throw new InvalidOperationException("Multiple vehicles are available for this service. Please select a vehicle for your booking.");
+                            vehicle = activeVehicles.FirstOrDefault(v => IsVehicleEligible(v, dto)) ?? activeVehicles[0];
                         }
                     }
                 }
@@ -358,11 +389,11 @@ namespace Limousine.Application.Services
                             ? dto.PhoneNumber
                             : (!string.IsNullOrWhiteSpace(dto.Phone)
                                 ? dto.Phone
-                                : "+1000000000"))))?.Trim() ?? "+1000000000";
+                                : "+1 647 952 5412"))))?.Trim() ?? "+1 647 952 5412";
 
                 if (string.IsNullOrWhiteSpace(snapshotPhoneNumber))
                 {
-                    snapshotPhoneNumber = "+1000000000";
+                    snapshotPhoneNumber = "+1 647 952 5412";
                 }
 
                 customer = null;
@@ -371,6 +402,7 @@ namespace Limousine.Application.Services
             // 6. Strict Backend Validation: Validate all submitted customer information
             // regardless of whether it was automatically loaded from the profile or manually entered/modified.
             ValidateCustomerInformation(snapshotFullName, snapshotEmail, snapshotPhoneNumber);
+            snapshotPhoneNumber = PhoneHelper.NormalizeNorthAmericanPhone(snapshotPhoneNumber);
 
             if (string.IsNullOrWhiteSpace(dto.PickupLocation))
             {

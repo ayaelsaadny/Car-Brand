@@ -84,7 +84,7 @@
             }
           </span>
           <span class="nav-label">{{ item.label }}</span>
-          @if (item.badge !== undefined) { <span class="nav-badge">{{ item.badge }}</span> }
+          @if (item.badge) { <span class="nav-badge">{{ item.badge }}</span> }
         </a>
       }
     </nav>
@@ -107,6 +107,9 @@
     <header class="header">
       <button class="menu-btn" (click)="toggle()" aria-label="Open menu">
         <span></span><span></span><span></span>
+        @if (adminBadgeService.totalBadge() > 0) {
+          <span class="menu-btn-badge">{{ adminBadgeService.totalBadge() }}</span>
+        }
       </button>
 
       <div class="header-slot"><ng-content select="[header-start]" /></div>

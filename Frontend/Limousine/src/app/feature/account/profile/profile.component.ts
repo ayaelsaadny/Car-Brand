@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AccountService } from '../../../core/services/account.service';
+import { northAmericanPhoneValidator, formatNorthAmericanPhone } from '../../../core/utils/phone.utils';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { CustomerProfile } from '../../../core/interfaces/api.models';
@@ -36,7 +37,7 @@ export class ProfileComponent implements OnInit {
 
   readonly profileForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
-    phoneNumber: ['', [Validators.pattern('^[+0-9\\s-]{8,20}$')]],
+    phoneNumber: ['', [northAmericanPhoneValidator()]],
     address: ['']
   });
 
@@ -87,15 +88,16 @@ export class ProfileComponent implements OnInit {
     this.errorMessage.set(null);
 
     const { fullName, phoneNumber, address } = this.profileForm.value;
+    const formattedPhone = phoneNumber ? formatNorthAmericanPhone(phoneNumber) : '';
 
-    this.accountService.updateProfile({ fullName, phoneNumber, address }).subscribe({
+    this.accountService.updateProfile({ fullName, phoneNumber: formattedPhone, address }).subscribe({
       next: (res) => {
         this.saving.set(false);
         this.successMessage.set(this.transloco.translate('account.profileUpdatedSuccess'));
         if (res.data) {
           this.profile.set(res.data);
         }
-        this.authService.updateCurrentUserProfile(fullName, phoneNumber);
+        this.authService.updateCurrentUserProfile(fullName, formattedPhone);
       },
       error: (err) => {
         this.saving.set(false);

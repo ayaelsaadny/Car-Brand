@@ -470,7 +470,8 @@
 
                 <label class="bk-field span3">
                   <span>{{ 'bookingForm.phone' | transloco }} <i>*</i></span>
-                  <input type="tel" name="phone" [(ngModel)]="booking.phone" required autocomplete="tel">
+                  <input type="tel" name="phone" [(ngModel)]="booking.phone" placeholder="+1 647 952 5412" required autocomplete="tel" (blur)="onBookingPhoneBlur()">
+                  <small class="bk-error" *ngIf="bookingPhoneError()">{{ 'auth.phoneInvalid' | transloco }}</small>
                 </label>
                 <label class="bk-field span3">
                   <span>{{ 'bookingForm.service' | transloco }}</span>
@@ -1012,7 +1013,8 @@
 
           <div class="form-group">
             <label>{{ 'auth.phone' | transloco }}</label>
-            <input type="tel" name="phone" [(ngModel)]="registerData.phoneNumber" placeholder="+1 555 123 4567" />
+            <input type="tel" name="phone" [(ngModel)]="registerData.phoneNumber" placeholder="+1 647 952 5412" (blur)="onRegisterPhoneBlur()" />
+            <small class="auth-field-error" *ngIf="registerPhoneError()">{{ 'auth.phoneInvalid' | transloco }}</small>
           </div>
 
           <div class="form-group">
