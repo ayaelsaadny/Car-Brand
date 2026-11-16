@@ -98,7 +98,11 @@ cityOther: {
   bizPartners: {
     en: { title: "Partnerships | Oudy", description: "Partner with Oudy to offer premium chauffeur services to your customers." },
     fr: { title: "Partenariats | Oudy", description: "Devenez partenaire d'Oudy pour offrir des services de chauffeur haut de gamme à vos clients." }
-  }
+  },
+  help: {
+  en: { title: "Help Center | Oudy", description: "Answers about booking, airport transfers, pricing and our chauffeur services." },
+  fr: { title: "Centre d'aide | Oudy", description: "Réponses sur la réservation, les transferts aéroport, les tarifs et nos services de chauffeur." }
+}
 };
 
 @Injectable({

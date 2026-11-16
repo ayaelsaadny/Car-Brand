@@ -457,6 +457,93 @@
 "hourly": "Hourly Chauffeur Service",
 "hourlyDesc": "A chauffeur at your disposal for your meetings, site visits and full business days, with a flexible schedule that suits you...",
 "hourlyPage": "A chauffeur at your disposal for your meetings, site visits and full business days, with a flexible schedule that suits you. You move between appointments without worrying about driving or finding parking." },
+
+
+
+  "help": {
+    "title": "How can we help?",
+    "subtitle": "Quick answers about booking, airport transfers, pricing and our services.",
+    "searchPlaceholder": "Search for a question…",
+    "searchLabel": "Search the help center",
+    "clearSearch": "Clear search",
+    "tabsLabel": "Help topics",
+    "resultsFor": "Results for",
+    "noResults": "We could not find an answer. Try other words, or contact us directly.",
+    "stillNeed": "Still need help?",
+    "stillNeedDesc": "Our team is available 24/7. Send us a message and we will answer as soon as possible.",
+    "whatsapp": "Chat on WhatsApp",
+    "email": "Send an email",
+    "cats": {
+      "booking": "Booking",
+      "airport": "Airport",
+      "pricing": "Pricing",
+      "services": "Our services",
+      "business": "Business"
+    },
+    "faq": {
+      "b1": {
+        "q": "How do I book a chauffeur?",
+        "a": "Open the service you need, fill in the booking form with your date, time and addresses, and send it. We will confirm your ride with you. You can also message us on WhatsApp."
+      },
+      "b2": {
+        "q": "How far in advance should I book?",
+        "a": "As early as you can, especially for weddings, events and airport transfers at busy times. For a last-minute ride, contact us on WhatsApp and we will check availability."
+      },
+      "b3": {
+        "q": "Can I change or cancel my booking?",
+        "a": "Yes, please contact us as soon as possible with your booking details and we will tell you the options available for your ride."
+      },
+      "a1": {
+        "q": "Do you track my flight?",
+        "a": "Yes. For airport pickups we follow your flight, so your chauffeur is there even if the plane is early or late."
+      },
+      "a2": {
+        "q": "Where will my chauffeur meet me?",
+        "a": "Your chauffeur waits at arrivals and drives you from the airport to your destination."
+      },
+      "a3": {
+        "q": "Do you also offer airport drop-offs?",
+        "a": "Yes. We pick you up at your door and take you to the airport terminal, on time and without stress."
+      },
+      "p1": {
+        "q": "How is the price of my ride set?",
+        "a": "It depends on the service, the route, the duration and the vehicle. Contact us with your trip details and we will confirm the price before your ride."
+      },
+      "p2": {
+        "q": "How can I get a quote?",
+        "a": "Send us your trip details through the booking form or on WhatsApp, and we will reply with a clear quote."
+      },
+      "s1": {
+        "q": "What services do you offer?",
+        "a": "Airport transfers, private city experiences in Montréal, city-to-city transfers, and a private chauffeur for weddings, graduations, events, shopping and business by the hour."
+      },
+      "s2": {
+        "q": "Can I hire a chauffeur by the hour?",
+        "a": "Yes. Our business-by-the-hour service puts a private chauffeur at your disposal for meetings and full days."
+      },
+      "s3": {
+        "q": "Can you take me to a city that is not listed?",
+        "a": "Yes. Under city-to-city transfers, choose other destinations, tell us where you are going and we will arrange your private ride."
+      },
+      "z1": {
+        "q": "Do you offer services for companies?",
+        "a": "Yes. We offer premium chauffeur solutions for corporations, agencies and partners. See the Business section of the menu."
+      },
+      "z2": {
+        "q": "How can my agency become a partner?",
+        "a": "Open the Partnerships page in the Business menu or contact us, and we will discuss how to offer our chauffeur services to your customers."
+      }
+    }
+},
+
+
+
+
+
+
+
+
+
   "welcomeModal": {
     "badge": "VIP MEMBERSHIP",
     "title": "Track Your Bookings & Travel in Luxury",
@@ -468,4 +555,6 @@
     "haveAccount": "Already have an account?",
     "signIn": "Sign In"
   }
+
+  
 }

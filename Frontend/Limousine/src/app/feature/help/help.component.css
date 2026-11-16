@@ -1,0 +1,239 @@
+/* Help page — uses the site variables (--c-navy, --c-red, ...) from styles/style.css */
+
+:host { display: block; }
+
+.help-container {
+  width: min(960px, 100% - 40px);
+  margin-inline: auto;
+}
+
+/* ---------- Hero ---------- */
+.help-hero {
+  /* extra top space: the navbar is fixed over the page */
+  padding: calc(var(--header-h, 68px) + 56px) 0 64px;
+  background: linear-gradient(135deg, var(--c-navy) 0%, var(--c-navy-2) 100%);
+  color: var(--c-on-dark);
+  text-align: center;
+}
+.help-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-red);
+  background: #fff;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 14px;
+}
+.help-hero h1 {
+  margin: 0 0 10px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.help-sub {
+  margin: 0 auto 28px;
+  max-width: 560px;
+  color: var(--c-on-dark-muted);
+}
+
+/* ---------- Search ---------- */
+.help-search {
+  position: relative;
+  max-width: 560px;
+  margin-inline: auto;
+}
+.help-search input {
+  width: 100%;
+  height: 54px;
+  padding: 0 48px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: var(--c-text);
+  box-shadow: var(--shadow-md);
+  outline: none;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.help-search input:focus { border-color: var(--c-red); }
+.help-search input::-webkit-search-cancel-button { display: none; }
+.help-search-ico {
+  position: absolute;
+  inset-inline-start: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-text-muted);
+  pointer-events: none;
+}
+.help-search-clear {
+  position: absolute;
+  inset-inline-end: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c-bg-soft);
+  color: var(--c-navy);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.help-search-clear:hover { background: var(--c-red-soft); color: var(--c-red); }
+
+/* ---------- Body ---------- */
+.help-body {
+  padding: 40px 0 72px;
+  background: var(--c-bg-soft);
+}
+
+/* ---------- Tabs ---------- */
+.help-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.help-tabs::-webkit-scrollbar { display: none; }
+
+.help-tab {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: var(--c-navy);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.help-tab:hover { border-color: var(--c-red); color: var(--c-red); }
+.help-tab.active {
+  background: var(--c-navy);
+  border-color: var(--c-navy);
+  color: #fff;
+  box-shadow: inset 0 -3px 0 var(--c-red);
+}
+.help-tab.muted { opacity: 0.55; }
+
+/* ---------- Accordion ---------- */
+.help-results-label {
+  margin: 0 0 14px;
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+}
+.help-results-label strong { color: var(--c-navy); }
+
+.faq {
+  margin-bottom: 12px;
+  border: 1px solid var(--c-border);
+  border-inline-start: 4px solid transparent;
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.faq.open {
+  border-inline-start-color: var(--c-red);
+  box-shadow: var(--shadow-md);
+}
+.faq-h { margin: 0; font-size: inherit; letter-spacing: 0; }
+
+.faq-q {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 0;
+  background: none;
+  color: var(--c-navy);
+  font-family: var(--site-font);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: start;
+  line-height: 1.4;
+}
+.faq-q:hover { color: var(--c-red); }
+.faq-chev { flex-shrink: 0; transition: transform 0.25s var(--ease); }
+.faq.open .faq-chev { transform: rotate(180deg); color: var(--c-red); }
+
+/* open / close animation without knowing the height */
+.faq-a-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.28s var(--ease), visibility 0.28s;
+}
+.faq.open .faq-a-wrap { grid-template-rows: 1fr; visibility: visible; }
+.faq-a { overflow: hidden; }
+.faq-a p {
+  margin: 0;
+  padding: 0 20px 20px;
+  color: var(--c-text-muted);
+}
+
+/* ---------- Empty ---------- */
+.help-empty {
+  padding: 40px 20px;
+  text-align: center;
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+/* ---------- Buttons ---------- */
+.help-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+}
+.help-btn:active { transform: translateY(1px); }
+.help-btn-red { background: var(--c-red); color: #fff; }
+.help-btn-red:hover { background: var(--c-red-600); }
+.help-btn-light { background: rgba(255, 255, 255, 0.12); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+.help-btn-light:hover { background: rgba(255, 255, 255, 0.2); }
+.help-btn-outline { background: transparent; color: var(--c-navy); box-shadow: inset 0 0 0 1px var(--c-border); }
+.help-btn-outline:hover { background: var(--c-bg-soft); }
+
+/* ---------- Still need help ---------- */
+.help-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 40px;
+  padding: 28px 32px;
+  border-radius: var(--radius-lg);
+  background: var(--c-navy);
+  color: #fff;
+}
+.help-cta h2 { margin: 0 0 6px; color: #fff; font-size: var(--fs-lg); }
+.help-cta p { margin: 0; color: var(--c-on-dark-muted); }
+.help-cta-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 640px) {
+  .help-hero { padding: calc(var(--header-h, 68px) + 36px) 0 44px; }
+  .help-cta { flex-direction: column; align-items: flex-start; padding: 24px; }
+  .faq-q { padding: 16px; font-size: 1rem; }
+  .faq-a p { padding: 0 16px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-a-wrap, .faq-chev, .help-tab, .faq { transition: none; }
+}

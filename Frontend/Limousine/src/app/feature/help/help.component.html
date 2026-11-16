@@ -1,0 +1,112 @@
+<!-- Hero: navy band with the search box -->
+<section class="help-hero">
+  <div class="help-container">
+    <span class="help-eyebrow">{{ 'nav.help' | transloco }}</span>
+    <h1>{{ 'help.title' | transloco }}</h1>
+    <p class="help-sub">{{ 'help.subtitle' | transloco }}</p>
+
+    <div class="help-search" role="search">
+      <svg class="help-search-ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />
+      </svg>
+      <input
+        type="search"
+        [value]="query()"
+        (input)="onSearch($any($event.target).value)"
+        [placeholder]="'help.searchPlaceholder' | transloco"
+        [attr.aria-label]="'help.searchLabel' | transloco"
+        autocomplete="off" />
+      @if (searching()) {
+        <button type="button" class="help-search-clear" (click)="clearSearch()"
+                [attr.aria-label]="'help.clearSearch' | transloco">&times;</button>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="help-body">
+  <div class="help-container">
+
+    <!-- Tabs -->
+    <div class="help-tabs" role="tablist" [attr.aria-label]="'help.tabsLabel' | transloco">
+      @for (c of categories; track c; let i = $index) {
+        <button
+          type="button"
+          role="tab"
+          class="help-tab"
+          [id]="'help-tab-' + c"
+          [class.active]="!searching() && tab() === c"
+          [class.muted]="searching()"
+          [attr.aria-selected]="!searching() && tab() === c"
+          [attr.aria-controls]="'help-panel'"
+          [attr.tabindex]="tab() === c ? 0 : -1"
+          (click)="selectTab(c)"
+          (keydown)="onTabKey($event, i)">
+          {{ 'help.cats.' + c | transloco }}
+        </button>
+      }
+    </div>
+
+    <!-- Questions (accordion) -->
+    <div class="help-panel" id="help-panel" role="tabpanel" [attr.aria-labelledby]="searching() ? null : 'help-tab-' + tab()">
+      @if (searching()) {
+        <p class="help-results-label" aria-live="polite">
+          {{ 'help.resultsFor' | transloco }} <strong>“{{ query().trim() }}”</strong>
+          &middot; {{ items().length }}
+        </p>
+      }
+
+      @for (it of items(); track it.id) {
+        <div class="faq" [class.open]="openId() === it.id">
+          <h3 class="faq-h">
+            <button
+              type="button"
+              class="faq-q"
+              [id]="'faq-q-' + it.id"
+              [attr.aria-expanded]="openId() === it.id"
+              [attr.aria-controls]="'faq-a-' + it.id"
+              (click)="toggle(it.id)">
+              <span>{{ it.q }}</span>
+              <svg class="faq-chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          </h3>
+          <div class="faq-a-wrap" [id]="'faq-a-' + it.id" role="region" [attr.aria-labelledby]="'faq-q-' + it.id">
+            <div class="faq-a"><p>{{ it.a }}</p></div>
+          </div>
+        </div>
+      } @empty {
+        @if (searching()) {
+          <div class="help-empty">
+            <p>{{ 'help.noResults' | transloco }}</p>
+            <button type="button" class="help-btn help-btn-outline" (click)="clearSearch()">
+              {{ 'help.clearSearch' | transloco }}
+            </button>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Still need help? -->
+    <aside class="help-cta">
+      <div>
+        <h2>{{ 'help.stillNeed' | transloco }}</h2>
+        <p>{{ 'help.stillNeedDesc' | transloco }}</p>
+      </div>
+      <div class="help-cta-actions">
+        @if (whatsappUrl()) {
+          <a class="help-btn help-btn-red" [href]="whatsappUrl()" target="_blank" rel="noopener">
+            {{ 'help.whatsapp' | transloco }}
+          </a>
+        }
+        @if (email()) {
+          <a class="help-btn help-btn-light" [href]="'mailto:' + email()">{{ 'help.email' | transloco }}</a>
+        }
+      </div>
+    </aside>
+
+  </div>
+</section>
